@@ -1,0 +1,1 @@
+{"log": "certs/shallow_crit.jsonl", "region": "MAIN", "darts_checked": 160, "violations": 0, "min_slack": 0.0526, "max_xi_fem": 2.32109}

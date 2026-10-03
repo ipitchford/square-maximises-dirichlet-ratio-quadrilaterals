@@ -1,0 +1,15 @@
+b_A in [ 40.0 deg, 140.0 deg]:  |BA| >=   1318 |BD|  (l =  12.8): xi <= 2.49993  OK
+b_A in [ 41.0 deg, 139.0 deg]:  |BA| >=    418 |BD|  (l =   8.7): xi <= 2.49956  OK
+b_A in [ 42.0 deg, 138.0 deg]:  |BA| >=    230 |BD|  (l =   7.2): xi <= 2.49975  OK
+b_A in [ 43.0 deg, 137.0 deg]:  |BA| >=    155 |BD|  (l =   6.3): xi <= 2.49918  OK
+b_A in [ 45.0 deg, 135.0 deg]:  |BA| >=     92 |BD|  (l =   5.3): xi <= 2.49763  OK
+b_A in [ 47.5 deg, 132.5 deg]:  |BA| >=     61 |BD|  (l =   4.6): xi <= 2.49314  OK
+b_A in [ 50.0 deg, 130.0 deg]:  |BA| >=     46 |BD|  (l =   4.1): xi <= 2.48826  OK
+b_A in [ 55.0 deg, 125.0 deg]:  |BA| >=     31 |BD|  (l =   3.6): xi <= 2.49823  OK
+b_A in [ 60.0 deg, 120.0 deg]:  |BA| >=     25 |BD|  (l =   3.3): xi <= 2.47082  OK
+b_A in [ 65.0 deg, 115.0 deg]:  |BA| >=     21 |BD|  (l =   3.2): xi <= 2.47836  OK
+b_A in [ 70.0 deg, 110.0 deg]:  |BA| >=     19 |BD|  (l =   3.0): xi <= 2.45773  OK
+b_A in [ 80.0 deg, 100.0 deg]:  |BA| >=     17 |BD|  (l =   2.9): xi <= 2.42233  OK
+b_A in [ 90.0 deg,  90.0 deg]:  |BA| >=     16 |BD|  (l =   2.9): xi <= 2.44953  OK
+necessary for this bound: sin^2 b_A > 2/5, i.e. b_A in ( [39.23152048359225615493131424474365578 +/- 2.21e-36] , [140.76847951640774384506868575525634422 +/- 2.59e-36] ) deg
+ALL OK

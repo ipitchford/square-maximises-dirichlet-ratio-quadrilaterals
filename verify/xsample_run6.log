@@ -1,0 +1,21 @@
+PROVENANCE {"input": "95a93f87b5e122d99568b01e8589ee5f5762394efc434dcc5d6430e8e9d4d447", "xsample3.py": "8dee2c2cf6f318fe48f8f6af76a038fa8cbb823fa161d81fd9d1a76134996414", "xcert.py": "cea9eda9cf3d6ce3790b17d7ca7ac02e93e3236189ae7ab930d8531d3d351ed2"}
+18 boxes to check
+[1/18] T10.b0.c0.b0.c0.b0.c0.d1.b0.c0.d0.b0.c0. budget certs=13 subboxes=34 680s (verified so far 0)
+[2/18] T11.b0.c0.b0.c0.b0.c0.b1.c0.d0.c1.b0.a0. budget certs=24 subboxes=18 232s (verified so far 0)
+[3/18] T12.b0.c0.b0.c0.b0.c0.d0.b1.c1.d0.b1.c1. verified certs=8 subboxes=8 150s (verified so far 1)
+[4/18] T12.b0.c0.b0.c0.b0.c0.d0.b1.c0.d0.c1.b0. budget certs=23 subboxes=18 220s (verified so far 1)
+[5/18] T16.c0.c0.c0.a0.d1.c1.a0.d1.c1.b0.a1.d0. budget certs=11 subboxes=29 609s (verified so far 1)
+[6/18] T17.c0.c0.c0.a0.c1.d0.a0.c1.b1.d1.a1.a0 budget certs=17 subboxes=25 392s (verified so far 1)
+[7/18] T19.b0.b0.b0.a0.d1.b0.a0.d1.b1.c1.a0.d0 budget certs=15 subboxes=25 429s (verified so far 1)
+[8/18] T20.b0.b0.b0.a0.b1.d0.a0.b1.c1.d0.a0.b0. verified certs=1 subboxes=7 84s (verified so far 2)
+[9/18] T20.b0.b0.b0.a0.b0.d1.a1.b0.c0.d1.a1.a1. verified certs=9 subboxes=10 147s (verified so far 3)
+[10/18] T22.b0.c0.b0.c0.b0.c0.a0.d1.b0.c0.a0.d1. verified certs=1 subboxes=1 8s (verified so far 4)
+[11/18] T22.b0.c0.b0.c0.b0.c0.a0.d1.b1.c0.a0.d1. verified certs=1 subboxes=1 8s (verified so far 5)
+[12/18] T22.b0.c0.b0.c0.b0.c0.a0.d1.b0.c0.a0.d1. verified certs=5 subboxes=16 265s (verified so far 6)
+[13/18] T22.b0.c0.b0.c0.b0.c0.a0.d1.b0.c0.a0.d1. budget certs=16 subboxes=29 437s (verified so far 6)
+[14/18] T23.b0.c0.b0.c0.b0.c0.a0.b0.c0.d1.a1.b1. verified certs=1 subboxes=1 7s (verified so far 7)
+[15/18] T23.b0.c0.b0.c0.b0.c0.a0.b1.c0.d1.a1.c0. verified certs=1 subboxes=2 22s (verified so far 8)
+[16/18] T23.b0.c0.b0.c0.b0.c0.a0.b1.c0.d1.a1.c1. verified certs=3 subboxes=14 197s (verified so far 9)
+[17/18] T23.b0.c0.b0.c0.b0.c0.a0.b0.c0.d0.a1.b0. verified certs=14 subboxes=12 157s (verified so far 10)
+[18/18] T23.b0.c0.b0.c0.b0.c0.a0.b0.c0.d0.a0.b0. budget certs=10 subboxes=36 512s (verified so far 10)
+DONE verified 10/18, 4558s

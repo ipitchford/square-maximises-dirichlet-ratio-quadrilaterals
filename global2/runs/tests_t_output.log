@@ -1,0 +1,25 @@
+== 0. exact-rational two-triangle Piola conformity (unequal determinants)
+   exact: d1 ≠ d2, maps agree on the diagonal, normal traces equal, tangential traces differ (10 points), div_x w = −u
+== 1. point identity at δ = 0 (validation_points.csv), both diagonals
+   50 rows × 2 diagonals: max relative deviation of θ1..θ3 from fsolve 5.42e-08; Arb ⊇ Float64 checked on 50
+== 2. Taylor-model enclosure vs direct Float64 assembly at random points
+   (fold on box p0=[0.171, 0.374, 0.092, -0.438] r=0.02 shift=0: skipped)
+   (fold on box p0=[0.171, 0.374, 0.092, -0.438] r=0.02 shift=0: skipped)
+   180 points: TM enclosure overlaps the Arb point value everywhere required; max |mid(TM) − point| / (sum of radii) = 0.445
+   Float64 assembly from tsolve1's matrices vs Arb point value: max relative deviation 2.41e-08 (Float64 conditioning; informative)
+== 3. D4 invariance of the transported Rayleigh–Ritz values
+   max relative spread over the 8 images: 1.77e-09
+== 4. pointwise lower bounds below the Rayleigh–Ritz values
+   968 candidate evaluations; smallest relative slack below θ: 1.405e-01
+== 5. log semantics: runs/transport_cert.jsonl
+   uniform points in the a-priori box: Dict("COMPOUND" => 3735, "E2" => 88, "certified" => 19, "E4" => 147, "E3T" => 11), not located 0
+   COMPOUND     3117 leaves,   300 sampled
+   E2          13933 leaves,   300 sampled
+   certified   31426 leaves,  1500 sampled
+   E4            138 leaves,   138 sampled
+   SHELL           1 leaves,     1 sampled
+   E3T          1568 leaves,   300 sampled
+   certified leaves: max over samples of θ2/θ1 − kappa_cert = -0.0531 (must be ≤ 5e-3)
+
+tests_t: 10886 passed, 0 failed
+ALL TESTS PASSED

@@ -1,0 +1,27 @@
+name: structural-checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Manifest (files in Git match MANIFEST.sha256; files kept only in the release archive are listed in LARGE_FILES.md)
+        run: python tools/check_git_manifest.py
+      - name: Local-step records (exact tiling, shift levels, signs) and five negative controls
+        run: |
+          python verify/xlocal.py local/replay_v2/schur_cover2.json
+          python -O verify/xlocal.py local/replay_v2/schur_cover2.json
+          python verify/xlocal_negative_controls.py local/replay_v2/schur_cover2.json
+      - name: Supplement S is a faithful rendering of darts/LEMMAS.md (token-level identity)
+        run: cd paper && python supplement_check.py
+      - name: Rigour lint of the dart verifier
+        run: cd darts && python rigor_lint.py
+      - name: Every Python source compiles
+        run: python -m compileall -q -x '(\.bak|/replays/)' local global2 bandB darts verify referee_response paper tools > /dev/null

@@ -1,0 +1,2600 @@
+--- a/PILOT.md (round 3, sha256 bd3272c4a233)
++++ b/PILOT.md
+@@ -184,3 +184,23 @@
+ receipts, log changed mid-replay, FE_UPWARD / FE_DOWNWARD / FE_TOWARDZERO / FZ, hash-chained receipt of a machinery run);
+ check_charts, accounting, lemma tables, Corollary H', CBOX cover pass.  Overhead of the new binding: about 1.3 s per replay
+ process (2,703 runtime files hashed at start and end); the FP guard per leaf is a few microseconds.  Time estimate unchanged.
++
++**Round 4 (review round 3: harness / provenance; launch path before the queued run), measurements 2026-10-02.**
++Memory (/usr/bin/time -l, peak RSS): one replay3 shard of certs3/pp.merged.jsonl (621,307 lines; every shard parses the whole
++log) 1.50 GB, 355 s wall at shard 0/64 (parse + manifest + tiling of all 2,047 roots ≈ 170 s, then 3,958 leaves in 184 s); the
++driver's validation of the PP log (log_leaf_hashes) 0.74 GB, after the shards have exited; one recert worker on three heavy PP
++roots (PP_1_7_3_8, PP_1_10_3_8, PP_1_10_2_7: 2,148 leaves, BD k = 4..6, FARL k = 4, 5, INC; 0 subdivisions) 0.43 GB, plus resume
++bookkeeping of a PP share (status-only since round 4; tracemalloc: 59 MB at W = 4, 73 MB at W = 3; it was ~3.2 kB per leaf =
++0.25-0.33 GB with whole records) and the FARL problem cache (~0.02 GB): 0.52 GB per worker.  Sizing (coordinator's rules): recert
++W = 3 (3 x 0.52 x 1.2 + 0.3 = 2.17 GB -> --memory-gb 2.5; W = 4 would need 2.8 GB); replay SHARDS = 3 (3 x 1.50 x 1.1 + 0.4 =
++5.35 GB -> 5.5 GB at the certs3 line count; launch_replay.sh rescales by the certs4 PP line count).
++Recert samples with the round-4 code (`recert.py --time FAM 300 11`, 4,800 leaves): 0 failures in every (family, method) except
++SP_col FEM, 27/300 = 9% ('FEM: cart box': the leaf's t-range exceeds the collar chart's t1 = float(0.02), refused by the repaired
++collar FEM since round 1), about 290 leaves, which recert subdivides (earlier straddle test: certified by BO2 after one or two
++splits). Seconds per leaf: PP BO2 0.061, FEM 0.204 (max 4.4), FARL 0.174, INC 0.188; SP_spk BO2 0.051, FEM 0.234; SP_col BO2
++0.038, FEM 0.100; FP BO2 0.046, FARL 0.170; PF BO2 0.041; discards < 0.001.  INC: recert recomputes E (fresh apexes, fresh
++inc.l1_point at the recorded CR level, fresh P2 from the recorded level up) -- the 50 old INC leaves of replay shard 0/64 whose
++stored E exceeded the fresh bound all re-certify (P2 level unchanged).  Leaf CPU 9.6 h (sampled families) + FF / SF 0.02 h.
++Predicted wall time on P-cores: recert at W = 3 ≈ 3.2 h of leaves + splits / starts ≈ 0.1 h + end tail (largest root 10,989
++leaves ≈ 0.3 h) ≈ 3.4-3.7 h (W = 4: 2.6-2.9 h); replay at SHARDS = 3 ≈ (9.6 + 1.3 legacy) / 3 ≈ 3.6 h + gates ≈ 0.2 h + per-shard
++parse ≈ 0.1 h ≈ 3.9 h (SHARDS = 4: ≈ 3.0 h).  Workers placed on E-cores run about 1.5-2.5x slower.
+--- a/README.md (round 3, sha256 15d9ad63659b)
++++ b/README.md
+@@ -13,8 +13,11 @@
+ The second review (2026-10-02, round 2) cleared the numerics and Lemma 9.6 and blocked on the replay evidence chain (shard-count and
+ quick-mode validation, time-of-check snapshots, the FP environment, an aggregate receipt, family identity, unchecked replay reuse);
+ those findings are repaired in this package's own code (§9, round 3: `replay_all.py`, `replay_common.py`, `fpenv.py`, `binding.py`,
+-`replay_ok.py`, `rigor_lint.py`, `test_containment.py`, `test_replay_infra.py`). Its finding on the external sealed replay
+-wrappers is not acted on here (decision pending with the user).
++`replay_ok.py`, `rigor_lint.py`, `test_containment.py`, `test_replay_infra.py`). The third review (round 3) blocked on harness and
++provenance only (no mathematical or certificate regression); its items and the launch-path defects found before the queued launch
++are repaired in round 4 (§9). Launch method (decided by the user): long runs are queued through the machine's `research-run`
++launcher (`launch_recert.sh`, `launch_replay.sh`); the proof replay is this package's own hardened driver (`replay_all.py`), not an
++external replay wrapper. Threat model: §5.
+ 
+ Proof structure (LEMMAS.md §13, Theorem 13.2): after the reflection in BD (b_A ≤ b_C), every dart lies in a lemma region or in
+ the parameter region of one of the runs below; a run proves its region iff its fail-closed replay passes (all roots complete,
+@@ -116,6 +119,12 @@
+ t < 0.02, then Lemma 12.1). Grids: see `run_fam.py` (GRIDS) and the manifests in `manifests/`.
+ 
+ ## 5. Replay (fail closed) and accounting
++**Threat model.** The replay machinery protects the proof receipt against ACCIDENTAL corruption (torn or partial writes, killed
++processes, disk or copy errors), stale or changed files (sources, logs, manifests, chart caches, pin list, runtime files changed
++before or during a run), concurrent agents editing files in this directory, and environment drift (interpreter flags, startup
++hooks, PATH, numerics variables, FP environment, loaded libraries, niceness). Deliberate tampering by the owner of the machine
++(who could rewrite the sources, the pin, the receipt and the checker together) is OUT OF SCOPE; the final digest of a receipt is
++anchored outside this directory (HANDOFF, paper) so that a later change of a receipt is detectable.
+ `./replay_all.sh` (exit status 0 iff everything passes): certified tables of Lemmas 5.3 and 9.5, mesh conformity of the FEM charts,
+ Corollary H′, CBOX cover, `accounting.py` (KF quadtree tiling, family grids cover the claimed ranges, far/polar overlap), and
+ `replay2.py` (old and KF logs) / `replay3.py` (family logs): status whitelist, per-status schemas (no unknown keys), duplicate
+@@ -138,8 +147,22 @@
+ `accounting`), the merges and, FRESH, exactly SHARDS replay processes per log into a new `replays/run_<ID>/` (nothing is reused);
+ validates EVERY receipt record of every shard (`replay_ok.validate`: keys, ok, family, binding, counts, leaves_sha256, and the
+ multiset of record hashes equal to the one recomputed from the bound log); re-checks the pin, the logs, the manifests and the
+-runtime identity at the end; and writes an append-only, hash-chained receipt `replays/receipts/<ID>.jsonl`. Only a proof-mode run
+-without any failure prints `PASS`; quick mode prints `STRUCTURE-ONLY (NOT A PROOF)`. `test_replay_infra.py` probes all of this.
++runtime identity at the end; and writes an append-only, hash-chained receipt `replays/receipts/<ID>.jsonl` (canonical records with
++strict sequence, chained and self hashes, schema; write loop, fsync of file and directory; re-read and validated before success;
++the printed FINAL DIGEST is the end record's self hash). Before any gate, merge or replay it checks, in seconds, that the
++re-certification directory is complete (`certs_complete.py`: every manifest root exactly one root_done with ok = true, no FAIL leaf
++-- all FAIL leaves are listed --, no torn, garbage or duplicate record, every handoff with its item_done, every claim of a worker
++1..N and done) and aborts otherwise. Only a proof-mode run without any failure prints `PASS` and exits 0; quick mode prints
++`STRUCTURE-ONLY (NOT A PROOF)`, test mode `MACHINERY TEST OK (NOT A PROOF)` (exit 3). The driver runs at the TARGET niceness 10
++(no double nice under a launcher that already applies nice 10). `test_replay_infra.py` probes all of this (82 probes).
++**Launch (queued, research-run).** `launch_recert.sh` queues `recert_all.sh 3` (`--cpu 3 --memory-gb 2.5`: measured peak 0.43 GB
++per recert worker + resume bookkeeping and caches, sizing rule W x 0.52 x 1.2 + 0.3 <= 2.5 GB); recert_all.sh records N, the code
++identity and the families at the first start and refuses any other N or code on resume, runs its workers isolated (-I -S -B,
++bootstrap.py) under `env -i` at niceness 10, and exits with the verdict of `certs_complete.py`. `launch_replay.sh` (after the
++round-4 review) sizes the replay from the certs4 PP line count (measured peak 1.50 GB per replay3 shard of the 621,307-line PP log;
++SHARDS x 1.65 + 0.4 <= 6 GB: 3 shards, 5.5 GB) and queues `replay_all.sh` with the reviewed pin. `smoke_launch.sh recert|replay`:
++one-minute dry runs of exactly this path under research-run (1 CPU; not yet run: executing research-run was denied to the
++preparing agent by the permission system, so running them is the user's decision).
+ **Replay results: none valid at present** (the previous results were obtained with the defective verifier and are void; the fresh
+ bound replay runs after the re-certification).
+ 
+@@ -152,8 +175,10 @@
+ * `recert.py --time FAM N`: recomputation of random leaves of each family / method with the repaired verifier (timing; no log).
+ 
+ ## 7. What remains
+-1. Independent review of the repaired verifier (dispatched by the coordinator), then the re-certification of every family leaf
+-   (`recert.py`, failing leaves are subdivided and re-certified) and a completely fresh, fully bound `replay_all.sh`.
++1. The re-certification of every family leaf (`launch_recert.sh` -> `recert_all.sh 3`; failing leaves are subdivided and
++   re-certified; about 9% of the SP_col FEM leaves, whose t-range exceeds the collar chart's t1 = 0.02, are expected to be
++   subdivided, all other methods 0/300 in samples), then, after the round-4 review clears, a completely fresh, fully bound
++   `launch_replay.sh` -> `replay_all.sh` whose receipt digest is anchored externally.
+ 2. The old and KF logs are replayed (recomputed) with the repaired verifier; a failing old leaf would need a new certificate.
+ 3. Unchanged from before: no part of the dart case is open in the decomposition of Theorem 13.2 once the runs replay.
+ 
+@@ -184,6 +209,27 @@
+ conditions H1–H3 over FARL chart boxes and a non-vacuity check for fp:321; `fam5.farl_setup` / `charts.farl_problem` reject
+ k₀ ≤ 0; legacy manifests carry their family; exactness wording qualified for legacy roots.
+ 
++**Round 4 (review round 3: BLOCK on harness / provenance, no mathematical or certificate regression; threat model above).**
++(1) Runtime inventory: a fresh inventory at every end check (no memoisation) of the interpreter, every loaded non-OS Mach-O image
++(dyld: the Python framework binary, every extension module and bundled library), the standard library, the numerical packages and
++every *.pth and top-level module of the site directories; module origins checked against it, against the pinned sources or against
++the installers' RECORD hashes (late imports), no bytecode read (-B, empty pycache prefix), sys.flags / _xoptions / pycache prefix
++bound, `python -O` refused (`binding.py`, `bootstrap.py`). (2) Chart caches: the exact refcache/* inventory and hashes are pinned
++and verified before any unpickling, before every replay and at the end; a pinned run never writes a cache (`chart.py`); the
++rebuild-and-compare gate stays (`check_charts.py`). (3) The pin file is read once and its bytes parsed and hashed (private
++read-only copy for the children); every consumed log and manifest snapshot must equal its pin entry or the recorded merge output.
++(4) Shard outputs created exclusively (O_EXCL), snapshotted once after the child exits; exactly those bytes are validated,
++summarised and hashed; a missing summary fails the run. (5) Receipt: self hash per record, strict sequence and schema, write loop,
++fsync of file and directory, re-read before success, final digest printed for external anchoring. (6) Bootstrap: absolute
++package path and interpreter (never from $0), in-process niceness, children with a sanitised environment and -I -S -B
++(`replay_all.sh`, `bootstrap.py`). (7) Lint aliases (from-numpy imports, ufunc reductions, np.all / any, .var / .std) and
++comment-versus-string detection; Lemma 9.6 test also by analytic extrema over u-intervals (`farl_conditions_interval`); FIZ / AH /
++FZ16 probes (N/A where the CPU lacks FEAT_AFP); receipt metadata cross-checked against the log record; exit 0 only for a proof
++PASS. Launch path (found before the queued launch): target niceness 10 instead of an increment (research-run already applies
++nice 10); default worker counts 6 (the queue's cap; the sized launch uses 3); recert resume bound to the recorded N and code (a
++different N would orphan claims), atomic claims, one process per worker ID, torn tails cut at restart, status-only resume
++bookkeeping (memory); pre-replay completeness gate `certs_complete.py`; queued launch scripts and dry-run script.
++
+ ## 8. Files
+ Certificates: `gcert.py`, `gsigma.py`, `ldl.py`, `tm.py`, `poly.py`, `chart.py`, `charts.py`, `refexact.py` (FEM); `bo1d.py`, `bo2.py`,
+ `p2up.py`, `p2fix.py`, `bocert.py` (1-D bounds and P2); `inc.py` (INC, Lemma 11.4); `nanguard.py` (fail-closed handling of non-finite
+@@ -191,12 +237,14 @@
+ `fam5.py`; runners `run_crit*.py`, `run_main_cbox.py`, `run_box.py`, `run_spike_all.py`, `run_fam.py`, `prod_*.sh`; the pool
+ `pool.py` (work items, claims, queue), `pool_launch.sh`, `pool_scaler.sh`, `pool_keepalive.sh`, `pool_status.py` (volume-based
+ ETA), `pool_inprogress.py`, `pool_strip.py` (removes a failed root's records before it is redone), `bench.py` (cost benchmark). Predicates
+-`regions.py`. Replay `replay2.py`, `replay3.py`, `replay_all.sh` (reuses a replay whose log and verifier sha256 are unchanged:
+-`replay_ok.py`), `legacy_replays.sh`, `finalize.sh`, `accounting.py`, `manifests_legacy.py`, `merge_shards.py`, `merge_pool.py`,
++`regions.py`. Replay `replay2.py`, `replay3.py`, `replay_ok.py` (strict validation of shard outputs; reuse of an older replay is
++for development only and never part of a proof run), `legacy_replays.sh`, `finalize.sh`, `accounting.py`, `manifests_legacy.py`, `merge_shards.py`, `merge_pool.py`,
+ `summarize.py` (runs table), `audit_farl_nan.py`; repair tools `binding.py`, `grid.py`, `schur.py`, `rigor_lint.py`,
+-`test_containment.py`, `check_charts.py`, `remanifest.py`, `recert.py`, `recert_all.sh` (launcher), `replay_all.py` (aggregate
+-driver; `replay_all.sh` is its wrapper), `replay_common.py`, `fpenv.py`, `test_replay_infra.py`, `rigor_allowlist.json`; review bundle `review/`
+-(`round2.diff`, `round2_files.sha256`); tests of the repair `recert_tests/` (timing samples, pipeline and subdivision tests,
++`test_containment.py`, `check_charts.py`, `remanifest.py`, `recert.py`, `recert_all.sh` (re-certification), `certs_complete.py`
++(pre-replay completeness gate), `replay_all.py` (aggregate driver; `replay_all.sh` is its wrapper), `bootstrap.py` (isolated
++start of every proof process), `replay_common.py`, `fpenv.py`, `test_replay_infra.py`, `rigor_allowlist.json`, `make_pin.py` (pin
++list), `launch_recert.sh` / `launch_replay.sh` / `smoke_launch.sh` (queued launch through research-run); review bundles `review/`
++(`round2*`, `round3*`, `round4/`; `PINNED.sha256` is the current pin); tests of the repair `recert_tests/` (timing samples, pipeline and subdivision tests,
+ legacy replay samples; not part of the proof);
+ validation `validate_fem*.py`, `test_bo1d.py`, `test_inc.py`; lemma scripts `lemma_sector.py`, `lemma_longarm.py`, `hull_to_box.py`,
+ `check_conformity.py`, `check_cbox_cover.py`. Logs `certs/`, `certs2/`, `certs3/`; manifests `manifests/`; replay outputs
+--- a/binding.py (round 3, sha256 6c31b6f666bd)
++++ b/binding.py
+@@ -1,20 +1,30 @@
+-"""Binding of replay results (adversarial reviews of 2026-10-02, rounds 1 and 2).  A replay result is valid only for the exact
+-inputs and runtime it was computed with.  binding(script, manifest_sha256, family) returns (sha256, details) over
+-  * every TRANSITIVE local source of the replay script (AST import closure: every module imported anywhere in a file, followed
+-    recursively; this over-approximates the decision sources), byte for byte;
+-  * every cached chart file (refcache/*), byte for byte (check_charts.py separately proves they equal the exact rebuild);
+-  * the sha256 of the manifest bytes that the replay PARSED (the caller hashes its own immutable snapshot) and the FAMILY name
+-    (the theorem family: a log replayed under another family proves another statement);
+-  * the runtime identity (runtime_identity()): the interpreter binary and libpython, every installed file (Python sources,
+-    extension modules and bundled dynamic libraries) of python-flint, numpy, scipy, scikit-fem and mpmath, the NumPy build /
+-    BLAS configuration, the FLINT version and arb context, the OS / machine description, the floating-point environment
+-    (fpenv.state(): FPCR, fegetround, behavioural tests) and every numerics-relevant environment variable.
+-replay2.py / replay3.py compute the binding at start and again at the end and fail unless both agree (no source, cache, runtime
+-or environment change during the run); the aggregate driver replay_all.py binds every stage into one append-only receipt."""
+-import ast, os, sys, hashlib, json, platform, sysconfig
+-HERE = os.path.dirname(os.path.abspath(__file__))
++"""Binding of replay results (adversarial reviews of 2026-10-02, rounds 1-3).  Threat model (README §5): accidental corruption,
++stale or changed files, concurrent agents editing files and environment drift; deliberate tampering by the machine owner is out of
++scope.  A replay result is valid only for the exact inputs and runtime it was computed with.
++
++binding(script, manifest_sha256, family) returns (sha256, details) over
++  * every TRANSITIVE local source of the replay script (AST import closure), byte for byte;
++  * every cached chart file (refcache/*), byte for byte (the proof driver additionally requires them to equal the reviewed pin
++    before any of them is unpickled, see chart.py);
++  * the sha256 of the manifest bytes that the replay PARSED and the FAMILY name;
++  * the runtime identity runtime_identity(): a FRESH (never memoised) inventory static_inventory() of
++      - every Mach-O image loaded in this process that exists as a file (dyld: the interpreter, the Python framework binary,
++        every extension module and its bundled libraries),
++      - the interpreter executable and the standard library tree (sources, extension modules),
++      - every installed file of python-flint, numpy, scipy, scikit-fem, mpmath, and every *.pth file and every top-level module
++        (*.py: sitecustomize, usercustomize, targets of *.pth import hooks such as virtualenv's _virtualenv.py) of the site
++        directories,
++    and sys.flags, sys._xoptions, sys.pycache_prefix, the NumPy build / BLAS configuration, the FLINT version and arb context,
++    the OS, the floating-point environment (fpenv.state()) and the numerics environment variables.
++loaded_modules_problems(start_inventory, sources): every module loaded in the process (at the time of the call) must come from a
++file of the start inventory or a pinned local source with an unchanged sha256, and must not have read a cached .pyc (the proof
++runs use an empty pycache prefix and -B: all bytecode is compiled from the bound sources).
++proof_flags_problems(): in a proof run (DARTS_PIN set) the interpreter must run isolated (-I), without the site module (-S: no
++*.pth startup hooks), with -B and an empty pycache prefix (bootstrap.py); -O is always refused (asserts must be live)."""
++import ast, os, sys, hashlib, json, platform, sysconfig, ctypes
++HERE = os.path.dirname(os.path.realpath(__file__))
+ PACKAGES = ('python-flint', 'numpy', 'scipy', 'scikit-fem', 'mpmath')
+-ENV_PREFIXES = ('OMP_', 'OPENBLAS_', 'VECLIB_', 'MKL_', 'FLINT', 'TM_', 'NPY_', 'PYTHON', 'GOTO', 'BLIS_', 'ACCELERATE')
++ENV_PREFIXES = ('OMP_', 'OPENBLAS_', 'VECLIB_', 'MKL_', 'FLINT', 'TM_', 'NPY_', 'PYTHON', 'GOTO', 'BLIS_', 'ACCELERATE', 'DARTS_')
+ 
+ def local_imports(f):
+     t = ast.parse(open(os.path.join(HERE, f)).read())
+@@ -40,54 +50,100 @@
+         for chunk in iter(lambda: fh.read(1 << 20), b''): h.update(chunk)
+     return h.hexdigest()
+ 
+-_RUNTIME_FILES = None
+-def runtime_files():
+-    """{label: sha256} of the interpreter binary, libpython and every installed file of the numerical packages"""
+-    global _RUNTIME_FILES
+-    if _RUNTIME_FILES is not None: return _RUNTIME_FILES
++def loaded_images():
++    """paths of the Mach-O images loaded in this process (dyld), or of the mapped files on Linux"""
++    if sys.platform == 'darwin':
++        lib = ctypes.CDLL('/usr/lib/libSystem.B.dylib')
++        lib._dyld_image_count.restype = ctypes.c_uint32
++        lib._dyld_get_image_name.restype = ctypes.c_char_p; lib._dyld_get_image_name.argtypes = [ctypes.c_uint32]
++        return sorted({lib._dyld_get_image_name(i).decode() for i in range(lib._dyld_image_count())})
++    try:
++        return sorted({l.split()[-1] for l in open('/proc/self/maps') if len(l.split()) >= 6 and l.split()[-1].startswith('/')})
++    except OSError:
++        return []
++
++def _walk(root, suffixes=None):
++    for dp, dn, fn in os.walk(root):
++        dn[:] = [d for d in dn if d != '__pycache__']
++        for f in fn:
++            if suffixes is None or f.endswith(suffixes): yield os.path.join(dp, f)
++
++SYSTEM_PREFIXES = ('/usr/lib/', '/System/')     # OS-owned images (dyld shared cache): bound through the OS build (uname)
++def inventory_paths():
++    """the set of runtime files to bind: interpreter, every non-OS image loaded so far, the standard library tree, every file of
++    the numerical packages, the *.pth files and every top-level *.py module of the site directories (sitecustomize, usercustomize
++    and the targets of *.pth import hooks, e.g. virtualenv's _virtualenv.py, which no installer RECORD lists)"""
+     import importlib.metadata as md
+-    out = {}
+-    exe = os.path.realpath(sys.executable); out['interpreter:' + exe] = sha_file(exe)
+-    libdir, ldlib = sysconfig.get_config_var('LIBDIR'), sysconfig.get_config_var('LDLIBRARY')
+-    for cand in ([os.path.join(libdir, ldlib)] if libdir and ldlib else []) + [sysconfig.get_config_var('PYTHONFRAMEWORKPREFIX') or '']:
+-        if cand and os.path.isfile(cand): out['libpython:' + os.path.realpath(cand)] = sha_file(os.path.realpath(cand))
++    paths = set()
++    paths.add(os.path.realpath(sys.executable))
++    for p in loaded_images():
++        if os.path.isfile(p) and not p.startswith(SYSTEM_PREFIXES): paths.add(os.path.realpath(p))
++    sp = sysconfig.get_paths()
++    for p in _walk(os.path.realpath(sp['stdlib']), ('.py', '.so')): paths.add(os.path.realpath(p))
+     for pkg in PACKAGES:
+         try: dist = md.distribution(pkg)
+-        except md.PackageNotFoundError: out['package-missing:' + pkg] = ''; continue
+-        for f in sorted(dist.files or [], key=str):
+-            s = str(f)
+-            if '__pycache__' in s or s.endswith('.pyc'): continue
++        except md.PackageNotFoundError: continue
++        for f in dist.files or []:
+             p = dist.locate_file(f)
+-            if os.path.isfile(p): out[f'{pkg}:{s}'] = sha_file(p)
+-    _RUNTIME_FILES = out
++            if os.path.isfile(p) and '__pycache__' not in str(f): paths.add(os.path.realpath(p))
++    sitedirs = {sp['purelib'], sp['platlib']}
++    try:
++        import bootstrap; sitedirs.add(bootstrap.venv_site_packages())
++    except SystemExit: pass
++    for d in sitedirs:
++        if os.path.isdir(d):
++            for f in os.listdir(d):
++                if f.endswith(('.pth', '.py')) and os.path.isfile(os.path.join(d, f)): paths.add(os.path.realpath(os.path.join(d, f)))
++    return paths
++
++def static_inventory(paths=None):
++    """{realpath: sha256} of inventory_paths() (or of the given paths: the same key set re-hashed at the end of a run), read from the
++    file system at EVERY call -- nothing is memoised"""
++    if paths is None: paths = inventory_paths()
++    out = {}
++    for p in sorted(paths):
++        try: out[p] = sha_file(p)
++        except OSError: out[p] = None
+     return out
+ 
+-def runtime_identity():
++def record_hashes():
++    """{realpath: (distribution, urlsafe-b64 sha256)} from the installers' RECORD files of every distribution on sys.path"""
+     import importlib.metadata as md
++    out = {}
++    for dist in md.distributions():
++        for f in dist.files or []:
++            if f.hash is not None and f.hash.mode == 'sha256':
++                out[os.path.realpath(dist.locate_file(f))] = (dist.metadata['Name'], f.hash.value)
++    return out
++def _b64_sha256(path):
++    import base64
++    return base64.urlsafe_b64encode(hashlib.sha256(open(path, 'rb').read()).digest()).rstrip(b'=').decode()
++
++def runtime_identity(inventory=None):
+     import numpy as np, flint
+-    import fpenv
+-    try:
+-        npcfg = np.show_config(mode='dicts')
+-    except Exception as e:
+-        npcfg = {'error': repr(e)}
++    import fpenv, tm
++    import importlib.metadata as md
++    try: npcfg = np.show_config(mode='dicts')
++    except Exception as e: npcfg = {'error': repr(e)}
+     vers = {}
+     for p in PACKAGES:
+         try: vers[p] = md.version(p)
+         except Exception: vers[p] = 'missing'
+-    import tm
+-    files = runtime_files()
++    inv = static_inventory() if inventory is None else inventory
+     return dict(
+         TM_ORDER=os.environ.get('TM_ORDER', '<unset>'), tm_order_effective=tm.ORDER, arb_prec=flint.ctx.prec,
+         flint=dict(python_flint=getattr(flint, '__version__', None), FLINT=getattr(flint, '__FLINT_VERSION__', None),
+                    ctx=repr(flint.ctx), threads=getattr(flint.ctx, 'threads', None)),
+-        python=sys.version, implementation=platform.python_implementation(), executable=os.path.realpath(sys.executable),
++        python=sys.version, implementation=platform.python_implementation(), executable=sys.executable,
++        flags=repr(sys.flags), xoptions=dict(sys._xoptions), pycache_prefix=sys.pycache_prefix,
+         packages=vers, numpy_config=npcfg,
+         os=dict(platform=platform.platform(), uname=platform.uname()._asdict(), mac_ver=platform.mac_ver()[0]),
+         fp=fpenv.state(),
+         env={k: v for k, v in sorted(os.environ.items()) if k.startswith(ENV_PREFIXES)},
+-        runtime_files_sha256=hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(), runtime_files_count=len(files))
++        inventory_sha256=hashlib.sha256(json.dumps(inv, sort_keys=True).encode()).hexdigest(), inventory_count=len(inv))
+ 
+-def binding(script, manifest_sha256=None, family=None):
++def binding(script, manifest_sha256=None, family=None, inventory=None):
++    """inventory: a static_inventory() computed by the caller in this same call sequence (fresh); None: computed here"""
+     h = hashlib.sha256(); det = {}
+     srcs = closure([script])
+     det['sources'] = {f: sha_file(os.path.join(HERE, f)) for f in srcs}
+@@ -99,21 +155,63 @@
+             h.update(b'CACHE'); h.update(f.encode()); h.update(hb.encode())
+     det['manifest_sha256'] = manifest_sha256; det['family'] = family
+     h.update(b'MANIFEST'); h.update(str(manifest_sha256).encode()); h.update(b'FAMILY'); h.update(str(family).encode())
+-    env = runtime_identity(); det['environment'] = env
++    inv = static_inventory() if inventory is None else inventory
++    env = runtime_identity(inv); det['environment'] = env; det['inventory'] = inv
+     h.update(b'RUNTIME'); h.update(json.dumps(env, sort_keys=True, default=str).encode())
+     return h.hexdigest(), det
+ 
+-def loaded_local_modules_ok():
+-    """every local module that is loaded comes from HERE (no shadowing through sys.path)"""
+-    bad = []
++def loaded_modules_problems(inventory, sources, late=None):
++    """every loaded module / image comes from an unchanged file of the START inventory, a pinned local source, an OS image, or --
++    for a module first imported during the run from an installed distribution (e.g. numpy.f2py's optional charset_normalizer) --
++    a file whose sha256 equals its installer RECORD entry (recorded in `late`); no cached bytecode was read"""
++    bad = []; rec = None
++    def late_ok(rp, what):
++        nonlocal rec
++        if rec is None: rec = record_hashes()
++        r = rec.get(rp)
++        if r is None: bad.append(f'{what}: {rp} is neither in the bound inventory nor in an installer RECORD'); return
++        if _b64_sha256(rp) != r[1]: bad.append(f'{what}: {rp} differs from its installer RECORD ({r[0]})'); return
++        if late is not None: late[rp] = r[0]
+     for name, m in list(sys.modules.items()):
+-        f = getattr(m, '__file__', None)
+-        if f and os.path.exists(os.path.join(HERE, name + '.py')) and os.path.realpath(f) != os.path.realpath(os.path.join(HERE, name + '.py')):
+-            bad.append(f'{name} loaded from {f}')
++        spec = getattr(m, '__spec__', None)
++        origin = getattr(spec, 'origin', None) if spec is not None else getattr(m, '__file__', None)
++        if not origin or origin in ('built-in', 'frozen') or not os.path.isabs(str(origin)): continue
++        rp = os.path.realpath(origin)
++        if os.path.dirname(rp) == HERE and os.path.basename(rp) in sources:
++            if sha_file(rp) != sources[os.path.basename(rp)]: bad.append(f'local module {name}: source changed')
++        elif rp in inventory:
++            if sha_file(rp) != inventory[rp]: bad.append(f'module {name}: file {rp} changed')
++        else:
++            late_ok(rp, f'module {name}')
++        cached = getattr(spec, 'cached', None) if spec is not None else None
++        if cached and sys.pycache_prefix and not os.path.realpath(cached).startswith(os.path.realpath(sys.pycache_prefix)):
++            bad.append(f'module {name}: cached bytecode {cached} outside the empty pycache prefix')
++    for p in loaded_images():
++        if not os.path.isfile(p) or p.startswith(SYSTEM_PREFIXES): continue
++        rp = os.path.realpath(p)
++        if rp in inventory:
++            if sha_file(rp) != inventory[rp]: bad.append(f'loaded image {p} changed')
++        else:
++            late_ok(rp, 'loaded image')
++    if sys.pycache_prefix and os.path.isdir(sys.pycache_prefix):
++        for dp, dn, fn in os.walk(sys.pycache_prefix):
++            if fn: bad.append(f'bytecode was written under the pycache prefix ({dp})'); break
+     return bad
+ 
++def proof_flags_problems():
++    """the interpreter flags required of every proof process (DARTS_PIN set): isolated, -B, empty pycache prefix, no -O"""
++    bad = []
++    f = sys.flags
++    if f.optimize: bad.append('python -O / -OO: asserts are stripped; refused')
++    if os.environ.get('DARTS_PIN'):
++        if not (f.isolated and f.ignore_environment and f.no_user_site and f.safe_path): bad.append('not running isolated (-I)')
++        if not f.no_site: bad.append('the site module ran (-S missing): *.pth startup hooks were executed')
++        if not f.dont_write_bytecode: bad.append('bytecode writing enabled (-B missing)')
++        if not sys.pycache_prefix: bad.append('no pycache prefix (-X pycache_prefix=<empty dir> missing)')
++    return bad
++
+ if __name__ == '__main__':
+     hx, det = binding(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None, sys.argv[3] if len(sys.argv) > 3 else None)
+     env = det['environment']
+-    print(hx); print(json.dumps(dict(sources=list(det['sources']), family=det['family'], manifest_sha256=det['manifest_sha256'],
+-                                     runtime_files=env['runtime_files_count'], fp=env['fp'], os=env['os']['platform']), indent=1))
++    print(hx); print(json.dumps(dict(sources=len(det['sources']), family=det['family'], manifest_sha256=det['manifest_sha256'],
++                                     inventory=env['inventory_count'], flags=env['flags'], fp=env['fp']['fpcr'], os=env['os']['platform']), indent=1))
+--- a/chart.py (round 3, sha256 f89c1a408a21)
++++ b/chart.py
+@@ -15,8 +15,40 @@
+ from skfem import MeshTri
+ from refexact import grad_bary, p2_universal
+ 
+-CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'refcache')
++CACHE = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'refcache')
+ 
++# ---------------------------------------------------------------------------------------------- pinned chart caches (proof runs)
++# In a proof run the environment variable DARTS_PIN names the driver's private copy of the reviewed pin list.  Then the cache
++# directory must contain exactly the pinned refcache/* files with the pinned sha256 (verify_cache_inventory), a cache file is
++# unpickled only after its bytes have been read ONCE and their sha256 equals the pin (no unreviewed pickle is ever executed), and
++# nothing is written to the cache (an uncached chart is rebuilt in memory from the exact assembly).
++def _trusted_caches():
++    pin = os.environ.get('DARTS_PIN')
++    if not pin: return None
++    out = {}
++    for line in open(pin, 'rb').read().decode().split('\n'):
++        if not line.strip(): continue
++        h, f = line.split('  ', 1)
++        if f.startswith('refcache/'): out[f[len('refcache/'):]] = h
++    return out
++TRUSTED = _trusted_caches()
++def verify_cache_inventory():
++    """problems (empty = ok): the cache directory equals the pinned inventory, byte for byte"""
++    if TRUSTED is None: return ['no pinned chart-cache inventory (DARTS_PIN unset)']
++    have = sorted(os.listdir(CACHE)) if os.path.isdir(CACHE) else []
++    bad = []
++    if set(have) != set(TRUSTED): bad.append(f'cache inventory differs from the pin: extra {sorted(set(have) - set(TRUSTED))}, missing {sorted(set(TRUSTED) - set(have))}')
++    for f in have:
++        if f in TRUSTED and hashlib.sha256(open(os.path.join(CACHE, f), 'rb').read()).hexdigest() != TRUSTED[f]: bad.append(f'cache file {f} differs from the pin')
++    return bad
++def load_pinned(fn):
++    """the unpickled cache state, read once and verified against the pin BEFORE unpickling; None if the file is not pinned"""
++    name = os.path.basename(fn)
++    if name not in TRUSTED: return None
++    raw = open(fn, 'rb').read()
++    if hashlib.sha256(raw).hexdigest() != TRUSTED[name]: raise ValueError(f'chart cache {name}: bytes differ from the pin (not unpickled)')
++    return pickle.loads(raw)
++
+ def ref_unit_mesh(k):
+     m = MeshTri.init_refdom().refined(k); n = 2**k
+     P = np.rint(m.p*n).astype(np.int64)   # RIGOR: exact: the refined reference nodes are multiples of 1/n (dyadic), rint of exact integers
+@@ -62,6 +94,10 @@
+         fn = cache_file(pieces, k, self.bc, kappa, tag)
+         if fresh:
+             self._build(); return
++        if TRUSTED is not None:                                      # proof run: pinned caches only, no writes
++            st = load_pinned(fn)
++            if st is None: self._build(); return
++            self.__dict__.update(st); self.pieces_meta = pieces; return
+         os.makedirs(CACHE, exist_ok=True)
+         if os.path.exists(fn):
+             with open(fn, 'rb') as f: self.__dict__.update(pickle.load(f))
+--- a/check_charts.py (round 3, sha256 a4004da9c5bd)
++++ b/check_charts.py
+@@ -12,6 +12,7 @@
+ import numpy as np, pickle, collections
+ import charts
+ from chart import cache_file, CACHE
++import chart
+ 
+ CONSTRUCTORS = {'BD': charts.bd_chart, 'SPIKE-CR': charts.spike_cr_chart, 'C-only': charts.c_only_chart,
+                 'SPIKE2-CR': charts.spike2_cr_chart, 'FAR-CR': charts.far_cr_chart, 'DEEP-CR': charts.deep_cr_chart,
+@@ -30,7 +31,7 @@
+         if not (isinstance(a, np.ndarray) and isinstance(b, np.ndarray)): return f'{path}: array vs non-array'
+         if a.shape != b.shape or a.dtype != b.dtype: return f'{path}: shape/dtype {a.shape} {a.dtype} vs {b.shape} {b.dtype}'
+         if a.dtype.kind == 'f':
+-            if not (np.all(np.isfinite(a)) and np.all(np.isfinite(b))): return f'{path}: non-finite entries'
++            if not (np.all(np.isfinite(a)) and np.all(np.isfinite(b))): return f'{path}: non-finite entries'   # RIGOR: exact: boolean finiteness test
+         if not np.array_equal(a, b): return f'{path}: array entries differ'
+         return None
+     if isinstance(a, dict) or isinstance(b, dict):
+@@ -64,12 +65,20 @@
+ def main():
+     kmax = int(sys.argv[1]) if len(sys.argv) > 1 else 8
+     ok = True; matched = set(); t00 = time.time()
++    if chart.TRUSTED is not None:
++        inv = chart.verify_cache_inventory()
++        for b in inv: print('CACHE INVENTORY:', b)
++        if inv: ok = False
+     for name, cons in CONSTRUCTORS.items():
+         for k in range(2, kmax + 1):
+             fn = file_of(cons, k)
+             if not os.path.exists(fn): continue
+             matched.add(os.path.abspath(fn)); t0 = time.time()
+-            cached = pickle.load(open(fn, 'rb'))
++            if chart.TRUSTED is not None:
++                cached = chart.load_pinned(fn)                     # verified against the pin before unpickling
++                if cached is None: print(f'UNPINNED cache file {os.path.basename(fn)}: not loaded'); ok = False; continue
++            else:
++                cached = pickle.load(open(fn, 'rb'))               # development use (no pin): trusts the local cache
+             fresh = cons(k, fresh=True)
+             d = same(cached, fresh.cached_state())
+             conf, cinfo = conformity(fresh)
+--- a/gcert.py (round 3, sha256 d38b7c0f09d4)
++++ b/gcert.py
+@@ -27,7 +27,7 @@
+ 
+ # ---------------------------------------------------------------- polynomial helpers
+ def pvars(p0, r):
+-    return [Poly.var(i, p0[i], r[i]) for i in range(4)]
++    return [Poly.var(i, p0[i], r[i]) for i in range(4)]   # RIGOR: exact: Poly.var builds the exact variable p0 + r t (not a NumPy variance)
+ def poly_eval_float(P, t=None):   # RIGOR-FUNCTION: heuristic: float evaluation for the float solve and for free positive normalisers (J0), never a bound
+     """value at t (default 0) using float mids"""
+     if t is None: return float(sum(float(v.mid()) for e, v in P.d.items() if sum(e) == 0))
+@@ -274,7 +274,7 @@
+                 mu = min(fdown(GC[q]['JT'].lower())/J0[q] for q in S)*(1 - 1e-12)      # RIGOR: accounted: positive quotients (checked), one rounding each, times (1 - 1e-12): mu <= J_q(p)/J0_q; min of floats is exact
+                 if not mu > 0: return dict(ok=False, why='mu<=0')
+                 w = (1 + (3*len(S) + 8)*U)/(mu*sum(J0[q]*mats['M'][q][idx] for q in S))
+-            if not (np.all(np.isfinite(w)) and np.all(w > 0)): return dict(ok=False, why='weights')
++            if not (np.all(np.isfinite(w)) and np.all(w > 0)): return dict(ok=False, why='weights')   # RIGOR: exact: boolean tests
+             nrm = set_norm(idx, ent, w)
+             pd_lo = fdown(poly_to_tm(prodd).lower())
+             if not pd_lo > 0: return dict(ok=False, why='prod d <= 0')
+@@ -404,7 +404,7 @@
+                 for b in (b_lo, b_hi):
+                     pa = np.abs(a*ev[:, 0]); pb = np.abs(b*ev[:, 1])
+                     outs.append(np.abs(a*ev[:, 0] + b*ev[:, 1]) + 8*U*(pa + pb))
+-            return np.maximum.reduce(outs)
++            return np.maximum.reduce(outs)   # RIGOR: exact: elementwise maximum of floats (selection); the rounding of the entries is accounted above
+         u1 = comp(DF[0]); u2 = comp(DF[1])
+         hq = fin(np.max(np.sqrt(u1*u1 + u2*u2)))   # RIGOR: accounted: the float squares / sqrt are covered by the final factor 1 + 1e-9
+         h = max(h, hq)                              # RIGOR: exact: max of floats
+--- a/hull_to_box.py (round 3, sha256 a9bf04d3d8ee)
++++ b/hull_to_box.py
+@@ -23,7 +23,7 @@
+ def check(b, depth, st):
+     from nanguard import enclose
+     enc = [enclose(b[i][0], b[i][1]) for i in range(4)]        # exact-endpoint boxes containing [b_lo, b_hi]
+-    tms = [TM.var(i, enc[i][0], enc[i][1]) for i in range(4)]
++    tms = [TM.var(i, enc[i][0], enc[i][1]) for i in range(4)]   # RIGOR: exact: TM.var builds the exact variable c + h t (not a NumPy variance)
+     try:
+         img = [f.range() for f in coords(*tms)]
+         good = all(lo.lower() >= BOX[i][0] and hi.upper() <= BOX[i][1] for i, (lo, hi) in enumerate(img))
+--- a/ldl.py (round 3, sha256 84d04fd8713c)
++++ b/ldl.py
+@@ -34,7 +34,7 @@
+         if dj == 0.0: return dict(neg=-1, zero=True)
+         l = W[1:, 0]/dj
+         Lb[1:, j] = l
+-        W[1:, 1:] -= dj*np.outer(l, l)
++        W[1:, 1:] -= dj*np.outer(l, l)   # RIGOR: accounted: every float operation of the factorisation is covered by the backward error bound |dA| <= gamma_{b+1}|L||D||L^T| (Higham, Thm 9.3)
+         # shift window by one: new window covers j+1 .. j+1+b
+         W[:-1, :-1] = W[1:, 1:]
+         newi = j + 1 + b
+--- a/recert.py (round 3, sha256 f0fb481ad853)
++++ b/recert.py
+@@ -2,7 +2,10 @@
+ 
+ Input : certs3/<fam>.merged.jsonl (the certified tree of every root) and manifests/<fam>.json (exact grid encodings).
+ Output: certs4/<fam>.w<ID>.jsonl (one file per worker), later merged by merge_pool.py --dir certs4 and replayed by replay3.py.
+-For every root (claimed dynamically: certs4/claims/<fam>/<root>, created with O_EXCL; a restarted worker resumes its own claims):
++Launched by recert_all.sh (worker count N recorded in certs4/RECERT_N at the first start; any other N, a worker ID outside 1..N, a
++claim naming no worker 1..N or a second process with the same worker ID is REFUSED, so no claim can be orphaned by a restart).
++For every root (claimed dynamically: certs4/claims/<fam>/<root>, created atomically by link(2) of a file that already holds the
++worker ID; a restarted worker resumes its own claims):
+   * the structural records of the old tree (split, esc) are copied, so the root keeps its exact tiling;
+   * every old leaf is recomputed from scratch with the corrected code (recert_leaf):
+       discard : the recorded reason re-checked with the current predicate (else any other family reason);
+@@ -15,12 +18,14 @@
+     a success writes a new leaf record at the same path; a failure hands the leaf box to Cover5.process_item (the full cover
+     search: certificates at the box first, then bisection), whose records go to the same output;
+   * then a fresh root_done record (ok iff no FAIL leaf), box = the dyadic snapping of the manifest box.
+-Resumable: the output is read on restart; finished leaves (new leaf record, or item_done of the leaf path) are skipped, an
+-unfinished subdivision resumes inside Cover5 (it reads the same output), copied structural records are not duplicated.
++Resumable: the output is read on restart (a torn last line, left by a kill during a write, is cut off first); finished leaves
++(new leaf record, or item_done of the leaf path) are skipped, an unfinished subdivision resumes inside Cover5 (it reads the same
++output), copied structural records are not duplicated.  Completeness is checked by certs_complete.py before any replay.
+ Usage: recert.py --split FAMILY                 (once per family: per-root files of the old records, certs4/old/<fam>/)
+        recert.py FAMILY WORKER_ID                (production worker; exits when no unclaimed root is left)
+-       recert.py --time FAMILY N [SEED]          (test: recompute N random leaves per method, report times and failures)"""
+-import sys, os, json, time, random, collections
++       recert.py --time FAMILY N [SEED]          (test: recompute N random leaves per method, report times and failures)
++       recert.py --code-id                       (sha256 of the re-certification code: recert_all.sh records it at the first start)"""
++import sys, os, json, time, random, collections, re, fcntl, hashlib
+ HERE = '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts'
+ sys.path.insert(0, HERE)
+ import numpy as np
+@@ -110,9 +115,12 @@
+ def split_old(name):
+     """one-time: certs4/old/<fam>/<root>.jsonl with the leaf / split / esc records of each root (in log order), so that a worker
+     reads only the roots it claims (the merged PP log is 170 MB)"""
+-    d = os.path.join(os.environ.get('RECERT_DIR', os.path.join(HERE, 'certs4')), 'old', name)
+-    os.makedirs(d, exist_ok=True)
+-    if os.path.exists(os.path.join(d, '_COMPLETE')): return d
++    final = os.path.join(os.environ.get('RECERT_DIR', os.path.join(HERE, 'certs4')), 'old', name)
++    if os.path.exists(os.path.join(final, '_COMPLETE')): return final
++    if os.path.exists(final): raise SystemExit(f'{final} exists without _COMPLETE: an older interrupted split; move it away first')
++    os.makedirs(os.path.dirname(final), exist_ok=True)
++    d = final + f'.partial.{os.getpid()}'                   # built here, renamed into place when complete (an interrupted split
++    os.makedirs(d)                                          # leaves only an ignored .partial directory, never a half-filled one)
+     by = collections.defaultdict(list)
+     with open(os.path.join(HERE, 'certs3', f'{name.lower()}.merged.jsonl')) as f:
+         for line in f:
+@@ -125,46 +133,95 @@
+     for rid, lines in by.items():
+         with open(os.path.join(d, rid + '.jsonl'), 'a') as fo: fo.writelines(lines)
+     open(os.path.join(d, '_COMPLETE'), 'w').write('ok\n')
+-    return d
++    os.rename(d, final)
++    return final
+ def old_records(d, rid):
+     fn = os.path.join(d, rid + '.jsonl')
+     if not os.path.exists(fn): return []
+     return [json.loads(l) for l in open(fn)]
+ 
++def recorded_n(out_dir):
++    """the worker count recorded by recert_all.sh at the first start (out_dir/RECERT_N)"""
++    try:
++        with open(os.path.join(out_dir, 'RECERT_N')) as fh: s = fh.read().strip()
++    except OSError: raise SystemExit(f'{out_dir}/RECERT_N missing: start the re-certification with recert_all.sh')
++    if not re.fullmatch(r'[1-9][0-9]?', s): raise SystemExit(f'{out_dir}/RECERT_N malformed: {s!r}')
++    return int(s)
++
++def claim(cdir, rid, wid):
++    """atomic claim: the claim file appears (link(2)) already holding the worker ID; False if the root is claimed"""
++    tmp = os.path.join(cdir, f'.tmp.{wid}.{os.getpid()}')
++    with open(tmp, 'w') as fh: fh.write(str(wid)); fh.flush(); os.fsync(fh.fileno())
++    try: os.link(tmp, os.path.join(cdir, rid)); return True
++    except FileExistsError: return False
++    finally: os.unlink(tmp)
++
++def cut_torn_tail(path):
++    """a kill during a write leaves a torn last line: cut it off (the record was never complete; its work is redone)"""
++    if not os.path.exists(path) or os.path.getsize(path) == 0: return 0
++    with open(path, 'rb+') as fh:
++        data = fh.read()
++        if data.endswith(b'\n'): return 0
++        cut = data.rfind(b'\n') + 1
++        fh.truncate(cut); fh.flush(); os.fsync(fh.fileno())
++    print(json.dumps(dict(event='torn_tail_removed', file=os.path.basename(path), bytes=len(data) - cut)), flush=True)   # RIGOR: info: progress
++    return len(data) - cut
++
++def code_id():
++    """sha256 over the re-certification code: recert.py's local import closure, recert_all.sh and certs_complete.py"""
++    from binding import closure, sha_file
++    files = sorted(set(closure(['recert.py', 'certs_complete.py'])) | {'recert_all.sh'})
++    return hashlib.sha256(''.join(f'{f} {sha_file(os.path.join(HERE, f))}\n' for f in files).encode()).hexdigest()
++
+ def worker(name, wid):
+     from cover5 import Cover5
+     import fpenv
+     fpenv.check()                                            # certificates are computed under IEEE round-to-nearest only
+     out_dir = os.environ.get('RECERT_DIR', os.path.join(HERE, 'certs4')); os.makedirs(out_dir, exist_ok=True)
++    N = recorded_n(out_dir)
++    if not (re.fullmatch(r'[1-9][0-9]?', str(wid)) and int(wid) <= N): raise SystemExit(f'worker ID {wid!r} is not in 1..{N} (RECERT_N)')
++    wid = str(int(wid))
++    # one process per worker ID: a second one would interleave the same output file (advisory lock, released at exit)
++    os.makedirs(os.path.join(out_dir, 'locks'), exist_ok=True)
++    lk = os.open(os.path.join(out_dir, 'locks', f'w{wid}.lock'), os.O_CREAT | os.O_RDWR, 0o644)
++    try: fcntl.flock(lk, fcntl.LOCK_EX | fcntl.LOCK_NB)
++    except BlockingIOError: raise SystemExit(f'worker {wid} is already running (locks/w{wid}.lock)')
+     cdir = os.path.join(out_dir, 'claims', name); os.makedirs(cdir, exist_ok=True)
+     out = os.path.join(out_dir, f'{name.lower()}.w{wid}.jsonl')
+-    cx = Ctx(name)
+     man = json.load(open(os.path.join(HERE, 'manifests', f'{name.lower()}.json')))
+     mroots = {rid: (p0, r) for rid, p0, r in man['roots']}
++    # every claim must name a manifest root and a worker 1..N: a claim of any other owner would never be finished
++    claims = {}; bad = []
++    for c in os.listdir(cdir):
++        if c.startswith('.'): continue
++        with open(os.path.join(cdir, c)) as fh: owner = fh.read().strip()
++        if c not in mroots or not re.fullmatch(r'[1-9][0-9]?', owner) or int(owner) > N: bad.append(f'{c}: owner {owner!r}')
++        claims[c] = owner
++    if bad: raise SystemExit(f'{len(bad)} invalid claims in {cdir} (N = {N}), e.g. {bad[:5]}: refusing to start')
+     odir = os.path.join(out_dir, 'old', name)
+     if not os.path.exists(os.path.join(odir, '_COMPLETE')): raise SystemExit(f'run recert.py --split {name} first')
++    print(json.dumps(dict(event='start', family=name, worker=int(wid), N=N, pid=os.getpid(), niceness=os.nice(0),   # RIGOR: info: progress
++                          isolated=sys.flags.isolated, no_site=sys.flags.no_site, dont_write_bytecode=sys.flags.dont_write_bytecode)), flush=True)
++    cut_torn_tail(out)
++    cx = Ctx(name)
+     rng = random.Random(20261002 + int(wid)); order = sorted(mroots); rng.shuffle(order)
+     cv = Cover5(out, cx.fam, fem_problem=run_fam.fem_problem(name))
+     # what is already in the output (restart)
+-    have = set(); leaves_new = {}; items = set(); rdone = set()
++    have = set(); leaves_new = {}; items = set(); rdone = set()     # leaves_new: (root, path) -> status only (memory: ~0.1 kB, not ~3 kB, per leaf)
+     with open(out) as f:
+         for line in f:
+             try: d = json.loads(line)
+             except Exception: continue
+             t = d.get('type')
+             if t in ('split', 'esc', 'leaf'): have.add((t, d['root'], d['path']))
+-            if t == 'leaf': leaves_new[(d['root'], d['path'])] = d
++            if t == 'leaf': leaves_new[(d['root'], d['path'])] = d['status']
+             if t == 'item_done': items.add((d['root'], d['path']))
+             if t == 'root_done': rdone.add(d['root'])
+-    mine = set(os.listdir(cdir)) and {x for x in os.listdir(cdir) if open(os.path.join(cdir, x)).read().strip() == str(wid)}
++    mine = {x for x, o in claims.items() if o == wid}
+     queue = [x for x in order if x in mine and x not in rdone] + [x for x in order if x not in mine]
+     t_all = time.time(); nroots = 0; stats = collections.Counter()
+     for rid in queue:
+-        if rid not in mine:
+-            try:
+-                fd = os.open(os.path.join(cdir, rid), os.O_CREAT | os.O_EXCL | os.O_WRONLY); os.write(fd, str(wid).encode()); os.close(fd)
+-            except FileExistsError:
+-                continue
++        if rid not in mine and not claim(cdir, rid, wid): continue
+         if rid in rdone: continue
+         t0 = time.time(); counts = collections.Counter()
+         recs = old_records(odir, rid)
+@@ -175,14 +232,14 @@
+             if d['type'] != 'leaf': continue
+             key = (rid, d['path'])
+             if key in leaves_new:
+-                counts['cert' if leaves_new[key]['status'] == 'cert' else 'discard'] += 1; continue
++                st = leaves_new[key]; counts[st if st in ('cert', 'FAIL') else 'discard'] += 1; continue   # (a FAIL leaf keeps root_done ok = false)
+             if key in items: continue
+             fpenv.check()
+             try: new, info = recert_leaf(cx, d)
+             except Exception as e: new, info = None, 'exception: ' + repr(e)[:200]
+             stats[info.split(':')[0]] += 1
+             if new is not None:
+-                cv.emit(new); leaves_new[key] = new; counts['cert' if new['status'] == 'cert' else 'discard'] += 1
++                cv.emit(new); leaves_new[key] = new['status']; counts['cert' if new['status'] == 'cert' else 'discard'] += 1
+             else:
+                 print(json.dumps(dict(event='subdivide', root=rid, path=d['path'], old=d.get('method', d['status']), why=info)), flush=True)
+                 depth = len(d['path']) - len(rid)
+@@ -231,5 +288,7 @@
+         print(split_old(sys.argv[2]))
+     elif sys.argv[1] == '--time':
+         time_sample(sys.argv[2], int(sys.argv[3]), int(sys.argv[4]) if len(sys.argv) > 4 else 1)
++    elif sys.argv[1] == '--code-id':
++        print(code_id())
+     else:
+         worker(sys.argv[1], sys.argv[2])
+--- a/recert_all.sh (round 3, sha256 345f919e038c)
++++ b/recert_all.sh
+@@ -1,17 +1,58 @@
+ #!/bin/bash
+-# Re-certification of all cover5 family trees with the repaired verifier (recert.py): N workers (default 7) at nice 10, each
+-# working through the families in a fixed order (largest first); a root is claimed by exactly one worker
+-# (certs4/claims/<fam>/<root>); rerunning this script resumes (claims and per-worker outputs are kept).
+-# Output: certs4/<fam>.w<ID>.jsonl; progress: certs4/recert.w<ID>.out.  Afterwards: PIN=review/PINNED.sha256 SHARDS=7 ./replay_all.sh
+-cd "$(dirname "$0")"
++# Re-certification of all cover5 family trees with the repaired verifier (recert.py): N workers (default 6 = the queue's CPU
++# reservation), each working through the families in a fixed order (largest first); a root is claimed by exactly one worker
++# (<dir>/claims/<fam>/<root>); rerunning this script with the SAME N resumes (claims and per-worker outputs are kept).
++#   usage: recert_all.sh [N]          N canonical integer 1..64 (default 6)
++#   output: <dir>/<fam>.w<ID>.jsonl, progress <dir>/recert.w<ID>.out / .err; <dir> = certs4 (RECERT_DIR: test directories only)
++# Launch-path hardening (round 4): the package directory and the interpreter are ABSOLUTE constants (never derived from $0 or
++# PATH); every tool is called by absolute path; the workers run isolated (-I -S -B, empty pycache prefix, bootstrap.py) under a
++# sanitised environment (env -i); the niceness TARGET is 10 (the increment is 10 minus the current niceness, never below 0, so a
++# launcher that already applies nice 10, e.g. research-run, gives 10 and not 20).  The first start records N and the code
++# identity (recert.py --code-id) in <dir>/RECERT_N and <dir>/RECERT_CODE; a resume with another N or other code is REFUSED
++# (a different N would orphan the claims of the missing worker IDs).  When all workers have finished, certs_complete.py checks
++# that every root is done (exit status of this script = its verdict; any FAIL leaf is listed).
++# Afterwards: PIN=review/PINNED.sha256 SHARDS=6 ./replay_all.sh
++D=/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts
+ PY=/Users/admin/.venvs/analysis-py313/bin/python
+-N=${1:-7}
+-export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1
+-mkdir -p certs4
+-for F in PP SP_spk SP_col FP PF FF SF_spk SF_col; do $PY recert.py --split $F > /dev/null || exit 1; done
++ALLF="PP SP_spk SP_col FP PF FF SF_spk SF_col"
++N="${1:-6}"
++if ! [[ "$N" =~ ^[1-9][0-9]?$ ]] || [ "$N" -gt 64 ]; then echo "N must be a canonical integer in 1..64, got '$N'"; exit 2; fi
++OUT="${RECERT_DIR:-$D/certs4}"
++FAMS="$ALLF"
++if [ "$OUT" != "$D/certs4" ]; then                                    # test directories only: under the package, absolute
++  case "$OUT" in "$D"/recert_tests/*|"$D"/replays/test_runs/*) ;; *) echo "RECERT_DIR must be $D/certs4 or a test directory under recert_tests/ or replays/test_runs/"; exit 2 ;; esac
++  if [ -n "${RECERT_FAMILIES-}" ]; then
++    for F in $RECERT_FAMILIES; do case " $ALLF " in *" $F "*) ;; *) echo "unknown family '$F'"; exit 2 ;; esac; done
++    FAMS="$RECERT_FAMILIES"
++  fi
++elif [ -n "${RECERT_FAMILIES-}" ]; then echo "RECERT_FAMILIES is allowed for test directories only"; exit 2
++fi
++CUR=$(/bin/ps -o nice= -p $$ | /usr/bin/tr -d ' ')
++if ! [[ "$CUR" =~ ^-?[0-9]+$ ]]; then echo "cannot read the current niceness ('$CUR')"; exit 2; fi
++INC=$(( CUR < 10 ? 10 - CUR : 0 ))
++/bin/mkdir -p "$OUT" "$D/replays" || exit 2
++PYC=$(/usr/bin/mktemp -d "$D/replays/.pycache.XXXXXX") || exit 2
++py() { /usr/bin/env -i PATH=/usr/bin:/bin HOME="$HOME" OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 RECERT_DIR="$OUT" \
++       /usr/bin/nice -n "$INC" "$PY" -I -S -B -X "pycache_prefix=$PYC" "$D/bootstrap.py" "$@"; }
++CODE=$(py "$D/recert.py" --code-id) || { echo "recert.py --code-id failed"; exit 2; }
++for KV in "RECERT_N=$N" "RECERT_CODE=$CODE" "RECERT_FAMILIES=$FAMS"; do
++  F="$OUT/${KV%%=*}"; V="${KV#*=}"
++  if [ -e "$F" ]; then
++    if [ "$(/bin/cat "$F")" != "$V" ]; then echo "$F records '$(/bin/cat "$F")' but this start has '$V': refusing to resume"; exit 2; fi
++  else
++    ( set -o noclobber; echo "$V" > "$F" ) || { echo "cannot create $F"; exit 2; }
++  fi
++done
++echo "recert_all: N=$N dir=$OUT families='$FAMS' niceness $CUR -> +$INC code $CODE start $(/bin/date '+%F %T')"
++for F in $FAMS; do py "$D/recert.py" --split "$F" > /dev/null || { echo "split $F failed"; exit 1; }; done
+ for ((w=1; w<=N; w++)); do
+-  ( for F in PP SP_spk SP_col FP PF FF SF_spk SF_col; do
+-      nice -n 10 $PY recert.py $F $w >> certs4/recert.w$w.out 2>> certs4/recert.w$w.err || echo "worker $w family $F exit $?" >> certs4/recert.w$w.err
+-    done; echo "ALLDONE $(date '+%F %T')" >> certs4/recert.w$w.out ) &
++  ( for F in $FAMS; do
++      py "$D/recert.py" "$F" "$w" >> "$OUT/recert.w$w.out" 2>> "$OUT/recert.w$w.err" || echo "worker $w family $F exit $?" >> "$OUT/recert.w$w.err"
++    done; echo "ALLDONE $(/bin/date '+%F %T')" >> "$OUT/recert.w$w.out" ) &
+ done
+ wait
++echo "recert_all: workers finished $(/bin/date '+%F %T'); completeness check:"
++py "$D/certs_complete.py" "$OUT" $FAMS
++RC=$?
++/bin/rmdir "$PYC" 2>/dev/null
++exit $RC
+--- a/replay2.py (round 3, sha256 933643d20f5e)
++++ b/replay2.py
+@@ -130,7 +130,8 @@
+     from binding import binding
+     from nanguard import exact_box, InexactBox
+     import fpenv, replay_common as rc
+-    fpenv.check()                                            # IEEE round-to-nearest with gradual underflow, else abort
++    sc = rc.start_checks()                                   # flags, FP environment, pinned chart caches (before any load)
++    if sc: print('START CHECKS FAILED:', sc); sys.exit(1)
+     if not (0 <= si < sn): print('bad shard', a.shard); sys.exit(1)
+     msnap = rc.snapshot(a.manifest); lsnap = rc.snapshot(a.log)      # the replay parses exactly these bytes
+     vh, vdet = binding('replay2.py', msnap['sha256'], a.family)
+@@ -198,7 +199,7 @@
+         if not ok: fail(f'root {rid}: tiling: {why}')
+     # re-verification of leaves (sharded by root order)
+     from regions import check_reason
+-    out = open(a.out, 'w') if a.out else None
++    out = open(a.out, 'x') if a.out else None                # exclusive creation: never overwrites an output
+     gcs = {}
+     def gc_for(k):
+         from gcert import GCert
+@@ -250,8 +251,9 @@
+                 leaves_sha256=hashlib.sha256(''.join(sorted(shas)).encode()).hexdigest(),
+                 log_sha256=lsnap['sha256'],
+                 time_s=round(time.time() - t0, 1))   # RIGOR: info: timing
+-    for w in rc.end_checks('replay2.py', msnap['sha256'], a.family, vh, [msnap, lsnap]): fail('end of run: ' + w)
+-    summ['failures'] = len(bad)
++    for w in rc.end_checks('replay2.py', msnap['sha256'], a.family, vh, [msnap, lsnap], vdet): fail('end of run: ' + w)
++    summ['failures'] = len(bad); summ['late_loaded'] = dict(rc.LATE); summ['niceness'] = os.nice(0)   # (recorded, not bound)
++    summ['binding_sources'] = vdet['sources']; summ['binding_refcache'] = vdet['refcache']
+     print(json.dumps(summ), flush=True)
+     if out: out.write(json.dumps(dict(summary=summ)) + '\n'); out.close()
+     sys.exit(0 if not bad else 1)
+--- a/replay3.py (round 3, sha256 5e173d1c1d61)
++++ b/replay3.py
+@@ -88,7 +88,8 @@
+     fam = fam5.FAMILIES[a.family]()
+     si, sn = [int(x) for x in a.shard.split('/')]
+     import fpenv, replay_common as rc
+-    fpenv.check()                                            # IEEE round-to-nearest with gradual underflow, else abort
++    sc = rc.start_checks()                                   # flags, FP environment, pinned chart caches (before any load)
++    if sc: print('START CHECKS FAILED:', sc); sys.exit(1)
+     if not (0 <= si < sn): print('bad shard', a.shard); sys.exit(1)
+     msnap = rc.snapshot(a.manifest); lsnap = rc.snapshot(a.log)      # the replay parses exactly these bytes
+     vh, vdet = binding('replay3.py', msnap['sha256'], a.family); bad = []
+@@ -188,7 +189,7 @@
+     # 4. re-verification
+     from bo2 import bo_family
+     from p2fix import p2_cert
+-    out = open(a.out, 'w') if a.out else None
++    out = open(a.out, 'x') if a.out else None                # exclusive creation: never overwrites an output
+     gcs = {}
+     def gc_for(k):
+         from gcert import GCert
+@@ -259,8 +260,9 @@
+                 leaves_checked=nchk, ok=nok, failures=len(bad), binding_sha256=vh, manifest_sha256=vdet.get('manifest_sha256'),
+                 environment=vdet['environment'], leaves_sha256=hashlib.sha256(''.join(sorted(shas)).encode()).hexdigest(),
+                 log_sha256=lsnap['sha256'], time_s=round(time.time() - t0, 1))   # RIGOR: info: timing
+-    for w in rc.end_checks('replay3.py', msnap['sha256'], a.family, vh, [msnap, lsnap]): fail('end of run: ' + w)
+-    summ['failures'] = len(bad)
++    for w in rc.end_checks('replay3.py', msnap['sha256'], a.family, vh, [msnap, lsnap], vdet): fail('end of run: ' + w)
++    summ['failures'] = len(bad); summ['late_loaded'] = dict(rc.LATE); summ['niceness'] = os.nice(0)   # (recorded, not bound)
++    summ['binding_sources'] = vdet['sources']; summ['binding_refcache'] = vdet['refcache']
+     print(json.dumps(summ), flush=True)
+     if out: out.write(json.dumps(dict(summary=summ)) + '\n'); out.close()
+     sys.exit(0 if not bad else 1)
+--- a/replay_all.py (round 3, sha256 ffeba827a4a6)
++++ b/replay_all.py
+@@ -1,22 +1,46 @@
+-"""Aggregate fail-closed proof replay of the dart package (adversarial review round 2, SERIOUS 2, 5, 7).
+-Usage: replay_all.py --pin PINFILE [--shards N] [--mode proof|quick] [--certs DIR] [--run-id ID]
+-  --shards N   a canonical integer 1 <= N <= 64 (default 7): exactly N replay processes per log, each must succeed
+-  --mode       'proof' (default): every certificate recomputed; the only mode that can print PASS.
+-               'quick': structure only (no recomputation); it can never print PASS (it prints STRUCTURE-ONLY, NOT A PROOF).
+-               'test' : machinery test on a subset (--only TAG,..., --gates all|none); it can never print PASS.
+-  --pin        the reviewed file list ('sha256  path' lines): every listed file must have exactly that sha256, at the start and
+-               at the end, and every transitive decision source of every stage must be listed (no unpinned code).
+-Nothing is reused: every replay runs fresh into replays/run_<ID>/ (an existing run directory or receipt is never overwritten).
+-Receipt replays/receipts/<ID>.jsonl: append-only (created with O_EXCL), hash-chained records (each carries the sha256 of the
+-previous record), fsynced, binding: the pin list and its verification, the driver and wrapper sources, the runtime identity
+-(binding.runtime_identity) and floating-point environment, every gate (command, exit status, output sha256), every merge
+-(output sha256), every replay (log and manifest sha256, family, expected binding, every shard output sha256 and summary, the
+-strict validation of every receipt record against the recomputed leaf multiset of the log), and the end-of-run checks (pin
+-list, logs, manifests and runtime identity unchanged).  Exit status 0 iff mode proof and every check passed (PASS)."""
++"""Aggregate fail-closed proof replay of the dart package (adversarial reviews round 2 (SERIOUS 2, 5, 7) and round 3).
++Threat model (README §5): accidental corruption, stale or changed files, concurrent agents editing files, environment drift.
++Deliberate tampering by the owner of the machine is out of scope.
++
++Launch ONLY through replay_all.sh, which runs this file as
++    env -i PATH=/usr/bin:/bin HOME=... <venv python> -I -S -B -X pycache_prefix=<new empty dir> <darts>/bootstrap.py <darts>/replay_all.py
++Usage: replay_all.py --pin PINFILE [--shards N] [--mode proof|quick|test] [--certs DIR] [--run-id ID] [--only TAGS --gates all|none]
++  --shards N   canonical integer 1..64 (default 6, the queue's CPU reservation): exactly N replay processes per log
++  --mode       proof (default): every certificate recomputed; the ONLY mode that can print PASS and exit 0.
++               quick: structure only, never PASS (exit 3 when structurally OK); test: machinery test on a subset (--only, --gates),
++               never PASS (exit 3 when OK).  Exit 1: FAIL; exit 2: usage / launch error.
++What a run does (every step recorded in the receipt):
++  * reads the pin list ONCE (its sha256 is the hash of exactly the parsed bytes), writes a private read-only copy into the new
++    run directory (children read that copy through DARTS_PIN), and checks: every pinned file has its pinned sha256, every
++    transitive decision source of every stage is pinned, the chart cache directory equals the pinned refcache/* inventory;
++  * checks its own interpreter flags (-I -S -B, empty pycache prefix, no -O) and the FP environment, lowers its own priority
++    in-process to the TARGET niceness 10 (os.nice(max(0, 10 - current)): under a launcher that already applied nice 10, such as
++    research-run, the run stays at 10, not 20; the children inherit it and report it in their summaries), and launches every
++    child as <venv python, absolute> -I -S -B
++    -X pycache_prefix=<run>/pycache bootstrap.py <script> with a sanitised environment (PATH=/usr/bin:/bin, HOME, TMPDIR, the BLAS
++    thread variables, DARTS_PIN; nothing else);
++  * completeness (seconds, before any gate, merge or replay): certs_complete.check() of the re-certification directory for the
++    selected cover5 families -- every manifest root exactly one root_done with ok = true, no FAIL leaf (every FAIL leaf is listed
++    on stdout and in the receipt), no torn / garbage / duplicate record, every handoff with its item_done, every claim of a
++    worker 1..N (RECERT_N) and done; any problem ABORTS the run before any replay starts; the merge inputs must then have exactly
++    the sha256 of the bytes this check read;
++  * gates, merges and replays: gate outputs are captured in memory, hashed and written exclusively; a merged log is snapshotted
++    once after its merge and its sha256 recorded; before every replay the chart caches are re-verified against the pin, the log
++    and manifest are snapshotted once and must equal their pin entry (old logs, manifests) or the recorded merge output (family
++    logs); the children create their outputs exclusively; after the children exit each output is snapshotted ONCE and exactly
++    those bytes are validated (replay_ok.validate, incl. log-record metadata), summarised and hashed; a missing or unreadable
++    summary FAILS the run;
++  * end of run: the original pin file and the private copy, every pinned file, the chart caches, every consumed log and manifest
++    and every shard output must still have their recorded sha256; a FRESH runtime inventory must equal the start one; the
++    driver's loaded modules must come from unchanged bound files; the pycache directories must be empty;
++  * receipt replays/receipts/<ID>.jsonl: created exclusively; one canonical JSON record per line with seq (strictly 0, 1, 2, ...),
++    prev_sha256 (the previous record's self_sha256), time, kind (start, complete, gate, merge, replay, end, abort), data and self_sha256 (the
++    sha256 of the canonical record without it); every record written completely (write loop) and fsynced, the directory fsynced;
++    after the final record the receipt is closed, made read-only, re-read and fully validated (read_receipt) before the final
++    status is printed together with the final digest (the self_sha256 of the end record), which is to be anchored externally."""
+ import argparse, hashlib, json, os, re, subprocess, sys, time, secrets
+-HERE = os.path.dirname(os.path.abspath(__file__))
+-sys.path.insert(0, HERE)
+-PY = sys.executable
++HERE = os.path.dirname(os.path.realpath(__file__))
++if HERE not in sys.path: sys.path.insert(0, HERE)
+ GATES = [['lemma_sector.py'], ['lemma_longarm.py'], ['check_charts.py', '8'], ['rigor_lint.py'], ['test_containment.py'],
+          ['hull_to_box.py', '56', '64', '0.0339', '0.12', '0.5', '0.875'], ['check_cbox_cover.py'], ['accounting.py']]
+ LEGACY = [('certs/crit_collar.jsonl', 'COLLAR', 'manifests/crit_collar.json', 'crit_collar'),
+@@ -26,158 +50,305 @@
+           ('certs2/kf_collar.jsonl', 'KF_COLLAR', 'manifests/kf_collar.json', 'kf_collar'),
+           ('certs2/kf_spike.jsonl', 'KF_SPIKE', 'manifests/kf_spike.json', 'kf_spike')]
+ FAMILIES = ['PP', 'SP_col', 'SP_spk', 'PF', 'FP', 'FF', 'SF_col', 'SF_spk']
+-ENTRY_POINTS = ['replay_all.py', 'replay2.py', 'replay3.py', 'replay_ok.py', 'merge_pool.py'] + [g[0] for g in GATES]
++ENTRY_POINTS = ['replay_all.py', 'bootstrap.py', 'replay2.py', 'replay3.py', 'replay_ok.py', 'merge_pool.py'] + [g[0] for g in GATES]
++RECORD_KEYS = {'seq', 'prev_sha256', 'time', 'kind', 'data', 'self_sha256'}
++KINDS = {'start', 'complete', 'gate', 'merge', 'replay', 'end', 'abort'}
++EXIT_PASS, EXIT_FAIL, EXIT_USAGE, EXIT_NOT_PROOF = 0, 1, 2, 3
+ 
++def canon(obj): return json.dumps(obj, sort_keys=True, separators=(',', ':'), ensure_ascii=True)
++def plain(obj): return json.loads(json.dumps(obj, default=str))
++def sha_bytes(b): return hashlib.sha256(b).hexdigest()
++def sha_file(p):
++    with open(p, 'rb') as fh: return sha_bytes(fh.read())
++def write_all(fd, data):
++    view = memoryview(data)
++    while view:
++        n = os.write(fd, view)
++        if n <= 0: raise OSError('write returned 0')
++        view = view[n:]
++def fsync_dir(d):
++    fd = os.open(d, os.O_RDONLY)
++    try: os.fsync(fd)
++    finally: os.close(fd)
++def write_exclusive(path, data, mode=0o444):
++    fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
++    try: write_all(fd, data); os.fsync(fd)
++    finally: os.close(fd)
++    os.chmod(path, mode); fsync_dir(os.path.dirname(path))
++
++def final_status(mode, failures):
++    """only a proof-mode run without any failure is a PASS"""
++    if failures: return 'FAIL'
++    return {'proof': 'PASS', 'quick': 'STRUCTURE-ONLY (NOT A PROOF)', 'test': 'MACHINERY TEST OK (NOT A PROOF)'}[mode]
++def exit_code(status):
++    return EXIT_PASS if status == 'PASS' else (EXIT_FAIL if status == 'FAIL' else EXIT_NOT_PROOF)
++
+ class Receipt:
+     def __init__(self, path):
+-        os.makedirs(os.path.dirname(path), exist_ok=True)
+-        self.fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY | os.O_APPEND, 0o444)
+-        self.path = path; self.seq = 0; self.prev = '0'*64
++        self.path = path; self.dir = os.path.dirname(path)
++        os.makedirs(self.dir, exist_ok=True)
++        self.fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY | os.O_APPEND, 0o644)
++        fsync_dir(self.dir)
++        self.seq = 0; self.prev = '0'*64
+     def add(self, kind, **data):
+-        rec = dict(seq=self.seq, prev_sha256=self.prev, time=time.strftime('%Y-%m-%dT%H:%M:%S'), kind=kind, data=data)
+-        line = (json.dumps(rec, sort_keys=True, default=str) + '\n').encode()
+-        os.write(self.fd, line); os.fsync(self.fd)
+-        self.prev = hashlib.sha256(line).hexdigest(); self.seq += 1
++        if kind not in KINDS: raise ValueError(kind)
++        rec = dict(seq=self.seq, prev_sha256=self.prev, time=time.strftime('%Y-%m-%dT%H:%M:%S'), kind=kind, data=plain(data))
++        rec['self_sha256'] = sha_bytes(canon(rec).encode())
++        write_all(self.fd, (canon(rec) + '\n').encode()); os.fsync(self.fd)
++        self.prev = rec['self_sha256']; self.seq += 1
+         return self.prev
++    def close(self):
++        os.fsync(self.fd); os.close(self.fd); os.chmod(self.path, 0o444); fsync_dir(self.dir)
+ 
+-def sha_file(p): return hashlib.sha256(open(p, 'rb').read()).hexdigest()
++def read_receipt(raw):
++    """(records, final digest, problems) of receipt bytes: canonical lines, strict sequence, chained and self hashes, schema"""
++    problems = []; recs = []; prev = '0'*64
++    if not raw.endswith(b'\n'): problems.append('receipt does not end with a newline (torn)')
++    lines = raw.split(b'\n')[:-1] if raw.endswith(b'\n') else raw.split(b'\n')
++    for i, line in enumerate(lines):
++        try: rec = json.loads(line)
++        except Exception: problems.append(f'record {i}: not JSON'); break
++        if not isinstance(rec, dict) or set(rec) != RECORD_KEYS: problems.append(f'record {i}: keys'); break
++        if canon(rec).encode() != line: problems.append(f'record {i}: not in canonical form'); break
++        if rec['seq'] != i: problems.append(f'record {i}: seq {rec["seq"]}'); break
++        if rec['prev_sha256'] != prev: problems.append(f'record {i}: prev_sha256 does not chain'); break
++        if rec['kind'] not in KINDS or not isinstance(rec['data'], dict): problems.append(f'record {i}: kind / data'); break
++        body = {k: v for k, v in rec.items() if k != 'self_sha256'}
++        if sha_bytes(canon(body).encode()) != rec['self_sha256']: problems.append(f'record {i}: self_sha256 mismatch'); break
++        prev = rec['self_sha256']; recs.append(rec)
++    if recs and recs[0]['kind'] != 'start': problems.append('first record is not start')
++    ends = [r for r in recs if r['kind'] in ('end', 'abort')]
++    if len(ends) > 1 or (ends and ends[0] is not recs[-1]): problems.append('end / abort record is not unique and last')
++    return recs, prev, problems
+ 
+-def final_status(mode, failures):
+-    """only a proof-mode run without any failure is a PASS"""
+-    if failures: return 'FAIL'
+-    return {'proof': 'PASS', 'quick': 'STRUCTURE-ONLY (NOT A PROOF)', 'test': 'MACHINERY TEST OK (NOT A PROOF)'}[mode]
++def summaries_of(outputs):
++    """(summaries, problems) of shard output snapshots [(name, bytes)]: a missing or unreadable summary is a problem (FAIL)"""
++    out = []; bad = []
++    for name, b in outputs:
++        try:
++            s = json.loads(b.decode().rstrip('\n').split('\n')[-1])['summary']
++            if not isinstance(s, dict): raise ValueError('summary is not an object')
++            out.append(s)
++        except Exception: bad.append(f'{name}: summary missing or unreadable'); out.append(None)
++    return out, bad
+ 
+-def read_pin(pin):
++def read_pin_bytes(raw):
+     out = {}
+-    for line in open(pin):
+-        if not line.strip(): continue
+-        m = re.match(r'^([0-9a-f]{64})  (\S.*)$', line.rstrip('\n'))
+-        if not m: raise SystemExit(f'malformed pin line: {line!r}')
++    for line in raw.decode().split('\n'):
++        if not line: continue
++        m = re.fullmatch(r'([0-9a-f]{64})  (\S.*)', line)
++        if not m or m.group(2) in out: raise ValueError(f'malformed or duplicate pin line: {line!r}')
+         out[m.group(2)] = m.group(1)
+     return out
+ 
+-def check_pin(pins):
++def check_pinned(pins, which=None):
+     bad = []
+     for f, h in sorted(pins.items()):
++        if which is not None and not which(f): continue
+         p = os.path.join(HERE, f)
+-        if not os.path.isfile(p): bad.append(f'{f}: missing'); continue
++        if not os.path.isfile(p) or os.path.islink(p): bad.append(f'{f}: missing or not a regular file'); continue
+         if sha_file(p) != h: bad.append(f'{f}: sha256 differs from the pin')
+     return bad
+ 
++def check_cache_inventory(pins):
++    want = {f[len('refcache/'):] for f in pins if f.startswith('refcache/')}
++    have = set(os.listdir(os.path.join(HERE, 'refcache'))) if os.path.isdir(os.path.join(HERE, 'refcache')) else set()
++    bad = []
++    if not want: bad.append('the pin lists no chart cache files')
++    if have != want: bad.append(f'chart cache inventory differs from the pin: extra {sorted(have - want)}, missing {sorted(want - have)}')
++    return bad + check_pinned(pins, lambda f: f.startswith('refcache/'))
++
++def own_flags_problems():
++    f = sys.flags; bad = []
++    if f.optimize: bad.append('python -O: refused')
++    if not (f.isolated and f.no_site and f.dont_write_bytecode and sys.pycache_prefix): bad.append('driver not launched by replay_all.sh (-I -S -B -X pycache_prefix)')
++    return bad
++
+ def main():
+     ap = argparse.ArgumentParser()
+-    ap.add_argument('--pin', required=True); ap.add_argument('--shards', default='7'); ap.add_argument('--mode', default='proof')
++    ap.add_argument('--pin', required=True); ap.add_argument('--shards', default='6'); ap.add_argument('--mode', default='proof')
+     ap.add_argument('--certs', default='certs4'); ap.add_argument('--run-id', default=None)
+     ap.add_argument('--only', default=None); ap.add_argument('--gates', default='all')
+     a = ap.parse_args()
+-    # the replays run single-threaded BLAS; set it here so that the driver's runtime identity equals its children's
+-    os.environ.update(OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1', VECLIB_MAXIMUM_THREADS='1')
+-    if not re.fullmatch(r'[1-9][0-9]{0,1}', a.shards) or not (1 <= int(a.shards) <= 64):
+-        raise SystemExit(f'--shards must be a canonical integer in 1..64, got {a.shards!r}')
+-    if a.mode not in ('proof', 'quick', 'test'): raise SystemExit(f'--mode must be proof, quick or test, got {a.mode!r}')
+-    if a.mode != 'test' and (a.only is not None or a.gates != 'all'): raise SystemExit('--only / --gates are allowed in --mode test only')
+-    if a.gates not in ('all', 'none'): raise SystemExit('--gates must be all or none')
++    if not re.fullmatch(r'[1-9][0-9]?', a.shards) or not (1 <= int(a.shards) <= 64): print(f'--shards must be a canonical integer in 1..64, got {a.shards!r}'); sys.exit(EXIT_USAGE)
++    if a.mode not in ('proof', 'quick', 'test'): print(f'--mode must be proof, quick or test, got {a.mode!r}'); sys.exit(EXIT_USAGE)
++    if a.mode != 'test' and (a.only is not None or a.gates != 'all'): print('--only / --gates are allowed in --mode test only'); sys.exit(EXIT_USAGE)
++    if a.gates not in ('all', 'none'): print('--gates must be all or none'); sys.exit(EXIT_USAGE)
++    fl = own_flags_problems()
++    if fl: print('LAUNCH ERROR:', fl); sys.exit(EXIT_USAGE)
+     only = set(a.only.split(',')) if a.only else None
+     N = int(a.shards); quick = a.mode == 'quick'
+-    try: pins = read_pin(a.pin)                                         # before anything is created
+-    except (OSError, SystemExit) as e: raise SystemExit(f'pin file {a.pin!r} unreadable or malformed: {e}')
+-    if not pins: raise SystemExit(f'pin file {a.pin!r} is empty')
++    pin_path = os.path.realpath(a.pin)
++    try:
++        with open(pin_path, 'rb') as fh: pin_raw = fh.read()              # the ONLY read of the pin file before the end check
++        pins = read_pin_bytes(pin_raw)
++    except (OSError, ValueError) as e:
++        print(f'pin file {a.pin!r} unreadable or malformed: {e}'); sys.exit(EXIT_USAGE)
++    if not pins: print('empty pin'); sys.exit(EXIT_USAGE)
++    pin_sha = sha_bytes(pin_raw)
+     run_id = a.run_id or (time.strftime('%Y%m%dT%H%M%S') + '_' + secrets.token_hex(4))
+-    if not re.fullmatch(r'[A-Za-z0-9_.-]+', run_id): raise SystemExit('bad run id')
++    if not re.fullmatch(r'[A-Za-z0-9_.-]+', run_id): print('bad run id'); sys.exit(EXIT_USAGE)
+     base = os.path.join(HERE, 'replays') if a.mode != 'test' else os.path.join(HERE, 'replays', 'test_runs')
+     run_dir = os.path.join(base, f'run_{run_id}')
+-    os.makedirs(run_dir, exist_ok=False)                                   # never reuse or overwrite a run directory
++    os.makedirs(run_dir, exist_ok=False)
++    for d in ('pycache', 'tmp'): os.makedirs(os.path.join(run_dir, d))
++    pin_copy = os.path.join(run_dir, 'PIN.sha256'); write_exclusive(pin_copy, pin_raw)
+     rc_ = Receipt(os.path.join(base, 'receipts', f'{run_id}.jsonl'))
++    # niceness TARGET 10 (in-process, inherited by every child): under a launcher that already applied nice 10 (research-run)
++    # the run stays at 10, not 20; a higher start value is kept (an unprivileged process cannot lower it)
++    os.nice(max(0, 10 - os.nice(0)))   # RIGOR: exact: integer niceness arithmetic (no numerics)
+     import fpenv, replay_common as rcm
+-    from binding import binding, runtime_identity, closure
++    from binding import closure, static_inventory, runtime_identity, binding, loaded_modules_problems
+     from replay_ok import validate
+     failures = []
+     def failed(stage, msg):
+         failures.append(f'{stage}: {msg}'); print(f'FAIL {stage}: {msg}', flush=True)
+-    # ---- start: pin, sources, runtime
+-    pin_bad = check_pin(pins)
+-    needed = set(closure(ENTRY_POINTS)) | {'replay_all.sh'}
+-    unpinned = sorted(f for f in needed if f not in pins)
+-    for b in pin_bad: failed('pin', b)
+-    for f in unpinned: failed('pin', f'decision source {f} is not pinned')
++    # ---- start
++    for b in check_pinned(pins): failed('pin', b)
++    needed = set(closure(ENTRY_POINTS)) | {'replay_all.sh', 'rigor_allowlist.json'}
++    for f in sorted(needed - set(pins)): failed('pin', f'decision source {f} is not pinned')
++    for b in check_cache_inventory(pins): failed('chart caches', b)
+     try: fpenv.check(); fp_ok = True
+     except fpenv.FPEnvError as e: fp_ok = False; failed('fpenv', str(e))
+-    ident = runtime_identity(); ident_sha = hashlib.sha256(json.dumps(ident, sort_keys=True, default=str).encode()).hexdigest()
+-    rc_.add('start', run_id=run_id, mode=a.mode, shards=N, certs=a.certs, argv=sys.argv, pin_file=a.pin, pin_sha256=sha_file(a.pin),
+-            pin_count=len(pins), pin_failures=pin_bad, unpinned=unpinned, driver_sha256=sha_file(os.path.abspath(__file__)),
+-            wrapper_sha256=sha_file(os.path.join(HERE, 'replay_all.sh')), runtime_identity=ident, runtime_identity_sha256=ident_sha,
+-            fp_ok=fp_ok, env={k: v for k, v in os.environ.items() if k in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'VECLIB_MAXIMUM_THREADS', 'TM_ORDER')})
+-    if pin_bad or unpinned or not fp_ok:
+-        rc_.add('abort', reason='pin / FP environment check failed', failures=failures)
+-        print('ABORT (pin or FP environment); receipt', rc_.path); sys.exit(1)
+-    env = dict(os.environ)
++    inv0 = static_inventory(); ident0 = runtime_identity(inv0)
++    exe = sys.executable
++    if not (os.path.isabs(exe) and os.path.isfile(os.path.join(os.path.dirname(os.path.dirname(exe)), 'pyvenv.cfg'))): failed('launch', f'interpreter {exe} is not the absolute venv interpreter')
++    child_env = {'PATH': '/usr/bin:/bin', 'HOME': os.environ.get('HOME', '/var/empty'), 'TMPDIR': os.path.join(run_dir, 'tmp'),
++                 'OMP_NUM_THREADS': '1', 'OPENBLAS_NUM_THREADS': '1', 'VECLIB_MAXIMUM_THREADS': '1', 'DARTS_PIN': pin_copy}
++    def child(script, *args):
++        return [exe, '-I', '-S', '-B', '-X', 'pycache_prefix=' + os.path.join(run_dir, 'pycache'), os.path.join(HERE, 'bootstrap.py'),
++                os.path.join(HERE, script)] + list(args)
++    rc_.add('start', run_id=run_id, mode=a.mode, shards=N, certs=a.certs, argv=sys.argv, pin_file=pin_path, pin_sha256=pin_sha,
++            pin_count=len(pins), pin_copy=os.path.relpath(pin_copy, HERE), driver_sha256=sha_file(os.path.realpath(__file__)),
++            wrapper_sha256=sha_file(os.path.join(HERE, 'replay_all.sh')), runtime_identity=ident0, child_env=child_env,
++            child_command=child('<script>'), niceness=os.nice(0), failures_so_far=list(failures))
++    if failures:
++        rc_.add('abort', reason='start checks failed', failures=failures); rc_.close()
++        print('ABORT (start checks); receipt', os.path.relpath(rc_.path, HERE)); sys.exit(EXIT_FAIL)
++    # ---- completeness of the re-certification directory (seconds): no gate, merge or replay starts on incomplete certificates
++    import certs_complete
++    fams_sel = [F for F in FAMILIES if only is None or F.lower() in only]
++    t0 = time.time()
++    cc = (certs_complete.check(os.path.join(HERE, a.certs), fams_sel, require_lock=(a.mode != 'test')) if fams_sel
++          else dict(N=None, roots={}, inputs={}, problems=[], fails=[]))     # (test runs of legacy logs only)
++    rc_.add('complete', certs=a.certs, families=fams_sel, N=cc['N'], roots=cc['roots'], inputs=cc['inputs'], problems=len(cc['problems']),
++            first_problems=cc['problems'][:100], fail_leaves=len(cc['fails']), fail_leaf_list=cc['fails'][:500],
++            seconds=round(time.time() - t0, 1))   # RIGOR: info: timing
++    for x in cc['fails']: print('FAIL LEAF:', json.dumps(x), flush=True)
++    for pr in cc['problems'][:50]: failed('complete', pr)
++    if len(cc['problems']) > 50: failed('complete', f'... {len(cc["problems"]) - 50} more completeness problems')
++    if cc['fails']: failed('complete', f'{len(cc["fails"])} FAIL leaves (listed above and in the receipt)')
++    if failures:
++        rc_.add('abort', reason='re-certification directory incomplete', failures=failures); rc_.close()
++        print('ABORT (incomplete certificates: no replay started); receipt', os.path.relpath(rc_.path, HERE)); sys.exit(EXIT_FAIL)
+     # ---- gates
+     for g in (GATES if a.gates == 'all' else []):
+-        out = os.path.join(run_dir, 'gate_' + g[0].replace('.py', '') + '.out'); t0 = time.time()
+-        with open(out, 'wb') as fo:
+-            r = subprocess.run(['nice', '-n', '10', PY] + g, cwd=HERE, stdout=fo, stderr=subprocess.STDOUT, env=env)
+-        rc_.add('gate', command=g, exit=r.returncode, output=os.path.relpath(out, HERE), output_sha256=sha_file(out),
++        t0 = time.time()
++        r = subprocess.run(child(*g), cwd=HERE, env=child_env, capture_output=True)
++        outb = r.stdout + b'\n--- stderr ---\n' + r.stderr
++        out = os.path.join(run_dir, 'gate_' + g[0].replace('.py', '') + '.out'); write_exclusive(out, outb)
++        rc_.add('gate', command=g, exit=r.returncode, output=os.path.relpath(out, HERE), output_sha256=sha_bytes(outb),
+                 seconds=round(time.time() - t0, 1))   # RIGOR: info: timing
+         if r.returncode != 0: failed('gate ' + g[0], f'exit {r.returncode}')
+         print(f'gate {" ".join(g)}: exit {r.returncode}', flush=True)
+-    # ---- merges of the re-certified family logs
++    # ---- merges
++    expected = {}                                                     # path -> sha256 the replays must consume
+     replays = [(log, fam, man, 'replay2.py', tag) for log, fam, man, tag in LEGACY if only is None or tag in only]
++    for log, fam, man, script, tag in replays: expected[log] = pins.get(log); expected[man] = pins.get(man)
+     for F in FAMILIES:
+         if only is not None and F.lower() not in only: continue
+-        L = F.lower(); out = os.path.join(run_dir, f'merge_{L}.out')
+-        with open(out, 'wb') as fo:
+-            r = subprocess.run([PY, 'merge_pool.py', F, '--dir', a.certs], cwd=HERE, stdout=fo, stderr=subprocess.STDOUT, env=env)
+-        merged = os.path.join(a.certs, f'{L}.merged.jsonl')
+-        ok = r.returncode == 0 and os.path.isfile(os.path.join(HERE, merged))
+-        rc_.add('merge', family=F, exit=r.returncode, merged=merged, merged_sha256=sha_file(os.path.join(HERE, merged)) if ok else None,
+-                output_sha256=sha_file(out))
+-        if not ok: failed('merge ' + F, f'exit {r.returncode} or merged log missing'); continue
+-        replays.append((merged, F, f'manifests/{L}.json', 'replay3.py', L))
+-    # ---- replays: exactly N fresh shards each, every output strictly validated
+-    snaps = []
++        L = F.lower(); merged = os.path.join(a.certs, f'{L}.merged.jsonl')
++        inputs = sorted(f for f in os.listdir(os.path.join(HERE, a.certs)) if f.startswith(L + '.') and f.endswith('.jsonl') and not f.endswith('.merged.jsonl')) if os.path.isdir(os.path.join(HERE, a.certs)) else []
++        in_sha = {f: sha_file(os.path.join(HERE, a.certs, f)) for f in inputs}
++        if in_sha != {f: h for f, h in cc['inputs'].items() if f.startswith(L + '.')}: failed('merge ' + F, 'merge inputs differ from the files the completeness check read')
++        r = subprocess.run(child('merge_pool.py', F, '--dir', a.certs), cwd=HERE, env=child_env, capture_output=True)
++        mp = os.path.join(HERE, merged)
++        msha = sha_file(mp) if (r.returncode == 0 and os.path.isfile(mp)) else None
++        rc_.add('merge', family=F, exit=r.returncode, inputs=in_sha, merged=merged, merged_sha256=msha, output_sha256=sha_bytes(r.stdout + r.stderr))
++        if msha is None: failed('merge ' + F, f'exit {r.returncode} or merged log missing'); continue
++        man = f'manifests/{L}.json'
++        expected[merged] = msha; expected[man] = pins.get(man)
++        replays.append((merged, F, man, 'replay3.py', L))
++    # ---- replays
++    out_sha = {}
+     for log, fam, man, script, tag in replays:
+-        ls = rcm.snapshot(os.path.join(HERE, log)); ms = rcm.snapshot(os.path.join(HERE, man)); snaps += [ls, ms]
+-        vh = binding(script, ms['sha256'], fam)[0]
+-        procs = []; files = []; t0 = time.time()
++        stage = f'replay {tag}'; t0 = time.time()
++        for b in check_cache_inventory(pins): failed(stage, 'chart caches: ' + b)
++        ls = rcm.snapshot(os.path.join(HERE, log)); ms = rcm.snapshot(os.path.join(HERE, man))
++        if expected.get(log) is None or ls['sha256'] != expected[log]: failed(stage, f'log {log}: sha256 {ls["sha256"][:12]} differs from its pin / merge entry'); continue
++        if expected.get(man) is None or ms['sha256'] != expected[man]: failed(stage, f'manifest {man}: sha256 differs from its pin entry'); continue
++        procs = []
+         for i in range(N):
+-            f = os.path.join(run_dir, f'{tag}.{i}.jsonl'); files.append(f)
+-            cmd = ['nice', '-n', '10', PY, script, log, fam, man, '--shard', f'{i}/{N}', '--out', f] + (['--no-recert'] if quick else [])
+-            lf = open(f[:-6] + '.log', 'wb')
+-            procs.append((i, subprocess.Popen(cmd, cwd=HERE, stdout=lf, stderr=subprocess.STDOUT, env=env), lf))
+-        codes = {}
+-        for i, p, lf in procs: codes[i] = p.wait(); lf.close()
+-        stage = f'replay {tag}'
+-        for i, c in codes.items():
+-            if c != 0: failed(stage, f'shard {i} exit {c}')
+-        missing = [f for f in files if not os.path.isfile(f)]
+-        for f in missing: failed(stage, f'missing output {os.path.basename(f)}')
+-        problems = validate([f for f in files if os.path.isfile(f)], ls, ms, fam, vh, expect_shards=N, recert=not quick)
+-        for p in problems[:20]: failed(stage, p)
++            f = os.path.join(run_dir, f'{tag}.{i}.jsonl')
++            lf = open(os.path.join(run_dir, f'{tag}.{i}.log'), 'xb')
++            procs.append((i, f, subprocess.Popen(child(script, log, fam, man, '--shard', f'{i}/{N}', '--out', f) + (['--no-recert'] if quick else []),
++                                                 cwd=HERE, env=child_env, stdout=lf, stderr=subprocess.STDOUT), lf))
++        codes = {}; outputs = []
++        for i, f, p, lf in procs:
++            codes[i] = p.wait(); lf.close()
++            if codes[i] != 0: failed(stage, f'shard {i} exit {codes[i]}')
++            try:
++                with open(f, 'rb') as fh: b = fh.read()                    # the ONLY read of this output
++                outputs.append((os.path.basename(f), b)); out_sha[f] = sha_bytes(b)
++            except OSError: failed(stage, f'shard {i}: output missing')
++        summaries, sbad = summaries_of(outputs)
++        for b_ in sbad: failed(stage, b_)
++        vh = summaries[0].get('binding_sha256') if summaries and isinstance(summaries[0], dict) else None
++        problems = validate(outputs, ls, ms, fam, vh, expect_shards=N, recert=not quick) if vh else ['no binding in the first summary']
++        # the binding a child computed (which this process cannot recompute: other loaded images, environment, pycache prefix) must
++        # report exactly the pinned sources and chart caches, the sanitised child environment and the run's pycache prefix
++        for k, sm in enumerate(summaries):
++            if not isinstance(sm, dict): continue
++            for src, h in (sm.get('binding_sources') or {}).items():
++                if pins.get(src) != h: problems.append(f'shard {k}: source {src} differs from the pin')
++            if not sm.get('binding_sources'): problems.append(f'shard {k}: no binding sources reported')
++            if {('refcache/' + f): h for f, h in (sm.get('binding_refcache') or {}).items()} != {f: h for f, h in pins.items() if f.startswith('refcache/')}:
++                problems.append(f'shard {k}: chart caches differ from the pin')
++            env_ = sm.get('environment') or {}
++            if env_.get('env') != {k2: v for k2, v in child_env.items() if k2.startswith(('OMP_', 'OPENBLAS_', 'VECLIB_', 'DARTS_'))}: problems.append(f'shard {k}: environment differs from the sanitised child environment')
++            if env_.get('pycache_prefix') != os.path.join(run_dir, 'pycache'): problems.append(f'shard {k}: wrong pycache prefix')
++            if (env_.get('fp') or {}).get('behaviour_failures'): problems.append(f'shard {k}: FP environment')
++            if sm.get('family') != fam or sm.get('log_sha256') != expected[log] or sm.get('manifest_sha256') != expected[man]: problems.append(f'shard {k}: family / log / manifest identity')
++        if len({(sm or {}).get('environment', {}).get('inventory_sha256') for sm in summaries}) != 1: problems.append('shards report different runtime inventories')
++        for pr in problems[:20]: failed(stage, pr)
+         if len(problems) > 20: failed(stage, f'... {len(problems) - 20} more validation problems')
+-        summaries = []
+-        for f in files:
+-            try: summaries.append(json.loads(open(f).read().rstrip('\n').split('\n')[-1])['summary'])
+-            except Exception: summaries.append(None)
+-        w = rcm.changed(ls) or rcm.changed(ms)
+-        if w: failed(stage, w)
+         rc_.add('replay', tag=tag, script=script, family=fam, log=log, log_sha256=ls['sha256'], manifest=man, manifest_sha256=ms['sha256'],
+-                expected_binding=vh, shards=N, exit_codes=codes, outputs={os.path.basename(f): (sha_file(f) if os.path.isfile(f) else None) for f in files},
+-                summaries=summaries, validation_problems=len(problems), seconds=round(time.time() - t0, 1))   # RIGOR: info: timing
++                expected_binding=vh, shards=N, exit_codes=codes, outputs={n: sha_bytes(b) for n, b in outputs}, summaries=summaries,
++                validation_problems=len(problems), seconds=round(time.time() - t0, 1))   # RIGOR: info: timing
+         print(f'{stage}: shards ok {sum(1 for c in codes.values() if c == 0)}/{N}, validation problems {len(problems)}', flush=True)
+-    # ---- end of run: nothing changed
+-    end_bad = check_pin(pins)
+-    for s in snaps:
+-        w = rcm.changed(s)
+-        if w: end_bad.append(w)
+-    ident2 = runtime_identity(); ident2_sha = hashlib.sha256(json.dumps(ident2, sort_keys=True, default=str).encode()).hexdigest()
+-    if ident2_sha != ident_sha: end_bad.append('runtime identity changed during the run')
++        del ls, ms, outputs
++    # ---- end of run
++    end_bad = []
++    for p in (pin_path, pin_copy):
++        try:
++            if sha_file(p) != pin_sha: end_bad.append(f'pin file {p} changed during the run')
++        except OSError: end_bad.append(f'pin file {p} unreadable at the end')
++    end_bad += check_pinned(pins) + check_cache_inventory(pins)
++    for path, h in expected.items():
++        if h is not None and os.path.isfile(os.path.join(HERE, path)) and sha_file(os.path.join(HERE, path)) != h: end_bad.append(f'{path} changed during the run')
++    for f, h in out_sha.items():
++        if sha_file(f) != h: end_bad.append(f'shard output {os.path.basename(f)} changed after it was validated')
++    inv1 = static_inventory(paths=list(inv0))                       # the start inventory's files, re-read now (no memoisation)
++    if inv1 != inv0: end_bad.append('runtime files changed during the run: ' + str(sorted(k for k in inv0 if inv0.get(k) != inv1.get(k))[:5]))
++    srcs = {f: pins[f] for f in pins if f.endswith('.py') and '/' not in f}
++    late = {}
++    end_bad += loaded_modules_problems(inv0, srcs, late)
++    for d in (os.path.join(run_dir, 'pycache'),):
++        if any(fn for _, _, fn in os.walk(d)): end_bad.append(f'bytecode written under {d}')
+     try: fpenv.check()
+     except fpenv.FPEnvError as e: end_bad.append(str(e))
+     for b in end_bad: failed('end', b)
+     status = final_status(a.mode, failures)
+-    rc_.add('end', end_state_unchanged=not end_bad, end_problems=end_bad, failures=failures, status=status)
+-    print(f'REPLAY_ALL STATUS: {status}  (receipt {os.path.relpath(rc_.path, HERE)}, run directory {os.path.relpath(run_dir, HERE)})')
+-    sys.exit(0 if (not failures) else 1)
++    digest = rc_.add('end', end_state_unchanged=not end_bad, end_problems=end_bad, failures=failures, status=status, driver_late_loaded=late)
++    rc_.close()
++    with open(rc_.path, 'rb') as fh: rraw = fh.read()
++    recs, final, rprob = read_receipt(rraw)
++    if rprob or final != digest or recs[-1]['data'].get('status') != status:
++        print('FAIL receipt re-read:', rprob[:3]); status = 'FAIL'
++    print(f'REPLAY_ALL STATUS: {status}  receipt {os.path.relpath(rc_.path, HERE)}  run directory {os.path.relpath(run_dir, HERE)}')
++    print(f'RECEIPT FINAL DIGEST (self_sha256 of the end record): {final}')
++    print(f'RECEIPT FILE SHA256: {sha_bytes(rraw)}')
++    sys.exit(exit_code(status))
+ 
+ if __name__ == '__main__':
+     main()
+--- a/replay_all.sh (round 3, sha256 916432af37c4)
++++ b/replay_all.sh
+@@ -1,15 +1,24 @@
+ #!/bin/bash
+-# Thin wrapper of the aggregate fail-closed proof replay replay_all.py (see its docstring).  Environment:
+-#   SHARDS  canonical integer 1..64 (default 7)        QUICK  unset/empty (proof) or exactly 1 (structure only, never PASS)
+-#   PIN     the reviewed pin list (default review/PINNED.sha256)   CERTS_DIR  re-certified family logs (default certs4)
+-# Any other value is rejected; nothing is reused (FRESH is obsolete: every run is fresh).
+-cd "$(dirname "$0")" || exit 2
++# Launcher of the aggregate fail-closed proof replay replay_all.py (see its docstring).  The package directory and the interpreter
++# are ABSOLUTE constants (never derived from $0, so a symlink or a copy of this script cannot select another driver); the driver
++# runs isolated (-I), without the site module (-S, no *.pth startup hooks), without bytecode (-B and a new empty pycache prefix),
++# under a sanitised environment (env -i: only PATH=/usr/bin:/bin, HOME and the BLAS thread variables).  Environment of the caller:
++#   SHARDS  canonical integer 1..64 (default 6 = the queue's CPU reservation)        QUICK  unset/empty (proof) or exactly 1 (structure only, never PASS)
++#   PIN     the reviewed pin list (default <package>/review/PINNED.sha256)   CERTS_DIR  re-certified family logs (default certs4)
++# Any other value is rejected (exit 2).  Exit 0 iff the run is a proof PASS.  Extra arguments are passed to the driver (machinery
++# tests: --mode test --only TAGS --gates none --run-id ID; a test run can never PASS).
++D=/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts
+ PY=/Users/admin/.venvs/analysis-py313/bin/python
+-SH="${SHARDS:-7}"
++SH="${SHARDS:-6}"
+ if ! [[ "$SH" =~ ^[1-9][0-9]?$ ]] || [ "$SH" -gt 64 ]; then echo "SHARDS must be a canonical integer in 1..64, got '$SH'"; exit 2; fi
+ case "${QUICK-}" in
+   "") MODE=proof ;;
+   1) MODE=quick ;;
+   *) echo "QUICK must be unset or exactly 1, got '$QUICK'"; exit 2 ;;
+ esac
+-exec $PY replay_all.py --pin "${PIN:-review/PINNED.sha256}" --shards "$SH" --mode "$MODE" --certs "${CERTS_DIR:-certs4}"
++PIN_ARG="${PIN:-$D/review/PINNED.sha256}"
++CERTS_ARG="${CERTS_DIR:-certs4}"
++/bin/mkdir -p "$D/replays" || exit 2
++PYC=$(/usr/bin/mktemp -d "$D/replays/.pycache.XXXXXX") || exit 2
++exec /usr/bin/env -i PATH=/usr/bin:/bin HOME="$HOME" OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 \
++  "$PY" -I -S -B -X "pycache_prefix=$PYC" "$D/bootstrap.py" "$D/replay_all.py" --pin "$PIN_ARG" --shards "$SH" --mode "$MODE" --certs "$CERTS_ARG" "$@"
+--- a/replay_common.py (round 3, sha256 182aa4eac189)
++++ b/replay_common.py
+@@ -1,10 +1,15 @@
+ """Shared fail-closed plumbing of replay2.py / replay3.py (adversarial review round 2, SERIOUS 3, 4, 6).
+   snapshot(path)        reads a file ONCE; the replay parses exactly these bytes and records their sha256 (no re-read for the hash)
+   changed(snap)         re-reads the path at the end: a different sha256 or file identity (device, inode, size, mtime) is a failure
+-  end_checks(...)       at the end of a replay: binding recomputed and equal to the start binding (sources, chart cache, manifest
+-                        hash, family, runtime identity, FP environment); every snapshot unchanged; FP environment still
+-                        round-to-nearest with gradual underflow; no production-only module was loaded (this verifies the
+-                        RIGOR-MODULE annotations of rigor_lint.py at run time); every loaded local module comes from this directory."""
++  start_checks()        at the start of a replay: interpreter flags of a proof process (isolated, -S, -B, empty pycache prefix, no -O),
++                        FP environment, and in a proof run (DARTS_PIN) the chart-cache inventory equal to the pin BEFORE any chart
++                        is loaded
++  end_checks(...)       at the end of a replay: binding recomputed from a FRESH file-system inventory and equal to the start binding
++                        (sources, chart cache, manifest hash, family, runtime identity, FP environment); every snapshot unchanged;
++                        FP environment still round-to-nearest with gradual underflow; every loaded module and image comes from an
++                        unchanged file of the start inventory or a pinned local source and read no cached bytecode; the chart-cache
++                        inventory still equal to the pin; no production-only module was loaded (this verifies the RIGOR-MODULE
++                        annotations of rigor_lint.py at run time)."""
+ import os, sys, hashlib
+ HERE = os.path.dirname(os.path.abspath(__file__))
+ # production-only modules: rigor_lint.py exempts them from the per-site rules ONLY because no replay ever executes them
+@@ -26,18 +31,41 @@
+     if (st.st_dev, st.st_ino, st.st_size, st.st_mtime_ns) != snap['ident']: return f'{snap["path"]}: file identity changed during the replay'
+     return None
+ 
+-def end_checks(script, manifest_sha, family, vh_start, snaps):
++def start_checks():
++    """problems that forbid starting a replay"""
+     import fpenv
+-    from binding import binding, loaded_local_modules_ok
++    from binding import proof_flags_problems
++    bad = proof_flags_problems()
++    try: fpenv.check()
++    except fpenv.FPEnvError as e: bad.append(str(e))
++    if os.environ.get('DARTS_PIN'):
++        import chart
++        bad += chart.verify_cache_inventory()
++    return bad
++
++LATE = {}           # modules / images first loaded during the run, verified against their installer RECORD (reported in summaries)
++def end_checks(script, manifest_sha, family, vh_start, snaps, start_det):
++    import fpenv
++    from binding import binding, loaded_modules_problems, static_inventory
+     bad = []
+     try: fpenv.check()
+     except fpenv.FPEnvError as e: bad.append(str(e))
+-    vh_end = binding(script, manifest_sha, family)[0]
+-    if vh_end != vh_start: bad.append('binding changed during the replay (sources, chart cache, runtime or environment)')
++    inv_end = static_inventory(paths=list(start_det['inventory']))     # the same files, re-read now (no memoisation)
++    vh_end, det_end = binding(script, manifest_sha, family, inventory=inv_end)
++    if vh_end != vh_start:
++        bad.append('binding changed during the replay (sources, chart cache, runtime or environment)')
++        a, b = start_det['inventory'], det_end['inventory']
++        ch = sorted(k for k in set(a) | set(b) if a.get(k) != b.get(k))
++        if ch: bad.append(f'runtime files changed: {ch[:5]}')
+     for s in snaps:
+         w = changed(s)
+         if w: bad.append(w)
++    srcs = dict(start_det['sources'])
++    srcs['bootstrap.py'] = __import__('binding').sha_file(os.path.join(HERE, 'bootstrap.py'))
++    bad += loaded_modules_problems(start_det['inventory'], srcs, LATE)
++    if os.environ.get('DARTS_PIN'):
++        import chart
++        bad += chart.verify_cache_inventory()
+     for m in EXEMPT_MODULES:
+         if m in sys.modules: bad.append(f'production-only module {m} was loaded by the replay')
+-    bad += loaded_local_modules_ok()
+     return bad
+--- a/replay_ok.py (round 3, sha256 d429b96eed99)
++++ b/replay_ok.py
+@@ -1,13 +1,14 @@
+-"""Strict validation of the outputs of a sharded replay (adversarial review round 2, SERIOUS 6 and 7).
+-validate(files, log_snap, manifest_snap, script, family, binding_hex) checks EVERY record of the shard files
+-  replays .../<tag>.<i>.jsonl, i = 0..n-1:
++"""Strict validation of the outputs of a sharded replay (adversarial reviews round 2 (SERIOUS 6, 7) and round 3 (items 4, 7)).
++validate(outputs, log_snap, manifest_snap, family, binding_hex) checks EVERY record of the shard outputs, given as BYTE SNAPSHOTS
++(name, bytes) taken once by the caller (the driver hashes and summarises exactly the same bytes), i = 0..n-1:
+   * every line parses; every line but the last is a leaf receipt with exactly the keys
+     {root, path, line, status, method, ok, info, record_sha256, binding_sha256, family}, ok = true, the expected binding and family;
+   * the last line is a summary for shard i/n with partial = false, recert = true, failures = 0, leaves_checked = ok = the number of
+     receipts in the file, the expected family, binding, log sha256 and manifest sha256, and leaves_sha256 = the sha256 of the
+     file's sorted receipt record hashes;
+   * across the shards: no duplicate receipt (log line), and the multiset of receipt record hashes and the set of receipt lines
+-    equal those RECOMPUTED from the bound log bytes (every leaf record of the log, hashed as by the replays).
++    equal those RECOMPUTED from the bound log bytes (every leaf record of the log, hashed as by the replays); every receipt's
++    root, path, status and method agree with its log record (info must be a string).
+ Returns a list of problems (empty = valid).  The proof driver (replay_all.py) always replays fresh and then applies validate()
+ to its own outputs; reuse of an older replay (this script's command line) is for development only and never yields a proof.
+ Usage: replay_ok.py TAG LOG SCRIPT MANIFEST FAMILY [--dir DIR]   (exit 0 iff a complete valid replay of LOG exists in DIR)"""
+@@ -17,7 +18,8 @@
+ RECEIPT_KEYS = {'root', 'path', 'line', 'status', 'method', 'ok', 'info', 'record_sha256', 'binding_sha256', 'family'}
+ 
+ def log_leaf_hashes(log_bytes):
+-    """{line number: record sha256} of every leaf record of the log, hashed exactly as by replay2 / replay3"""
++    """{line number: (record sha256, root, path, status, method)} of every leaf record of the log, hashed exactly as by replay2 /
++    replay3; method as the replays report it (legacy cert records without a method key are FEM certificates)"""
+     from replay2 import rec_hash
+     out = {}
+     text = log_bytes.decode()
+@@ -29,16 +31,23 @@
+         try: d = json.loads(s)
+         except Exception: continue
+         if isinstance(d, dict) and d.get('type') == 'leaf':
+-            out[ln] = rec_hash({k: v for k, v in d.items() if not k.startswith('_')})
++            out[ln] = (rec_hash({k: v for k, v in d.items() if not k.startswith('_')}), d.get('root'), d.get('path'), d.get('status'),
++                       d.get('method', 'FEM' if d.get('status') == 'cert' else None))
+     return out
+ 
+-def validate(files, log_snap, manifest_snap, family, binding_hex, expect_shards=None, recert=True):
++def validate(outputs, log_snap, manifest_snap, family, binding_hex=None, expect_shards=None, recert=True):
++    """outputs: list of (name, bytes) snapshots of the shard output files; returns a list of problems (empty = valid).
++    binding_hex None: the binding is taken from the first summary and every shard and receipt must carry the same one (the caller
++    checks that binding's recorded sources, chart caches and environment, which a launching process cannot recompute itself)"""
+     bad = []
+-    if not files: return ['no replay output files']
+-    seen_lines = {}; n_expected = None; idx = set()
+-    for f in files:
+-        try: raw = open(f, 'rb').read().decode()
+-        except Exception as e: bad.append(f'{f}: unreadable ({e})'); continue
++    if not outputs: return ['no replay output files']
++    if binding_hex is None:
++        try: binding_hex = json.loads(outputs[0][1].decode().rstrip('\n').split('\n')[-1])['summary']['binding_sha256']
++        except Exception: return ['first shard has no readable summary']
++    seen_lines = {}; meta = {}; n_expected = None; idx = set()
++    for f, rawb in outputs:
++        try: raw = rawb.decode()
++        except Exception as e: bad.append(f'{f}: not UTF-8 ({e})'); continue
+         if not raw.endswith('\n'): bad.append(f'{f}: torn last line'); continue
+         lines = raw.split('\n')[:-1]
+         if not lines: bad.append(f'{f}: empty'); continue
+@@ -59,7 +68,9 @@
+             if d['family'] != family: bad.append(f'{f}:{k}: receipt family {d["family"]!r} != {family!r}'); continue
+             if not isinstance(d['line'], int): bad.append(f'{f}:{k}: receipt line'); continue
+             if d['line'] in seen_lines: bad.append(f'{f}:{k}: duplicate receipt for log line {d["line"]}'); continue
+-            seen_lines[d['line']] = d['record_sha256']; recs.append(d['record_sha256'])
++            if not isinstance(d['info'], str): bad.append(f'{f}:{k}: receipt info is not a string'); continue
++            seen_lines[d['line']] = d['record_sha256']; meta[d['line']] = (d['root'], d['path'], d['status'], d['method'])
++            recs.append(d['record_sha256'])
+         want = dict(partial=False, recert=recert, failures=0, family=family, binding_sha256=binding_hex, log_sha256=log_snap['sha256'],
+                     manifest_sha256=manifest_snap['sha256'])
+         for k, v in want.items():
+@@ -70,7 +81,10 @@
+     if expect_shards is not None and n_expected != expect_shards: bad.append(f'{n_expected} shards, expected {expect_shards}')
+     exp = log_leaf_hashes(log_snap['bytes'])
+     if set(seen_lines) != set(exp): bad.append(f'receipts cover {len(seen_lines)} log lines, the log has {len(exp)} leaf records (sets differ)')
+-    elif any(seen_lines[ln] != exp[ln] for ln in exp): bad.append('a receipt record hash differs from the recomputed hash of its log line')
++    else:
++        if any(seen_lines[ln] != exp[ln][0] for ln in exp): bad.append('a receipt record hash differs from the recomputed hash of its log line')
++        wrong = [ln for ln in exp if meta[ln] != exp[ln][1:]]
++        if wrong: bad.append(f'{len(wrong)} receipts disagree with their log records in root / path / status / method (first: line {wrong[0]})')
+     return bad
+ 
+ if __name__ == '__main__':
+@@ -80,9 +94,16 @@
+     d = sys.argv[sys.argv.index('--dir') + 1] if '--dir' in sys.argv else os.path.join(HERE, 'replays')
+     ls = rc.snapshot(os.path.join(HERE, log) if not os.path.isabs(log) else log)
+     ms = rc.snapshot(os.path.join(HERE, manifest) if not os.path.isabs(manifest) else manifest)
+-    vh = binding(script, ms['sha256'], family)[0]
+     files = sorted(glob.glob(os.path.join(d, f'{tag}.[0-9]*.jsonl')))
+-    problems = validate(files, ls, ms, family, vh)
++    outs = [(f, open(f, 'rb').read()) for f in files]
++    # the binding is taken from the summaries (its runtime part belongs to the replaying process, which this one cannot recompute);
++    # its recorded source closure and chart caches must equal the current files
++    problems = validate(outs, ls, ms, family, None)
++    if not problems:
++        det = binding(script, ms['sha256'], family)[1]
++        summ = json.loads(outs[0][1].decode().rstrip('\n').split('\n')[-1])['summary']
++        if summ.get('binding_sources') != det['sources']: problems.append('the replay was made with other source files than the current ones')
++        if summ.get('binding_refcache') != det['refcache']: problems.append('the replay was made with other chart caches than the current ones')
+     for p in problems[:20]: print('INVALID:', p)
+     if problems: sys.exit(1)
+     print(f'valid: {tag} ({len(files)} shards, every receipt checked against the bound log)')
+--- a/rigor_allowlist.json (round 3, sha256 ee8c585408b5)
++++ b/rigor_allowlist.json
+@@ -226,6 +226,12 @@
+ "scope": "module",
+ "kind": "F5",
+ "line_sha256": "4a9530ca8a29716afde548eff618582feb2539895d399dbbbb58951766fd5cb6"
++},
++{
++"file": "bo2f.py",
++"scope": "module",
++"kind": "F5",
++"line_sha256": "5395eaac48f63deebd1f5ba10f4fff73b160480152ace0e07eaace5106c405a2"
+ },
+ {
+ "file": "bo2f.py",
+@@ -316,6 +322,12 @@
+ "scope": "module",
+ "kind": "F5",
+ "line_sha256": "bce6c771e2416dd160f3a74cba9db3b5c2f18b1d731c9866486447af6760cc1f"
++},
++{
++"file": "bo2f.py",
++"scope": "module",
++"kind": "F5",
++"line_sha256": "c4ed6823f9e703fa0ab89f819cf8470c1d09d05a65eea486fd6caf24a1d5e84b"
+ },
+ {
+ "file": "bo2f.py",
+--- a/rigor_lint.py (round 3, sha256 0429bbb72a9d)
++++ b/rigor_lint.py
+@@ -1,16 +1,17 @@
+ """Rigour lint of the verifier sources (adversarial review 2026-10-02, gate 1).  Exit status 1 on any unannotated hazard.
+ 
+-Sources linted: the transitive local-import closure (binding.closure) of every replay / accounting entry point:
++Sources linted: the transitive local-import closure (binding.closure) of every replay / accounting / driver entry point:
+   replay2.py replay3.py accounting.py check_charts.py check_cbox_cover.py hull_to_box.py lemma_sector.py lemma_longarm.py
+-  merge_pool.py replay_ok.py remanifest.py rigor_lint.py
++  merge_pool.py replay_ok.py remanifest.py rigor_lint.py replay_all.py bootstrap.py test_containment.py make_pin.py summarize.py
+ Flagged constructs (AST walk):
+   F1  float(...), fin(...), round(...) calls and .mid() method calls      (a nearest conversion that could reach a decision)
+   F2  x ** k with a non-literal base                                        (python-flint ball ** k is NaN for balls around 0)
+   F3  builtin max(...) / min(...)                                           (ball comparisons can be undecided; NaN is dropped)
+   F4  math.nextafter / np.nextafter / math.ulp outside nanguard.py          (endpoint conversions must use fdown / fup)
+-  F5  NumPy casts and reductions: np.max/min/amax/amin/sum/prod/mean/maximum/minimum/round/rint/floor/ceil/float64/float32/
+-      asarray/array/linspace/percentile/median/fromiter, and the methods .astype/.item/.max/.min/.sum/.prod/.mean
+-                                                                            (float rounding hidden in a NumPy call)
++  F5  NumPy casts and reductions, under ANY alias (import numpy as x; from numpy import f [as g]; from numpy.linalg import ...):
++      max/min/amax/amin/sum/prod/mean/var/std/all/any/maximum/minimum/round/rint/floor/ceil/float64/float32/asarray/array/
++      linspace/percentile/median/fromiter/dot/matmul/einsum, ufunc methods .reduce/.accumulate/.reduceat/.outer on a NumPy
++      attribute, and the methods .astype/.item/.max/.min/.sum/.prod/.mean/.var/.std/.all/.any   (rounding hidden in NumPy)
+ Every flagged node must be covered by an annotation, else it is a FAILURE:
+   * on its own line, or on the first line of its enclosing statement:   # RIGOR: <tag>: <reason>
+   * on the def line of an enclosing function:                           # RIGOR-FUNCTION: <tag>: <reason>
+@@ -33,23 +34,46 @@
+ sys.path.insert(0, HERE)
+ from binding import closure
+ ENTRIES = ['replay2.py', 'replay3.py', 'accounting.py', 'check_charts.py', 'check_cbox_cover.py', 'hull_to_box.py',
+-           'lemma_sector.py', 'lemma_longarm.py', 'merge_pool.py', 'replay_ok.py', 'remanifest.py', 'rigor_lint.py']
++           'lemma_sector.py', 'lemma_longarm.py', 'merge_pool.py', 'replay_ok.py', 'remanifest.py', 'rigor_lint.py',
++           'replay_all.py', 'bootstrap.py', 'test_containment.py', 'make_pin.py', 'summarize.py']
+ TAGS = ('heuristic', 'info', 'exact', 'accounted', 'helper')
++import io, tokenize
+ NP_TAINT = {'max', 'min', 'amax', 'amin', 'nanmax', 'nanmin', 'sum', 'prod', 'mean', 'maximum', 'minimum', 'round', 'around', 'rint',
+             'floor', 'ceil', 'float64', 'float32', 'float16', 'longdouble', 'asarray', 'array', 'linspace', 'percentile', 'median',
+-            'fromiter', 'nextafter'}
+-METHOD_TAINT = {'astype', 'item', 'max', 'min', 'sum', 'prod', 'mean'}
++            'fromiter', 'nextafter', 'var', 'std', 'nanvar', 'nanstd', 'all', 'any', 'dot', 'matmul', 'einsum', 'nansum', 'cumsum',
++            'cumprod', 'average', 'fsum'}
++UFUNC_METHODS = {'reduce', 'accumulate', 'reduceat', 'outer'}
++METHOD_TAINT = {'astype', 'item', 'max', 'min', 'sum', 'prod', 'mean', 'var', 'std', 'all', 'any'}
+ ALLOWLIST = os.path.join(HERE, 'rigor_allowlist.json')
+ ANN = re.compile(r'#\s*RIGOR(-FUNCTION|-MODULE)?:\s*([a-z]+)\s*:\s*(\S.*)$')
+ 
+-def annotations(lines):
++def annotations(src):
++    """annotations found in real COMMENT tokens only (tokenize): a string literal that looks like an annotation is ignored"""
+     out = {}
+-    for i, l in enumerate(lines, 1):
+-        m = ANN.search(l)
+-        if m: out[i] = (m.group(1) or '', m.group(2), m.group(3).strip())
++    for tok in tokenize.generate_tokens(io.StringIO(src).readline):
++        if tok.type == tokenize.COMMENT:
++            m = ANN.search(tok.string)
++            if m: out[tok.start[0]] = (m.group(1) or '', m.group(2), m.group(3).strip())
+     return out
+ 
++def numpy_aliases(tree):
++    """(module aliases of numpy and its submodules, {local name: numpy attribute} of names imported from numpy)"""
++    mods = set(); names = {}
++    for n in ast.walk(tree):
++        if isinstance(n, ast.Import):
++            for a in n.names:
++                if a.name == 'numpy' or a.name.startswith('numpy.'): mods.add(a.asname or a.name.split('.')[0])
++        elif isinstance(n, ast.ImportFrom) and n.module and (n.module == 'numpy' or n.module.startswith('numpy.')):
++            for a in n.names: names[a.asname or a.name] = a.name
++    return mods, names
++
++def _root(node):
++    while isinstance(node, ast.Attribute): node = node.value
++    return node.id if isinstance(node, ast.Name) else None
++
+ def flagged(tree):
++    mods, npnames = numpy_aliases(tree)
++    mods |= {'np', 'numpy'}
+     for node in ast.walk(tree):
+         if isinstance(node, ast.Call):
+             f = node.func
+@@ -58,9 +82,13 @@
+             elif isinstance(f, ast.Name) and f.id in ('max', 'min'): yield node, 'F3 ' + f.id + '()'
+             elif isinstance(f, ast.Attribute) and f.attr in ('nextafter', 'ulp') and isinstance(f.value, ast.Name) and f.value.id in ('math', 'np', 'numpy'):
+                 yield node, 'F4 ' + f.value.id + '.' + f.attr
+-            elif isinstance(f, ast.Attribute) and isinstance(f.value, ast.Name) and f.value.id in ('np', 'numpy') and f.attr in NP_TAINT:
++            elif isinstance(f, ast.Attribute) and _root(f) in mods and f.attr in NP_TAINT:
+                 yield node, 'F5 np.' + f.attr
+-            elif isinstance(f, ast.Attribute) and f.attr in METHOD_TAINT and not (isinstance(f.value, ast.Name) and f.value.id in ('np', 'numpy', 'math')):
++            elif isinstance(f, ast.Attribute) and f.attr in UFUNC_METHODS and _root(f) in mods:
++                yield node, 'F5 ufunc.' + f.attr
++            elif isinstance(f, ast.Name) and f.id in npnames and npnames[f.id] in NP_TAINT:
++                yield node, 'F5 ' + f.id + ' (from numpy)'
++            elif isinstance(f, ast.Attribute) and f.attr in METHOD_TAINT and not (isinstance(f.value, ast.Name) and f.value.id in (mods | {'math'})):
+                 yield node, 'F5 .' + f.attr + '()'
+         elif isinstance(node, ast.BinOp) and isinstance(node.op, ast.Pow):
+             b = node.left
+@@ -70,7 +98,7 @@
+ def lint_file(fn, listing):
+     src = open(os.path.join(HERE, fn)).read(); lines = src.split('\n')
+     tree = ast.parse(src)
+-    ann = annotations(lines)
++    ann = annotations(src)
+     mod = [v for k, v in ann.items() if v[0] == '-MODULE' and lines[k - 1].lstrip().startswith('#')]
+     # statement start lines and function def lines for every node
+     parents = {}
+--- a/summarize.py (round 3, sha256 ca15918183aa)
++++ b/summarize.py
+@@ -1,18 +1,17 @@
+-"""Markdown table of a proof replay from its aggregate receipt (replays/receipts/<ID>.jsonl, written by replay_all.py): for
+-every run (log): family, log sha256 prefix, shards, leaves checked / ok / failures (from the shard summaries recorded in the
+-receipt), validation problems; then the gate results and the final status.  The receipt's hash chain is verified first.
++"""Markdown table of a proof replay from its aggregate receipt (replays/receipts/<ID>.jsonl, written by replay_all.py).  The receipt
++is validated first with replay_all.read_receipt (canonical records, strict sequence, chained prev_sha256, per-record self_sha256,
++schema, a unique final end / abort record); then for every replayed log: family, log sha256 prefix, shards, leaves checked / ok /
++failures (from the shard summaries recorded in the receipt), validation problems; the gate results; the final status and digest.
+ Usage: summarize.py RECEIPT"""
+-import sys, json, hashlib
++import sys, os
++sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
++from replay_all import read_receipt
+ def main():
+-    raw = open(sys.argv[1], 'rb').read().split(b'\n')
+-    if raw and raw[-1] == b'': raw = raw[:-1]
+-    prev = '0'*64; recs = []
+-    for line in raw:
+-        d = json.loads(line)
+-        if d['prev_sha256'] != prev: print('RECEIPT HASH CHAIN BROKEN at seq', d.get('seq')); sys.exit(1)
+-        prev = hashlib.sha256(line + b'\n').hexdigest(); recs.append(d)
++    raw = open(sys.argv[1], 'rb').read()
++    recs, digest, problems = read_receipt(raw)
++    if problems: print('RECEIPT INVALID:', problems); sys.exit(1)
+     start = recs[0]['data']; end = recs[-1]['data'] if recs[-1]['kind'] == 'end' else None
+-    print(f"run {start['run_id']} mode {start['mode']} shards {start['shards']} pin {start['pin_file']} ({start['pin_count']} files)")
++    print(f"run {start['run_id']} mode {start['mode']} shards {start['shards']} pin {start['pin_file']} ({start['pin_count']} files, sha256 {start['pin_sha256'][:12]})")
+     print('| log | family | log sha256 | shards ok | leaves checked | ok | failures | validation problems |')
+     print('|---|---|---|---|---|---|---|---|')
+     for r in recs:
+@@ -23,6 +22,7 @@
+               f"{sum(x['ok'] for x in s)} | {sum(x['failures'] for x in s)} | {d['validation_problems']} |")
+     for r in recs:
+         if r['kind'] == 'gate': print(f"gate {' '.join(r['data']['command'])}: exit {r['data']['exit']}")
+-    print('end:', json.dumps(end) if end else 'NO END RECORD (incomplete run)')
++    print('end:', {k: end[k] for k in ('status', 'end_state_unchanged', 'failures')} if end else 'NO END RECORD (aborted or incomplete run)')
++    print('final digest:', digest)
+ if __name__ == '__main__':
+     main()
+--- a/test_containment.py (round 3, sha256 dbf557f8f0a7)
++++ b/test_containment.py
+@@ -29,8 +29,8 @@
+     """exact Fraction of a float or of an EXACT arb point"""
+     if isinstance(x, arb):
+         if x.rad() != 0: raise ValueError('not an exact arb point')
+-        m, e = x.mid().man_exp(); m, e = int(m), int(e)
+-        return Fr(m)*Fr(2)**e
++        m, e = x.mid().man_exp(); m, e = int(m), int(e)   # RIGOR: exact: the exact midpoint of a radius-0 ball as mantissa and exponent
++        return Fr(m)*Fr(2)**e   # RIGOR: exact: Fraction ** int
+     return Fr(float(x))   # RIGOR: exact: float() of floats (test inputs)
+ def lo_of(x): return F(x.lower())
+ def hi_of(x): return F(x.upper())
+@@ -107,8 +107,8 @@
+     for _ in range(nsamp):
+         coefs = []
+         for c in T.c:
+-            if c.rad() == 0: coefs.append(F(c.mid()))
+-            else: coefs.append(rng.choice([lo_of(c), hi_of(c), F(c.mid())]))
++            if c.rad() == 0: coefs.append(F(c.mid()))   # RIGOR: exact: the exact midpoint of a radius-0 ball
++            else: coefs.append(rng.choice([lo_of(c), hi_of(c), F(c.mid())]))   # RIGOR: exact: exact ball endpoints / midpoint (all points of the ball)
+         t = [Fr(rng.choice([-1, 1, 0, Fr(rng.randint(-1000, 1000), 1000)])) for _ in range(NV)]
+         # also the 1-D vertices of the quadratic parts (where the old code formed a NaN candidate)
+         if rng.random() < 0.3:
+@@ -174,7 +174,7 @@
+             vals = []
+             for (i, k) in ((0, 0), (0, 1), (1, 1)):
+                 T = A[i][k]
+-                cs = [F(c.mid()) if c.rad() == 0 else rng.choice([lo_of(c), hi_of(c)]) for c in T.c]
++                cs = [F(c.mid()) if c.rad() == 0 else rng.choice([lo_of(c), hi_of(c)]) for c in T.c]   # RIGOR: exact: exact midpoint of a radius-0 ball, else an exact ball endpoint
+                 vals.append(tm_eval_exact(cs, t) + rng.choice([Fr(0), hi_of(T.R), -hi_of(T.R)]))
+             a11, a12, a22 = vals
+             check('schur', a11 <= n11u < 0, 'N11 sample above the bound')
+@@ -187,7 +187,7 @@
+     import fam5, gcert, tm as tmmod
+     from gsigma import sigma_box
+     L = rec('fp', 321); fam = fam5.FAMILIES['FP']()
+-    st = fam.fem_setup(np.array(L['p0']), np.array(L['r']), L['k'])
++    st = fam.fem_setup(np.array(L['p0']), np.array(L['r']), L['k'])   # RIGOR: exact: float64 arrays of JSON floats (test inputs)
+     pb, pc, rc = st
+     caught = []
+     orig = tmmod.TM.range
+@@ -200,8 +200,8 @@
+         return res
+     tmmod.TM.range = spy
+     try:
+-        gc = gcert.GCert(pb); sol = gc.solve(np.array(pc), np.array(rc)); sc, _ = sigma_box(gc, sol, np.array(pc), np.array(rc))
+-        res = gc.certify(np.array(pc), np.array(rc), sc, sol=sol)
++        gc = gcert.GCert(pb); sol = gc.solve(np.array(pc), np.array(rc)); sc, _ = sigma_box(gc, sol, np.array(pc), np.array(rc))   # RIGOR: exact: float64 arrays of JSON floats (test inputs)
++        res = gc.certify(np.array(pc), np.array(rc), sc, sol=sol)   # RIGOR: exact: float64 arrays of JSON floats (test inputs)
+     finally: tmmod.TM.range = orig
+     check('witness-tm', bool(res.get('ok')), f'fp:321 no longer certifies: {res.get("why")}')
+     for T, (lo, hi) in caught:
+@@ -221,7 +221,7 @@
+     import fam5, gcert
+     from gsigma import sigma_box
+     L = rec('pp', 66327); fam = fam5.FAMILIES['PP']()
+-    st = fam.fem_setup(np.array(L['p0']), np.array(L['r']), L['k'])
++    st = fam.fem_setup(np.array(L['p0']), np.array(L['r']), L['k'])   # RIGOR: exact: float64 arrays of JSON floats (test inputs)
+     check('witness-schur', st is not None, 'FEM setup failed'); pb, pc, rc = st
+     seen = []
+     orig = gcert.schur_upper
+@@ -229,8 +229,8 @@
+         res = orig(N); seen.append((N, res)); return res
+     gcert.schur_upper = spy
+     try:
+-        gc = gcert.GCert(pb); sol = gc.solve(np.array(pc), np.array(rc)); sc, _ = sigma_box(gc, sol, np.array(pc), np.array(rc))
+-        res = gc.certify(np.array(pc), np.array(rc), sc, sol=sol)
++        gc = gcert.GCert(pb); sol = gc.solve(np.array(pc), np.array(rc)); sc, _ = sigma_box(gc, sol, np.array(pc), np.array(rc))   # RIGOR: exact: float64 arrays of JSON floats (test inputs)
++        res = gc.certify(np.array(pc), np.array(rc), sc, sol=sol)   # RIGOR: exact: float64 arrays of JSON floats (test inputs)
+     finally: gcert.schur_upper = orig
+     check('witness-schur', bool(res.get('ok')), f'witness leaf no longer certifies: {res.get("why")}')
+     for N, (ok, schur, why) in seen:
+@@ -255,11 +255,11 @@
+     rng.shuffle(fem); cases += [('pp:FEM', x) for x in fem[:(6 if QUICK else 20)]]
+     fam = fam5.FAMILIES['PP']()
+     for name, L in cases:
+-        st = fam.fem_setup(np.array(L['p0']), np.array(L['r']), L['k'])
++        st = fam.fem_setup(np.array(L['p0']), np.array(L['r']), L['k'])   # RIGOR: exact: float64 arrays of JSON floats (test inputs)
+         if st is None: check('strain', False, f'{name}: setup failed'); continue
+         pb, pc, rc = st
+         gc = gcert.GCert(pb)
+-        fac = piece_factors(gc, np.array(pc), np.array(pc), np.array(rc))
++        fac = piece_factors(gc, np.array(pc), np.array(pc), np.array(rc))   # RIGOR: exact: float64 arrays of JSON floats (test inputs)
+         for _ in range(10 if QUICK else 25):
+             t = [rng.choice([-1.0, 1.0, rng.uniform(-1, 1)]) for _ in range(4)]
+             p = [pc[i] + rc[i]*t[i] for i in range(4)]
+@@ -292,7 +292,7 @@
+         check('angles', F(fdown(arb(t).atan())) <= lo_of(r) and F(fup(arb(t).atan())) >= hi_of(r), f'atan({t})')
+     # witness sp_spk:7: the BO2 arm of the leaf must contain atan of the whole t-range
+     L = rec('sp_spk', 7); fam = fam5.FAMILIES['SP_spk']()
+-    A_, C_ = fam.arms(np.array(L['p0']), np.array(L['r']))
++    A_, C_ = fam.arms(np.array(L['p0']), np.array(L['r']))   # RIGOR: exact: float64 arrays of JSON floats (test inputs)
+     t_lo = F(L['p0'][0]) - F(L['r'][0]); t_hi = F(L['p0'][0]) + F(L['r'][0])
+     with prec(300):
+         a_lo = (arb(t_lo.numerator)/t_lo.denominator).atan(); a_hi = (arb(t_hi.numerator)/t_hi.denominator).atan()
+@@ -306,7 +306,7 @@
+ # ------------------------------------------------------------------------------------------------ FARL tail and cut
+ def exact_cut_max(lo, hi, k0):
+     """max over u in [lo, hi] (Fractions) of g(u^2) = (1 - k0 u^2)^2 + k0^2 u^2, exactly (convex quadratic in s = u^2)"""
+-    def g(s): return (1 - k0*s)**2 + k0*k0*s
++    def g(s): return (1 - k0*s)**2 + k0*k0*s   # RIGOR: exact: Fraction ** int (the exact reference)
+     s_hi = max(lo*lo, hi*hi); s_lo = Fr(0) if lo <= 0 <= hi else min(lo*lo, hi*hi)   # RIGOR: exact: Fractions
+     return max(g(s_lo), g(s_hi))   # RIGOR: exact: Fractions
+ def test_farl():
+@@ -322,14 +322,14 @@
+         # brute-force samples: pi^2/g(u^2) >= tail at sample points
+         for _ in range(5):
+             u = F(c) + F(h)*Fr(rng.randint(-1000, 1000), 1000)
+-            gu = (1 - k0*u*u)**2 + k0*k0*u*u
++            gu = (1 - k0*u*u)**2 + k0*k0*u*u   # RIGOR: exact: Fraction ** int (the exact reference)
+             rr = ref(lambda: arb.pi()*arb.pi()/(arb(gu.numerator)/gu.denominator))
+             check('farl', F(tail) <= lo_of(rr), 'cut_tail above a sample value')
+     # witnesses pp:80526 (PP, FARL) and fp:325 (FP, FARL): fresh setups; the tail is <= the exact value; the cut u-range contains
+     # cot of the whole angle range; validity re-checked at sample u in exact rational arithmetic
+     for fam_name, line in (('pp', 80526), ('fp', 325), ('fp', 321)):
+         L = rec(fam_name, line); fam = fam5.FAMILIES[fam_name.upper()]()
+-        p0 = np.array(L['p0']); r = np.array(L['r'])
++        p0 = np.array(L['p0']); r = np.array(L['r'])   # RIGOR: exact: float64 arrays of JSON floats (test inputs)
+         st = fam.fem_setup(p0, r, L['k'])
+         if st is None: check('farl', False, f'{fam_name}:{line}: no FARL setup'); continue
+         pb, pc, rc = st
+@@ -337,7 +337,7 @@
+         k0 = None
+         # recover k0 from the problem name (FARL_k.._RA.._L.._k0..) and recompute the exact maximum
+         import re
+-        mm = re.search(r'_k0([0-9.e-]+)$', pb.name); k0 = Fraction(float(mm.group(1))) if mm else None
++        k0 = pb.farl[2] if hasattr(pb, 'farl') else None                 # the exact rational k0 of the FARL problem
+         if k0 is not None:
+             mx = exact_cut_max(F(pc[0]) - F(rc[0]), F(pc[0]) + F(rc[0]), k0)
+             rr = ref(lambda: arb.pi()*arb.pi()/(arb(mx.numerator)/mx.denominator))
+@@ -365,6 +365,25 @@
+     h3 = S((RA*u, RA))*sB < 0
+     ident = (d[0]*1 - d[1]*u == 1) and sB == -L and S((Fr(1), Fr(0))) == -(L - k0*u)
+     return h1, h2, h3, ident
++def farl_conditions_interval(RA, L, k0, u_lo, u_hi, cpts):
++    """Lemma 9.6 over the WHOLE interval u in [u_lo, u_hi] and the whole C-box (corners cpts), exactly: with
++    S_P(u) = det(Q2 - Q1, P - Q1) = -k0 P_y u^2 + k0 P_x u + (P_y - L) (affine in P, so its maximum over the box is at a corner;
++    a quadratic in u, so its maximum over the interval is at an end or at the vertex u* = P_x / (2 P_y) when that lies inside):
++    (H1) R > L > k0 u_hi;  (H2) S_B = -L < 0, max_u S_D(u) = k0 u_hi - L < 0 and max over corners and u of S_P(u) < 0;
++    (H3) S_{R (u,1)}(u) = R - L > 0 for every u.  Returns (H1, H2, H3, worst S over the C-box)."""
++    def S(P, u): return -k0*P[1]*u*u + k0*P[0]*u + (P[1] - L)
++    def smax(P):
++        cand = [u_lo, u_hi]
++        if P[1] != 0:
++            us = P[0]/(2*P[1])
++            if u_lo <= us <= u_hi: cand.append(us)
++        return max(S(P, u) for u in cand)   # RIGOR: exact: max of Fractions
++    h1 = RA > L > k0*u_hi and k0 > 0
++    worst = max(smax(P) for P in cpts)   # RIGOR: exact: max of Fractions
++    h2 = -L < 0 and k0*u_hi - L < 0 and worst < 0
++    h3 = RA - L > 0
++    return h1, h2, h3, worst
++
+ def test_farl_validity():
+     import fam5
+     cases = [('pp', 80526), ('fp', 325), ('fp', 321)]
+@@ -377,7 +396,7 @@
+     for fam_name, line in cases:
+         L_ = rec(fam_name, line) if isinstance(line, int) else line
+         fam = fam5.FAMILIES[fam_name.upper()]()
+-        st = fam.fem_setup(np.array(L_['p0']), np.array(L_['r']), L_['k'])
++        st = fam.fem_setup(np.array(L_['p0']), np.array(L_['r']), L_['k'])   # RIGOR: exact: float64 arrays of JSON floats (test inputs)
+         if st is None: check('farl-H', False, f'{fam_name}: no FARL setup'); continue
+         pb, pc, rc = st
+         if not hasattr(pb, 'farl'): check('farl-H', False, f'{fam_name}: not a FARL problem ({pb.name})'); continue
+@@ -385,12 +404,18 @@
+         u_lo, u_hi = F(pc[0]) - F(rc[0]), F(pc[0]) + F(rc[0])
+         cx = (F(pc[2]) - F(rc[2]), F(pc[2]) + F(rc[2])); cy = (F(pc[3]) - F(rc[3]), F(pc[3]) + F(rc[3]))
+         cpts = [(x, y) for x in cx for y in cy]
++        i1, i2, i3, worst = farl_conditions_interval(RA, Lc, k0, u_lo, u_hi, cpts)
++        check('farl-H', i1 and i2 and i3, f'{fam_name}: Lemma 9.6 fails on the interval: H1 {i1} H2 {i2} H3 {i3} (worst S {float(worst)})')   # RIGOR: info: message
++        # cross-check of the closed form: the direct determinant at the ends and at sampled interior points
+         us = [u_lo, u_hi] + [u_lo + (u_hi - u_lo)*Fr(rng.randint(0, 1000), 1000) for _ in range(8)]
+         for u in us:
+             h1, h2, h3, ident = farl_conditions_exact(RA, Lc, k0, u, cpts)
+             check('farl-H', h1 and h2 and h3 and ident, f'{fam_name}: Lemma 9.6 condition fails at u = {float(u)}: H1 {h1} H2 {h2} H3 {h3} identities {ident}')   # RIGOR: info: message
++            q1 = (Lc*u, Lc); d = (1 - k0*u*u, -k0*u)
++            for P in cpts: check('farl-H', d[0]*(P[1] - q1[1]) - d[1]*(P[0] - q1[0]) == -k0*P[1]*u*u + k0*P[0]*u + (P[1] - Lc), 'closed form of S_P')
+     check('farl-H', n_setups >= 3, f'only {n_setups} FARL setups were tested (vacuous)')
+-    print(f'   FARL validity (H1-H3, exact, 10 values of u each, over the whole chart box): {n_setups} setups incl. pp:80526, fp:325, fp:321')
++    print(f'   FARL validity (H1-H3 exact over the whole u-interval and C-box via the analytic extremes; closed form cross-checked at 10 '
++          f'values of u): {n_setups} setups incl. pp:80526, fp:325, fp:321')
+ 
+ # ------------------------------------------------------------------------------------------------ BO2 projection extrema
+ def test_bo2_proj():
+@@ -401,7 +426,7 @@
+     rng.shuffle(recs)
+     fam = fam5.FAMILIES['PP']()
+     for L in recs[:(40 if QUICK else 200)]:
+-        armA, armC = bo2.arm_variant(*fam.arms(np.array(L['p0']), np.array(L['r'])), L.get('arms', 'polar'))
++        armA, armC = bo2.arm_variant(*fam.arms(np.array(L['p0']), np.array(L['r'])), L.get('arms', 'polar'))   # RIGOR: exact: float64 arrays of JSON floats (test inputs)
+         th = arb(L['theta']); u = (th.cos(), th.sin())
+         pts = [(arb(0), arb(0)), (arb(1), arb(0))]
+         for a in (armA, armC):
+--- a/test_replay_infra.py (round 3, sha256 e7e7c3f12f25)
++++ b/test_replay_infra.py
+@@ -1,59 +1,104 @@
+-"""Probes of the replay / receipt machinery (adversarial review round 2, SERIOUS 2-7).  Each probe must FAIL CLOSED:
+-  S2  replay_all.sh rejects SHARDS = 0, -1, abc, 07, 65 and QUICK = 0, false; only a proof-mode run without failures is 'PASS';
+-  S3  a log replaced after it was parsed makes the replay fail (snapshot hash / file identity re-checked at the end);
+-  S4  a replay started under FE_UPWARD, FE_DOWNWARD, FE_TOWARDZERO or flush-to-zero aborts (fpenv guard);
+-  S6  a log replayed under the wrong family (crit_collar as SPIKE_X1) fails; replay_ok rejects a wrong expected family;
+-  S7  replay_ok rejects a synthetic summary-only output, a dropped receipt and a forged record hash; it accepts a genuine replay;
+-  S5  the machinery test of replay_all.py (crit_collar; 2 shards) produces a hash-chained receipt ending with an unchanged state.
+-Usage: test_replay_infra.py   (exit 0 iff every probe behaves as required; about 1 minute)"""
+-import os, sys, json, shutil, subprocess, tempfile, hashlib
+-HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
+-PY = sys.executable
++"""Probes of the replay / receipt machinery (adversarial reviews round 2 (SERIOUS 2-7) and round 3 (items 1-7)).  Threat model:
++accidental corruption, stale or changed files, concurrent agents editing files, environment drift.  Every probe must FAIL CLOSED
++(or, for the positive probes, pass).  Scratch space: replays/test_runs/infra_<random>/ (inside the package).
++  R2   SHARDS / QUICK validation; only a proof-mode run without failures is PASS and exits 0 (quick / test exit 3, FAIL exits 1)
++  R2   wrong family; replay_ok: genuine replay accepted, wrong family / summary-only / dropped / forged receipts rejected; a log
++       changed during a replay; FE_UPWARD / FE_DOWNWARD / FE_TOWARDZERO / FZ at start
++  1    runtime inventory recomputed at every call (no memoisation); the loaded Python framework binary is bound; a stale .pyc with
++       a valid header is executed by a normal interpreter but NOT by the proof flags (-B, empty pycache prefix); sys.flags /
++       _xoptions / pycache prefix are part of the identity; python -O is refused; a late-loaded module outside the inventory and
++       its installer RECORD, or differing from its RECORD, is reported
++  2    a pin without chart caches aborts the driver; a cache file whose bytes differ from the pin is NOT unpickled; an extra cache
++       file is reported
++  3    the pin file changed during a run, a pinned log differing from its pin entry, a merged log changed after its merge: FAIL
++  4    outputs are created exclusively; a shard output changed after validation is caught at the end; a missing summary FAILS
++  5    receipts: a forged terminal status, reordered / extra-key / non-canonical / torn records are rejected; write loop under
++       partial writes; the printed final digest is the end record's self hash
++  6    a symlinked copy of the launcher next to a counterfeit driver still runs the canonical driver; a PATH shim 'nice' is never
++       executed; a polluted caller environment (PYTHONPATH, PYTHONSTARTUP, other variables) does not reach the children
++  7    lint: NumPy aliases, from-numpy names, ufunc reductions, np.all, .var() flagged; an annotation inside a string literal is
++       ignored; Lemma 9.6 interval check rejects a violating configuration; FIZ / AH / FZ16 (where the CPU supports them) and a
++       rounding-mode change inside a leaf are caught; receipt metadata differing from the log record is rejected
++  4b   launch path under research-run (which execs its job as /usr/bin/nice -n 10 CMD): the replay driver and recert_all.sh run
++       at the TARGET niceness max(10, launcher's) -- under nice -n 10, 10 and not 20 -- and so do all their children; default
++       worker counts are 6; recert_all.sh works from any cwd under a PATH of failing shims and a polluted environment; it records
++       N, the code identity and the families at the first start and refuses a resume with another N (including the default),
++       other code; a worker refuses invalid claims and a second process with the same worker ID; a torn last line is cut off at
++       the next start; certs_complete.check flags every kind of incompleteness (missing / duplicate / not-ok root_done, FAIL
++       leaf, handoff without item_done, unclaimed or orphaned root, garbage line, stray file, worker ID above N, no RECERT_N); the
++       driver aborts on an incomplete directory before any gate, merge or replay, and replays a complete re-certified family
++Usage: test_replay_infra.py   (exit 0 iff every probe behaves as required; about 10 minutes)"""
++import os, sys, json, shutil, subprocess, hashlib, threading, time, secrets, ctypes, importlib
++HERE = os.path.dirname(os.path.realpath(__file__)); sys.path.insert(0, HERE)
++PY = '/Users/admin/.venvs/analysis-py313/bin/python'
+ ENV = dict(os.environ, OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1', VECLIB_MAXIMUM_THREADS='1')
+ RESULTS = []
+ def probe(name, cond, detail=''):
+     RESULTS.append((name, bool(cond))); print(('ok   ' if cond else 'FAIL ') + name + (f'  ({detail})' if detail else ''), flush=True)
+-def run(cmd, **kw):
+-    return subprocess.run(cmd, cwd=HERE, env=kw.pop('env', ENV), capture_output=True, text=True, **kw)
++def run(cmd, env=None, **kw):
++    return subprocess.run(cmd, cwd=HERE, env=env or ENV, capture_output=True, text=True, **kw)
++SCR = os.path.join(HERE, 'replays', 'test_runs', 'infra_' + secrets.token_hex(4)); os.makedirs(SCR)
++RSCR = os.path.relpath(SCR, HERE)
++def make_pin(path, drop=None, alter=None):
++    r = run([PY, 'make_pin.py', path]); assert r.returncode == 0, r.stdout + r.stderr
++    lines = open(path).read().split('\n')[:-1]
++    if drop: lines = [l for l in lines if not drop(l.split('  ', 1)[1])]
++    if alter:
++        lines = [(('0'*64 + '  ' + l.split('  ', 1)[1]) if alter(l.split('  ', 1)[1]) else l) for l in lines]
++    open(path, 'w').write('\n'.join(lines) + '\n')
++    return path
++def driver(run_id, pin, only='crit_collar', certs=None, env_extra=None, wrapper=os.path.join(HERE, 'replay_all.sh'), path=None, prefix=()):
++    env = dict(ENV, SHARDS='2', PIN=pin); env.update(env_extra or {})
++    if path: env['PATH'] = path
++    args = list(prefix) + ['bash', wrapper, '--mode', 'test', '--only', only, '--gates', 'none', '--run-id', run_id]
++    if certs: args += ['--certs', certs]
++    return subprocess.run(args, cwd=HERE, env=env, capture_output=True, text=True)
++def receipt_path(run_id): return os.path.join(HERE, 'replays', 'test_runs', 'receipts', run_id + '.jsonl')
++def wait_for(pred, timeout=300):
++    t0 = time.time()
++    while time.time() - t0 < timeout:
++        try:
++            if pred(): return True
++        except Exception: pass
++        time.sleep(0.2)
++    return False
++def receipt_kinds(run_id):
++    try: return [json.loads(l)['kind'] + ':' + str(json.loads(l)['data'].get('tag', json.loads(l)['data'].get('family', ''))) for l in open(receipt_path(run_id))]
++    except OSError: return []
+ 
+ def main():
+-    tmp = tempfile.mkdtemp(prefix='replay_infra_', dir=os.environ.get('TMPDIR'))
+-    # ---- S2: driver argument validation and status
++    import replay_all as RA
++    BASE_PIN = make_pin(os.path.join(SCR, 'pin.sha256'))
++    # ---------------------------------------------------------------- round-2 probes (kept)
+     for s in ('0', '-1', 'abc', '07', '65'):
+-        r = run(['bash', 'replay_all.sh'], env=dict(ENV, SHARDS=s))
+-        probe(f'S2 SHARDS={s!r} rejected', r.returncode == 2 and 'SHARDS must be' in r.stdout)
++        r = run(['bash', 'replay_all.sh'], env=dict(ENV, SHARDS=s)); probe(f'R2 SHARDS={s!r} rejected', r.returncode == 2 and 'SHARDS must be' in r.stdout)
+     for q in ('0', 'false', 'yes'):
+-        r = run(['bash', 'replay_all.sh'], env=dict(ENV, QUICK=q))
+-        probe(f'S2 QUICK={q!r} rejected', r.returncode == 2 and 'QUICK must be' in r.stdout)
+-    import replay_all as RA
+-    probe('S2 only proof mode can PASS', RA.final_status('proof', []) == 'PASS' and 'PASS' not in RA.final_status('quick', [])
+-          and 'PASS' not in RA.final_status('test', []) and RA.final_status('proof', ['x']) == 'FAIL')
+-    r = run([PY, 'replay_all.py', '--pin', 'review/PINNED.sha256', '--shards', '2', '--only', 'crit_collar'])
+-    probe('S2 --only refused outside test mode', r.returncode != 0 and 'allowed in --mode test only' in r.stderr)
+-    # ---- S6 / S7 on a genuine replay of crit_collar
+-    out = os.path.join(tmp, 'ok'); os.makedirs(out)
++        r = run(['bash', 'replay_all.sh'], env=dict(ENV, QUICK=q)); probe(f'R2 QUICK={q!r} rejected', r.returncode == 2 and 'QUICK must be' in r.stdout)
++    probe('R2/7 exit codes: 0 only for a proof PASS', RA.exit_code(RA.final_status('proof', [])) == 0 and RA.exit_code(RA.final_status('quick', [])) == 3
++          and RA.exit_code(RA.final_status('test', [])) == 3 and RA.exit_code(RA.final_status('proof', ['x'])) == 1 and 'PASS' not in RA.final_status('quick', []))
++    out = os.path.join(SCR, 'ok'); os.makedirs(out)
+     r = run([PY, 'replay2.py', 'certs/crit_collar.jsonl', 'COLLAR', 'manifests/crit_collar.json', '--out', os.path.join(out, 'crit_collar.0.jsonl')])
+-    probe('genuine replay of crit_collar passes', r.returncode == 0)
+-    r = run([PY, 'replay2.py', 'certs/crit_collar.jsonl', 'SPIKE_X1', 'manifests/crit_collar.json', '--out', os.path.join(tmp, 'wf.jsonl')])
+-    probe('S6 wrong family replay fails', r.returncode != 0 and 'family' in r.stdout)
++    probe('genuine replay of crit_collar passes', r.returncode == 0, r.stdout[-200:] if r.returncode else '')
++    r = run([PY, 'replay2.py', 'certs/crit_collar.jsonl', 'SPIKE_X1', 'manifests/crit_collar.json', '--out', os.path.join(SCR, 'wf.jsonl')])
++    probe('R2 wrong-family replay fails', r.returncode != 0 and 'family' in r.stdout)
+     ok_cmd = [PY, 'replay_ok.py', 'crit_collar', 'certs/crit_collar.jsonl', 'replay2.py', 'manifests/crit_collar.json']
+-    r = run(ok_cmd + ['COLLAR', '--dir', out]); probe('S7 replay_ok accepts the genuine replay', r.returncode == 0)
+-    r = run(ok_cmd + ['SPIKE_X1', '--dir', out]); probe('S6 replay_ok rejects a wrong expected family', r.returncode != 0)
++    probe('R2 replay_ok accepts the genuine replay', run(ok_cmd + ['COLLAR', '--dir', out]).returncode == 0)
++    probe('R2 replay_ok rejects a wrong expected family', run(ok_cmd + ['SPIKE_X1', '--dir', out]).returncode != 0)
+     lines = open(os.path.join(out, 'crit_collar.0.jsonl')).read().split('\n')[:-1]
+-    syn = os.path.join(tmp, 'syn'); os.makedirs(syn)
+     def forged(name, new_lines):
+-        d = os.path.join(syn, name); os.makedirs(d)
++        d = os.path.join(SCR, 'syn_' + name); os.makedirs(d)
+         open(os.path.join(d, 'crit_collar.0.jsonl'), 'w').write('\n'.join(new_lines) + '\n')
+         return run(ok_cmd + ['COLLAR', '--dir', d]).returncode
+-    s = json.loads(lines[-1]); s['summary']['leaves_checked'] = s['summary']['ok'] = 123; s['summary'].pop('leaves_sha256')
+-    probe('S7 summary-only output rejected', forged('summary_only', [json.dumps(s)]) != 0)
+-    probe('S7 dropped receipt rejected', forged('dropped', lines[:2] + lines[3:]) != 0)
++    s0 = json.loads(lines[-1]); s0['summary']['leaves_checked'] = s0['summary']['ok'] = 123; s0['summary'].pop('leaves_sha256')
++    probe('R2 summary-only output rejected', forged('summary_only', [json.dumps(s0)]) != 0)
++    probe('R2 dropped receipt rejected', forged('dropped', lines[:2] + lines[3:]) != 0)
+     rec = json.loads(lines[0]); rec['record_sha256'] = '0'*64
+-    probe('S7 forged record hash rejected', forged('forged', [json.dumps(rec)] + lines[1:]) != 0)
+-    # ---- S3: the log replaced after parsing (the replay is run through a wrapper that rewrites the log inside tiles())
+-    logc = os.path.join(tmp, 'crit_collar_copy.jsonl'); shutil.copyfile(os.path.join(HERE, 'certs/crit_collar.jsonl'), logc)
+-    wrapper = os.path.join(tmp, 'mutate.py')
+-    open(wrapper, 'w').write(f'''import sys; sys.path.insert(0, {HERE!r})
++    probe('R2 forged record hash rejected', forged('forged', [json.dumps(rec)] + lines[1:]) != 0)
++    rec = json.loads(lines[0]); rec['status'] = 'discard' if rec['status'] == 'cert' else 'cert'
++    probe('7 receipt metadata differing from its log record rejected', forged('meta', [json.dumps(rec)] + lines[1:]) != 0)
++    logc = os.path.join(SCR, 'crit_collar_copy.jsonl'); shutil.copyfile(os.path.join(HERE, 'certs/crit_collar.jsonl'), logc)
++    w = os.path.join(SCR, 'mutate.py')
++    open(w, 'w').write(f'''import sys; sys.path.insert(0, {HERE!r})
+ import replay2
+ orig = replay2.tiles
+ def tiles(*a, **k):
+@@ -63,41 +108,285 @@
+ sys.argv = ['replay2.py', {logc!r}, 'COLLAR', {os.path.join(HERE, 'manifests/crit_collar.json')!r}]
+ replay2.main()
+ ''')
+-    r = run([PY, wrapper])
+-    probe('S3 log changed during the replay -> failure', r.returncode != 0 and 'changed during the replay' in r.stdout)
+-    # ---- S4: FP environment
+-    for mode, name in ((0x00400000, 'FE_UPWARD'), (0x00800000, 'FE_DOWNWARD'), (0x00C00000, 'FE_TOWARDZERO'), (None, 'FZ')):
+-        w = os.path.join(tmp, f'fp_{name}.py')
+-        setter = (f'lib.fesetround({mode})' if mode is not None else
+-                  'env = fpenv._FenvArm64Darwin(); lib.fegetenv(ctypes.byref(env)); env.fpcr |= (1 << 24); lib.fesetenv(ctypes.byref(env))')
+-        open(w, 'w').write(f'''import sys, ctypes; sys.path.insert(0, {HERE!r})
+-import fpenv
+-lib = fpenv._lib(); {setter}
++    r = run([PY, w]); probe('R2 log changed during the replay -> failure', r.returncode != 0 and 'changed during the replay' in r.stdout)
++    import fpenv
++    for mode, name in ((0x00400000, 'FE_UPWARD'), (0x00800000, 'FE_DOWNWARD'), (0x00C00000, 'FE_TOWARDZERO')):
++        w = os.path.join(SCR, f'fp_{name}.py')
++        open(w, 'w').write(f'''import sys; sys.path.insert(0, {HERE!r})
++import fpenv; fpenv._lib().fesetround({mode})
+ import replay2
+ sys.argv = ['replay2.py', {os.path.join(HERE, 'certs/crit_collar.jsonl')!r}, 'COLLAR', {os.path.join(HERE, 'manifests/crit_collar.json')!r}]
+ replay2.main()
+ ''')
++        r = run([PY, w]); probe(f'R2 replay refuses to start under {name}', r.returncode != 0 and 'START CHECKS FAILED' in r.stdout)
++    # FPCR bits: FZ, FZ16, AH, FIZ (AH and FIZ exist only with FEAT_AFP; an unsupported bit does not stick and cannot be tested)
++    for bit, name in ((24, 'FZ'), (19, 'FZ16'), (1, 'AH'), (0, 'FIZ')):
++        w = os.path.join(SCR, f'fpcr_{name}.py')
++        open(w, 'w').write(f'''import sys, ctypes; sys.path.insert(0, {HERE!r})
++import fpenv
++env = fpenv._FenvArm64Darwin(); lib = fpenv._lib(); lib.fegetenv(ctypes.byref(env)); env.fpcr |= (1 << {bit}); lib.fesetenv(ctypes.byref(env))
++lib.fegetenv(ctypes.byref(env))
++if not (env.fpcr >> {bit}) & 1: print('UNSUPPORTED'); sys.exit(0)
++try: fpenv.check(); print('NOT DETECTED')
++except fpenv.FPEnvError as e: print('DETECTED', e)
++''')
+         r = run([PY, w])
+-        probe(f'S4 replay aborts under {name}', r.returncode != 0 and 'FPEnvError' in (r.stdout + r.stderr))
+-    # ---- S5: machinery test of the aggregate driver (subset, 2 shards) with a pin of the current files
+-    from binding import closure, sha_file
+-    import glob
+-    files = sorted(set(closure(RA.ENTRY_POINTS)) | {'replay_all.sh'} | {os.path.relpath(f, HERE) for f in glob.glob(os.path.join(HERE, 'manifests/*.json'))})
+-    pin = os.path.join(tmp, 'pin.sha256'); open(pin, 'w').write(''.join(f'{sha_file(os.path.join(HERE, f))}  {f}\n' for f in files))
+-    rid = 'infra_' + os.path.basename(tmp)
+-    r = run([PY, 'replay_all.py', '--pin', pin, '--shards', '2', '--mode', 'test', '--only', 'crit_collar', '--gates', 'none', '--run-id', rid])
+-    rp = os.path.join(HERE, 'replays', 'test_runs', 'receipts', rid + '.jsonl')
+-    good = r.returncode == 0 and os.path.isfile(rp)
+-    if good:
+-        raw = open(rp, 'rb').read().split(b'\n')[:-1]; prev = '0'*64; chain = True
+-        for line in raw:
+-            d = json.loads(line); chain &= d['prev_sha256'] == prev; prev = hashlib.sha256(line + b'\n').hexdigest()
+-        end = json.loads(raw[-1])['data']
+-        good = chain and end['end_state_unchanged'] and end['status'] == 'MACHINERY TEST OK (NOT A PROOF)'
+-    probe('S5 machinery run: hash-chained receipt, unchanged end state, never PASS', good, r.stdout.strip().split('\n')[-1][:120])
++        probe(f'7 FPCR.{name} detected (or unsupported by this CPU)', 'DETECTED' in r.stdout or 'UNSUPPORTED' in r.stdout, r.stdout.strip()[:60])
++    w = os.path.join(SCR, 'fp_midleaf.py')
++    open(w, 'w').write(f'''import sys; sys.path.insert(0, {HERE!r})
++import fpenv, replay2, regions
++orig = regions.check_reason
++calls = [0]
++def cr(*a, **k):
++    calls[0] += 1
++    if calls[0] == 1: fpenv._lib().fesetround(0x00400000)       # a persistent mode change inside the first leaf
++    return orig(*a, **k)
++regions.check_reason = cr
++sys.argv = ['replay2.py', {os.path.join(HERE, 'certs/main_cbox.jsonl')!r}, 'MAIN_CBOX', {os.path.join(HERE, 'manifests/main_cbox.json')!r}, '--no-recert']
++replay2.main()
++''')
++    r = run([PY, w]); probe('7 a rounding-mode change inside a leaf is caught by the per-leaf guard', r.returncode != 0 and 'round-to-nearest' in r.stdout)
++    # ---------------------------------------------------------------- item 1: runtime inventory
++    import binding
++    t = os.path.join(SCR, 'invfile.bin'); open(t, 'wb').write(b'a')
++    i1 = binding.static_inventory(paths=[t]); open(t, 'wb').write(b'b'); i2 = binding.static_inventory(paths=[t])
++    probe('1 runtime inventory recomputed at every call (no memoisation)', i1[t] != i2[t])
++    paths = binding.inventory_paths()
++    probe('1 the loaded Python framework binary is bound', any(p.endswith('/Python') and 'Python.framework' in p for p in paths))
++    ident = binding.runtime_identity()
++    probe('1 sys.flags, _xoptions and the pycache prefix are part of the runtime identity', all(k in ident for k in ('flags', 'xoptions', 'pycache_prefix')))
++    pm = os.path.join(SCR, 'pycmod'); os.makedirs(os.path.join(pm, '__pycache__'))
++    src = os.path.join(pm, 'probe_mod.py'); open(src, 'w').write('X = 1\n')
++    import importlib.util, importlib._bootstrap_external as be, marshal
++    st = os.stat(src)
++    code = compile('X = 2\n', src, 'exec')
++    data = be._code_to_timestamp_pyc(code, st.st_mtime, st.st_size)
++    open(importlib.util.cache_from_source(src), 'wb').write(data)
++    r1 = run([PY, '-c', f'import sys; sys.path.insert(0, {pm!r}); import probe_mod; print(probe_mod.X)'])
++    empty = os.path.join(SCR, 'pyc_empty'); os.makedirs(empty)
++    r2 = run([PY, '-I', '-S', '-B', '-X', f'pycache_prefix={empty}', '-c', f'import sys; sys.path.insert(0, {pm!r}); import probe_mod; print(probe_mod.X)'])
++    probe('1 a stale .pyc with a valid header: executed normally, ignored under the proof flags', r1.stdout.strip() == '2' and r2.stdout.strip() == '1', f'normal {r1.stdout.strip()}, proof {r2.stdout.strip()}')
++    r = run([PY, '-O', '-I', '-S', '-B', '-X', f'pycache_prefix={empty}', os.path.join(HERE, 'bootstrap.py'), os.path.join(HERE, 'replay2.py'),
++             'certs/crit_collar.jsonl', 'COLLAR', 'manifests/crit_collar.json'], env=dict(ENV, DARTS_PIN=BASE_PIN))
++    probe('1 python -O is refused', r.returncode != 0 and 'refused' in r.stdout)
++    fake = os.path.join(SCR, 'fake_late.py'); open(fake, 'w').write('Y = 1\n')
++    import types
++    m = types.ModuleType('fake_late_mod'); m.__spec__ = importlib.util.spec_from_file_location('fake_late_mod', fake); sys.modules['fake_late_mod'] = m
++    pr = binding.loaded_modules_problems(binding.static_inventory(), {})
++    probe('1 a late-loaded module outside the inventory and every RECORD is reported', any('fake_late.py' in p and 'RECORD' in p for p in pr))
++    orig_rh = binding.record_hashes
++    binding.record_hashes = lambda: {os.path.realpath(fake): ('fakedist', 'wronghash')}
++    pr = binding.loaded_modules_problems(binding.static_inventory(), {})
++    binding.record_hashes = orig_rh; del sys.modules['fake_late_mod']
++    probe('1 a late-loaded module differing from its installer RECORD is reported', any('differs from its installer RECORD' in p for p in pr))
++    # ---------------------------------------------------------------- item 2: chart caches
++    nopin = make_pin(os.path.join(SCR, 'pin_nocache.sha256'), drop=lambda f: f.startswith('refcache/'))
++    r = driver('p2a_' + secrets.token_hex(3), nopin)
++    probe('2 a pin without the chart caches aborts the driver', r.returncode == 1 and 'the pin lists no chart cache files' in r.stdout)
++    bad_cache = sorted(f for f in os.listdir(os.path.join(HERE, 'refcache')) if f.startswith('chart_'))[0]
++    altpin = make_pin(os.path.join(SCR, 'pin_altcache.sha256'), alter=lambda f: f == 'refcache/' + bad_cache)
++    w = os.path.join(SCR, 'cache_probe.py')
++    open(w, 'w').write(f'''import sys, pickle; sys.path.insert(0, {HERE!r})
++calls = []
++orig = pickle.loads
++pickle.loads = lambda *a, **k: (calls.append(1), orig(*a, **k))[1]
++import chart
++print('INVENTORY', chart.verify_cache_inventory())
++try: chart.load_pinned(chart.os.path.join(chart.CACHE, {bad_cache!r})); print('LOADED')
++except ValueError as e: print('REFUSED', e)
++print('UNPICKLE_CALLS', len(calls))
++''')
++    r = run([PY, w], env=dict(ENV, DARTS_PIN=altpin))
++    probe('2 a cache file whose bytes differ from the pin is not unpickled', 'REFUSED' in r.stdout and 'UNPICKLE_CALLS 0' in r.stdout and 'differs from the pin' in r.stdout)
++    droppin = make_pin(os.path.join(SCR, 'pin_dropcache.sha256'), drop=lambda f: f == 'refcache/' + bad_cache)
++    r = run([PY, w], env=dict(ENV, DARTS_PIN=droppin))
++    probe('2 an extra (unpinned) cache file is reported and not loaded', 'extra' in r.stdout and bad_cache in r.stdout and 'UNPICKLE_CALLS 0' in r.stdout)
++    # ---------------------------------------------------------------- item 3: pin and inputs
++    pin3 = os.path.join(SCR, 'pin_changing.sha256'); shutil.copyfile(BASE_PIN, pin3)
++    rid = 'p3a_' + secrets.token_hex(3)
++    th = threading.Thread(target=lambda: wait_for(lambda: len(receipt_kinds(rid)) >= 1) and open(pin3, 'a').write('\n'))
++    th.start(); r = driver(rid, pin3, only='crit_collar,ff', certs='recert_tests/pipe1'); th.join()
++    probe('3 the pin file changed during the run -> FAIL', r.returncode == 1 and 'changed during the run' in r.stdout)
++    altlog = make_pin(os.path.join(SCR, 'pin_altlog.sha256'), alter=lambda f: f == 'certs/crit_collar.jsonl')
++    r = driver('p3b_' + secrets.token_hex(3), altlog)
++    probe('3 a pinned log differing from its pin entry aborts', r.returncode == 1 and 'certs/crit_collar.jsonl: sha256 differs from the pin' in r.stdout)
++    cdir = os.path.join(SCR, 'certs_ff'); os.makedirs(cdir)
++    for f in os.listdir(os.path.join(HERE, 'recert_tests', 'pipe1')):
++        if f.startswith('ff.w') and f.endswith('.jsonl'): shutil.copyfile(os.path.join(HERE, 'recert_tests', 'pipe1', f), os.path.join(cdir, f))
++    shutil.copytree(os.path.join(HERE, 'recert_tests', 'pipe1', 'claims'), os.path.join(cdir, 'claims'))     # (complete: passes certs_complete)
++    rid = 'p3c_' + secrets.token_hex(3)
++    th = threading.Thread(target=lambda: wait_for(lambda: any(k.startswith('merge') for k in receipt_kinds(rid))) and open(os.path.join(cdir, 'ff.merged.jsonl'), 'a').write('\n'))
++    th.start(); r = driver(rid, BASE_PIN, only='ff', certs=os.path.relpath(cdir, HERE)); th.join()
++    probe('3 a merged log changed after its merge -> FAIL', r.returncode == 1 and ('merge entry' in r.stdout or 'changed during the run' in r.stdout or 'log / manifest identity' in r.stdout))
++    # ---------------------------------------------------------------- item 4: shard outputs
++    ex = os.path.join(SCR, 'exists.jsonl'); open(ex, 'w').write('x\n')
++    r = run([PY, 'replay2.py', 'certs/crit_collar.jsonl', 'COLLAR', 'manifests/crit_collar.json', '--out', ex])
++    probe('4 an existing output file is never overwritten (exclusive creation)', r.returncode != 0 and 'FileExistsError' in r.stderr and open(ex).read() == 'x\n')
++    rid = 'p4b_' + secrets.token_hex(3)
++    run_dir = os.path.join(HERE, 'replays', 'test_runs', f'run_{rid}')
++    def tamper():
++        if wait_for(lambda: 'replay:crit_collar' in receipt_kinds(rid)):
++            with open(os.path.join(run_dir, 'crit_collar.0.jsonl'), 'a') as fh: fh.write('\n')
++    th = threading.Thread(target=tamper); th.start(); r = driver(rid, BASE_PIN, only='crit_collar,ff', certs='recert_tests/pipe1'); th.join()
++    probe('4 a shard output changed after its validation is caught at the end', r.returncode == 1 and 'changed after it was validated' in r.stdout)
++    summ, bad = RA.summaries_of([('x.jsonl', lines[0].encode() + b'\n')])
++    probe('4 a missing summary is a failure', summ == [None] and bad)
++    # ---------------------------------------------------------------- items 5, 6: receipts and bootstrap (one clean machinery run)
++    rid = 'p5_' + secrets.token_hex(3)
++    r = driver(rid, BASE_PIN, env_extra={'PYTHONPATH': SCR, 'PYTHONSTARTUP': os.path.join(SCR, 'nope.py'), 'EVIL_VAR': '1'})
++    raw = open(receipt_path(rid), 'rb').read()
++    recs, digest, prob = RA.read_receipt(raw)
++    probe('6 a polluted caller environment does not reach the children (machinery run passes)', r.returncode == 3 and not prob and recs[-1]['data']['status'].startswith('MACHINERY'), r.stdout.strip().split('\n')[-3][:100] if r.stdout else r.stderr[-200:])
++    probe('5 the printed final digest is the end record\'s self hash', f'RECEIPT FINAL DIGEST (self_sha256 of the end record): {digest}' in r.stdout)
++    start = recs[0]['data']
++    probe('6 children run with the fixed sanitised environment', set(start['child_env']) == {'PATH', 'HOME', 'TMPDIR', 'OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'VECLIB_MAXIMUM_THREADS', 'DARTS_PIN'}
++          and start['child_env']['PATH'] == '/usr/bin:/bin' and start['child_command'][1:5] == ['-I', '-S', '-B', '-X'])
++    lines_r = raw.split(b'\n')[:-1]
++    forged_end = lines_r[-1].replace(b'MACHINERY TEST OK (NOT A PROOF)', b'PASS')
++    probe('5 a forged terminal status is rejected', bool(RA.read_receipt(b'\n'.join(lines_r[:-1] + [forged_end]) + b'\n')[2]))
++    probe('5 reordered records are rejected', bool(RA.read_receipt(b'\n'.join([lines_r[1], lines_r[0]] + lines_r[2:]) + b'\n')[2]))
++    probe('5 a non-canonical record is rejected', bool(RA.read_receipt(b'\n'.join([lines_r[0].replace(b'":', b'": ', 1)] + lines_r[1:]) + b'\n')[2]))
++    probe('5 a torn receipt is rejected', bool(RA.read_receipt(raw[:-1])[2]))
++    x = json.loads(lines_r[0]); x['extra'] = 1
++    probe('5 a record with an extra key is rejected', bool(RA.read_receipt(json.dumps(x, sort_keys=True, separators=(',', ':')).encode() + b'\n')[2]))
++    orig_write = RA.os.write
++    RA.os.write = lambda fd, data: orig_write(fd, bytes(data[:3]))
++    try:
++        rp = os.path.join(SCR, 'partial', 'r.jsonl'); rr = RA.Receipt(rp); rr.add('start', a=1, b='x'*100); rr.add('end', status='FAIL'); rr.close()
++    finally: RA.os.write = orig_write
++    probe('5 the receipt write loop survives partial writes', not RA.read_receipt(open(rp, 'rb').read())[2])
++    fk = os.path.join(SCR, 'fake'); os.makedirs(fk)
++    os.symlink(os.path.join(HERE, 'replay_all.sh'), os.path.join(fk, 'replay_all.sh'))
++    open(os.path.join(fk, 'replay_all.py'), 'w').write('print("COUNTERFEIT")\n')
++    r = subprocess.run(['bash', os.path.join(fk, 'replay_all.sh')], cwd=fk, env=dict(ENV, SHARDS='2', PIN=os.path.join(SCR, 'no_such_pin')), capture_output=True, text=True)
++    probe('6 a symlinked launcher next to a counterfeit driver runs the canonical driver', 'COUNTERFEIT' not in r.stdout and 'unreadable or malformed' in r.stdout)
++    sb = os.path.join(SCR, 'shimbin'); os.makedirs(sb); marker = os.path.join(SCR, 'nice_was_run')
++    open(os.path.join(sb, 'nice'), 'w').write(f'#!/bin/sh\ntouch {marker}\nexec /usr/bin/nice "$@"\n'); os.chmod(os.path.join(sb, 'nice'), 0o755)
++    r = driver('p6b_' + secrets.token_hex(3), BASE_PIN, path=sb + ':' + ENV.get('PATH', '/usr/bin:/bin'))
++    probe('6 a PATH shim named nice is never executed', r.returncode == 3 and not os.path.exists(marker) and "'nice'" not in open(os.path.join(HERE, 'replay_all.py')).read())
++    # ---------------------------------------------------------------- item 7: lint and Lemma 9.6
++    import rigor_lint as RL, ast
++    srcl = ('import numpy as xp\nfrom numpy import max as npmax, sum\nimport numpy\n'
++            'a = npmax(x)\nb = sum(y)\nc = xp.sum(z)\nd = numpy.add.reduce(w)\ne = xp.all(v)\nf = q.var()\n'
++            's = "# RIGOR: exact: inside a string"; g = float(s)\n')
++    kinds = [k for _, k in RL.flagged(ast.parse(srcl))]
++    probe('7 lint flags NumPy aliases, from-numpy names, ufunc reductions, np.all and .var()', all(any(t in k for k in kinds) for t in
++          ('npmax (from numpy)', 'sum (from numpy)', 'np.sum', 'ufunc.reduce', 'np.all', '.var()')), str(kinds))
++    probe('7 an annotation inside a string literal is not an annotation', 11 not in RL.annotations(srcl))
++    from test_containment import farl_conditions_interval
++    from fractions import Fraction as Fr
++    good = farl_conditions_interval(Fr(5), Fr(2), Fr(1, 4), Fr(1), Fr(3), [(Fr(1, 2), Fr(-1))])
++    badc = farl_conditions_interval(Fr(5), Fr(2), Fr(1, 4), Fr(1), Fr(3), [(Fr(1, 2), Fr(3))])
++    probe('7 the Lemma 9.6 interval check accepts a valid and rejects a violating configuration', all(good[:3]) and not badc[1])
++    launch_path_probes(RA, BASE_PIN)
+     bad = [n for n, c in RESULTS if not c]
+-    print(f'test_replay_infra: {"PASS" if not bad else "FAIL"} ({len(RESULTS)} probes, {len(bad)} failed); scratch {tmp}')
++    print(f'test_replay_infra: {"PASS" if not bad else "FAIL"} ({len(RESULTS)} probes, {len(bad)} failed); scratch {RSCR}')
+     sys.exit(0 if not bad else 1)
+ 
++def launch_path_probes(RA, BASE_PIN):
++    import certs_complete as CC, fcntl
++    base = os.nice(0); want10 = max(10, base + 10); want0 = max(10, base)
++    # ---- replay driver: target niceness
++    rid = 'n10_' + secrets.token_hex(3)
++    r = driver(rid, BASE_PIN, prefix=('/usr/bin/nice', '-n', '10'))
++    recs = RA.read_receipt(open(receipt_path(rid), 'rb').read())[0] if os.path.exists(receipt_path(rid)) else []
++    nd = recs[0]['data'].get('niceness') if recs else None
++    nc = [s_.get('niceness') for rr in recs if rr['kind'] == 'replay' for s_ in rr['data']['summaries']]
++    probe(f'4b driver launched under nice -n 10 (from {base}): driver and every child at niceness {want10}, not {base + 20}',
++          r.returncode == 3 and nd == want10 and nc and all(x == want10 for x in nc), f'driver {nd}, children {nc}')
++    rid = 'n0_' + secrets.token_hex(3)
++    r = driver(rid, BASE_PIN)
++    recs = RA.read_receipt(open(receipt_path(rid), 'rb').read())[0] if os.path.exists(receipt_path(rid)) else []
++    nd = recs[0]['data'].get('niceness') if recs else None
++    nc = [s_.get('niceness') for rr in recs if rr['kind'] == 'replay' for s_ in rr['data']['summaries']]
++    probe(f'4b driver launched at niceness {base}: driver and every child at {want0}', r.returncode == 3 and nd == want0 and nc and all(x == want0 for x in nc), f'driver {nd}, children {nc}')
++    sh = open(os.path.join(HERE, 'replay_all.sh')).read(); rsh = open(os.path.join(HERE, 'recert_all.sh')).read()
++    probe('4b default worker counts are 6 (replay_all.sh SHARDS, replay_all.py --shards, recert_all.sh N)',
++          'SH="${SHARDS:-6}"' in sh and "ap.add_argument('--shards', default='6')" in open(os.path.join(HERE, 'replay_all.py')).read() and 'N="${1:-6}"' in rsh)
++    # ---- recert_all.sh on a test directory (family FF, 42 roots, 540 leaves) under nice -n 10, from cwd /, with a PATH of shims
++    rdir = os.path.join(SCR, 'rc_ff'); shim = os.path.join(SCR, 'shim_rc'); os.makedirs(shim)
++    for tool in ('nice', 'ps', 'mkdir', 'env', 'python', 'python3', 'cat', 'date', 'tr', 'mktemp', 'rmdir'):
++        fn = os.path.join(shim, tool); open(fn, 'w').write(f'#!/bin/sh\n: > {os.path.join(SCR, "shim_used_" + tool)}\nexit 97\n'); os.chmod(fn, 0o755)
++    env_rc = dict(PATH=shim + ':/usr/bin:/bin', HOME=os.environ.get('HOME', '/var/empty'), RECERT_DIR=rdir, RECERT_FAMILIES='FF',
++                  PYTHONPATH=SCR, PYTHONSTARTUP=os.path.join(SCR, 'nope.py'), PYTHONHOME='/nonexistent', EVIL_VAR='1')
++    def recert_all(*args, prefix=()):
++        return subprocess.run(list(prefix) + ['/bin/bash', os.path.join(HERE, 'recert_all.sh')] + list(args), cwd='/', env=env_rc, capture_output=True, text=True, timeout=3600)
++    def starts():
++        out = []
++        for w in (1, 2):
++            try: out += [json.loads(l) for l in open(os.path.join(rdir, f'recert.w{w}.out')) if l.startswith('{"event": "start"')]
++            except OSError: pass
++        return out
++    t0 = time.time(); r = recert_all('2', prefix=('/usr/bin/nice', '-n', '10')); dt = time.time() - t0
++    st = starts()
++    probe(f'4b recert_all.sh 2 under nice -n 10 (cwd /, shim PATH, polluted environment): complete, every worker at niceness {want10}',
++          r.returncode == 0 and '"complete": true' in r.stdout and len(st) == 2 and all(x['niceness'] == want10 and x['isolated'] == 1 and x['no_site'] == 1 for x in st)
++          and not any(f.startswith('shim_used_') for f in os.listdir(SCR)), f'exit {r.returncode}, {dt:.0f} s, niceness {[x["niceness"] for x in st]}, {r.stdout.strip()[-160:]}')
++    r = recert_all('2'); st = starts()[2:]
++    probe(f'4b resume with the same N from niceness {base}: workers at {want0}, nothing redone, complete', r.returncode == 0 and len(st) == 2 and all(x['niceness'] == want0 for x in st), f'exit {r.returncode}')
++    r = recert_all('3')
++    probe('4b resume with another N is refused (exit 2)', r.returncode == 2 and 'refusing to resume' in r.stdout and "RECERT_N records '2'" in r.stdout)
++    r = recert_all()
++    probe('4b resume with the default N (6) on a directory started with 2 is refused', r.returncode == 2 and "this start has '6'" in r.stdout)
++    code_f = os.path.join(rdir, 'RECERT_CODE'); code = open(code_f).read()
++    os.chmod(code_f, 0o644); open(code_f, 'w').write('0'*64 + '\n')
++    r = recert_all('2'); open(code_f, 'w').write(code)
++    probe('4b resume with other re-certification code is refused', r.returncode == 2 and 'RECERT_CODE' in r.stdout and 'refusing' in r.stdout)
++    r = run([PY, 'recert.py', 'FF', '3'], env=dict(ENV, RECERT_DIR=rdir))
++    probe('4b a worker ID above the recorded N is refused', r.returncode != 0 and 'is not in 1..2' in r.stderr)
++    croot = sorted(os.listdir(os.path.join(rdir, 'claims', 'FF')))[0]; cfn = os.path.join(rdir, 'claims', 'FF', croot); owner = open(cfn).read()
++    open(cfn, 'w').write('7')
++    r = run([PY, 'recert.py', 'FF', '1'], env=dict(ENV, RECERT_DIR=rdir)); cc = CC.check(rdir, ['FF'])
++    open(cfn, 'w').write(owner)
++    probe('4b a claim naming no worker 1..N stops the worker and the completeness check', r.returncode != 0 and 'invalid claims' in r.stderr
++          and any("owner '7'" in p for p in cc['problems']))
++    lk = os.open(os.path.join(rdir, 'locks', 'w1.lock'), os.O_RDWR); fcntl.flock(lk, fcntl.LOCK_EX)
++    r = run([PY, 'recert.py', 'FF', '1'], env=dict(ENV, RECERT_DIR=rdir)); os.close(lk)
++    probe('4b a second process with the same worker ID is refused', r.returncode != 0 and 'already running' in r.stderr)
++    w1 = os.path.join(rdir, 'ff.w1.jsonl'); size = os.path.getsize(w1)
++    with open(w1, 'ab') as fh: fh.write(b'{"type": "leaf", "root": "FF_')
++    torn = any('torn last line' in p for p in CC.check(rdir, ['FF'])['problems'])
++    r = recert_all('2')
++    probe('4b a torn last line is reported, then cut off at the next start (directory complete again)', torn and r.returncode == 0 and os.path.getsize(w1) == size
++          and 'torn_tail_removed' in open(os.path.join(rdir, 'recert.w1.out')).read())
++    # ---- completeness check: one defect per copy of the complete directory
++    lines1 = open(w1).read().split('\n')[:-1]
++    i_done = [i for i, l in enumerate(lines1) if '"root_done"' in l]; i_leaf = [i for i, l in enumerate(lines1) if '"type": "leaf"' in l]
++    def variant(name, edit_lines=None, fs=None):
++        d = os.path.join(SCR, 'cc_' + name); shutil.copytree(rdir, d, ignore=shutil.ignore_patterns('locks'))
++        if edit_lines:
++            ls = edit_lines(list(lines1)); open(os.path.join(d, 'ff.w1.jsonl'), 'w').write('\n'.join(ls) + '\n')
++        if fs: fs(d)
++        return d, CC.check(d, ['FF'])
++    def setok(l, v): d = json.loads(l); d['ok'] = v; return json.dumps(d)
++    def setfail(l): d = json.loads(l); d['status'] = 'FAIL'; d['res'] = 'probe'; d.pop('method', None); return json.dumps(d)
++    root0 = json.loads(lines1[i_done[0]])['root']
++    cases = [('missing_root_done', dict(edit_lines=lambda ls: ls[:i_done[0]] + ls[i_done[0] + 1:]), '0 root_done records'),
++             ('not_ok', dict(edit_lines=lambda ls: ls[:i_done[0]] + [setok(ls[i_done[0]], False)] + ls[i_done[0] + 1:]), 'root_done has ok = False'),
++             ('dup_root_done', dict(edit_lines=lambda ls: ls + [ls[i_done[0]]]), '2 root_done records'),
++             ('handoff', dict(edit_lines=lambda ls: ls + [json.dumps(dict(type='handoff', root=root0, path=root0 + '0', p0=[0, 0, 0, 0], r=[0, 0, 0, 0], depth=1, k=4))]), 'has no item_done'),
++             ('garbage', dict(edit_lines=lambda ls: ls[:5] + ['{"type": "leaf", "ro'] + ls[5:]), 'not JSON'),
++             ('dup_tree', dict(edit_lines=lambda ls: ls + [ls[i_leaf[0]]]), 'duplicate tree record'),
++             ('unclaimed', dict(fs=lambda d: os.remove(os.path.join(d, 'claims', 'FF', root0))), 'never claimed'),
++             ('stray_file', dict(fs=lambda d: open(os.path.join(d, 'ff.0.jsonl'), 'w').write('')), 'not a worker log name'),
++             ('id_above_n', dict(fs=lambda d: os.rename(os.path.join(d, 'ff.w2.jsonl'), os.path.join(d, 'ff.w5.jsonl'))), 'worker ID above N'),
++             ('no_lock', dict(fs=lambda d: os.remove(os.path.join(d, 'RECERT_N'))), 'RECERT_N missing')]
++    for name, kw, want in cases:
++        d, cc = variant(name, **kw)
++        probe(f'4b completeness check flags: {name}', any(want in p for p in cc['problems']), (cc['problems'][:1] or ['-'])[0][:90])
++    dfail, cc = variant('fail_leaf', edit_lines=lambda ls: ls[:i_leaf[0]] + [setfail(ls[i_leaf[0]])] + ls[i_leaf[0] + 1:])
++    probe('4b completeness check lists a FAIL leaf', len(cc['fails']) == 1 and cc['fails'][0]['path'] == json.loads(lines1[i_leaf[0]])['path'])
++    probe('4b completeness check passes the complete directory', CC.check(rdir, ['FF']) ['problems'] == [] and not CC.check(rdir, ['FF'])['fails'])
++    # ---- driver: an incomplete directory aborts before any gate / merge / replay; the complete one replays (FF recert -> merge -> replay3)
++    rid = 'cc_' + secrets.token_hex(3)
++    r = driver(rid, BASE_PIN, only='ff', certs=os.path.relpath(dfail, HERE))
++    kinds = [k.split(':')[0] for k in receipt_kinds(rid)]
++    probe('4b driver aborts on a FAIL leaf before any gate, merge or replay, listing it', r.returncode == 1 and kinds == ['start', 'complete', 'abort'] and 'FAIL LEAF:' in r.stdout, str(kinds))
++    rid = 'ccok_' + secrets.token_hex(3)
++    r = driver(rid, BASE_PIN, only='ff', certs=os.path.relpath(rdir, HERE))
++    kinds = [k.split(':')[0] for k in receipt_kinds(rid)]
++    probe('4b driver replays the complete re-certified family (recert -> completeness -> merge -> replay3, 2 shards)',
++          r.returncode == 3 and kinds == ['start', 'complete', 'merge', 'replay', 'end'], str(kinds) + ' ' + r.stdout.strip()[-120:])
++
+ if __name__ == '__main__':
+     main()
+--- /dev/null
++++ b/bootstrap.py (new)
+@@ -0,0 +1,26 @@
++"""Proof-run bootstrap (adversarial review round 3, item 6).  Every proof process is started as
++    <venv python, absolute> -I -S -B -X pycache_prefix=<empty run directory> <darts>/bootstrap.py <darts>/SCRIPT ARGS...
++-I: isolated (no PYTHON* variables, no user site, no script directory on sys.path); -S: the site module is not run, so no *.pth
++startup hooks and no sitecustomize / usercustomize; -B and the empty pycache prefix: no bytecode is read or written, every module
++is compiled from its bound source.  Without the site module the virtual environment is not activated, so this file puts its own
++directory and the venv's site-packages (<venv>/lib/pythonX.Y/site-packages, the venv being the directory of sys.executable's
++pyvenv.cfg) on sys.path, and runs SCRIPT (which must lie in this directory) as __main__."""
++import sys, os, runpy
++HERE = os.path.dirname(os.path.realpath(__file__))
++def venv_site_packages():
++    root = os.path.dirname(os.path.dirname(os.path.abspath(sys.executable)))
++    if not os.path.isfile(os.path.join(root, 'pyvenv.cfg')): raise SystemExit(f'bootstrap: {sys.executable} is not a venv interpreter')
++    sp = os.path.join(root, 'lib', f'python{sys.version_info.major}.{sys.version_info.minor}', 'site-packages')
++    if not os.path.isdir(sp): raise SystemExit(f'bootstrap: no site-packages at {sp}')
++    return sp
++if __name__ == '__main__':
++    if len(sys.argv) < 2: raise SystemExit('usage: bootstrap.py SCRIPT [ARGS...]')
++    script = os.path.realpath(sys.argv[1])
++    if os.path.dirname(script) != HERE or not os.path.isfile(script): raise SystemExit(f'bootstrap: {sys.argv[1]!r} is not a script of {HERE}')
++    sys.argv = [script] + sys.argv[2:]
++    sys.path[:0] = [HERE]
++    sys.path.append(venv_site_packages())
++    # load the standard-library extension modules (and their external libraries, e.g. libmpdec for _decimal) that the verifier
++    # uses, before any runtime inventory is taken
++    import decimal, fractions, zlib, hashlib, ctypes, json, pickle, struct, math   # noqa: F401
++    runpy.run_path(script, run_name='__main__')
+--- /dev/null
++++ b/certs_complete.py (new)
+@@ -0,0 +1,110 @@
++"""Pre-replay completeness gate of a re-certification directory (default certs4): a fast check (seconds, not hours) that a replay
++may start.  For every family F (log prefix f = F.lower()) of the list:
++  * the worker logs are exactly the files DIR/<f>.w<ID>.jsonl (merge_pool.py merges every DIR/<f>.*.jsonl but the merged log, so
++    any other such file is reported), with worker IDs 1..N, N = DIR/RECERT_N (recorded by recert_all.sh at the first start;
++    required unless require_lock is False, which is for test directories only);
++  * every line is a complete JSON object with a string root (no torn or garbage line) of a known record type, every leaf has
++    status cert, discard or FAIL;
++  * every record names a manifest root; every manifest root has exactly ONE root_done record, and it has ok = true;
++  * no FAIL leaf -- every FAIL leaf is listed, so that it can be decided on before any replay time is spent;
++  * no (root, path) tree record (leaf / split / esc) occurs twice; every handoff has its item_done; no handoff or item_done occurs
++    twice; every item_done has ok = true;
++  * every claim DIR/claims/<F>/<root> names a manifest root and a worker 1..N; every manifest root is claimed; every claimed root is
++    done (a claim without its root_done is an orphan: the root would never be finished).
++check(dir, families, require_lock) -> dict(problems, fails, inputs {file name: sha256 of the bytes checked}, roots {F: count}, N).
++The proof driver (replay_all.py) runs check() before any gate, merge or replay and aborts on any problem or FAIL leaf; the merge
++inputs must then have exactly the checked sha256.  recert_all.sh runs it when its workers have finished.
++Usage: certs_complete.py DIR [FAMILY ...] [--no-lock]   (exit 0 iff complete; DIR absolute or relative to the package)"""
++import sys, os, json, hashlib, re
++HERE = '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts'
++ALL = ('PP', 'SP_spk', 'SP_col', 'FP', 'PF', 'FF', 'SF_spk', 'SF_col')
++TYPES = ('leaf', 'split', 'esc', 'root_done', 'handoff', 'item_done')
++
++def read_n(d):
++    """N recorded in DIR/RECERT_N, or None if absent / malformed"""
++    try:
++        with open(os.path.join(d, 'RECERT_N')) as fh: s = fh.read().strip()
++    except OSError: return None
++    return int(s) if re.fullmatch(r'[1-9][0-9]?', s) else None
++
++def check(d, families=ALL, require_lock=True):
++    d = d if os.path.isabs(d) else os.path.join(HERE, d)
++    problems = []; fails = []; inputs = {}; roots = {}
++    if not os.path.isdir(d): return dict(problems=[f'{d}: no such directory'], fails=[], inputs={}, roots={}, N=None)
++    N = read_n(d)
++    if N is None and require_lock: problems.append('RECERT_N missing or malformed (recert_all.sh records the worker count at the first start)')
++    listing = sorted(os.listdir(d))
++    for F in families:
++        if F not in ALL: problems.append(f'unknown family {F!r}'); continue
++        f = F.lower()
++        try:
++            with open(os.path.join(HERE, 'manifests', f + '.json'), 'rb') as fh: man = json.loads(fh.read())
++            mroots = {r[0] for r in man['roots']}
++        except Exception as e: problems.append(f'{F}: manifest unreadable: {e!r}'); continue
++        roots[F] = len(mroots)
++        files = [x for x in listing if x.startswith(f + '.') and x.endswith('.jsonl') and x != f + '.merged.jsonl']
++        done = {}; seen = {}; hand = {}; items = {}
++        for fn in files:
++            m = re.fullmatch(re.escape(f) + r'\.w([1-9][0-9]?)\.jsonl', fn)
++            if not m: problems.append(f'{fn}: not a worker log name (merge_pool.py would merge it)'); continue
++            if N is not None and int(m.group(1)) > N: problems.append(f'{fn}: worker ID above N = {N}')
++            with open(os.path.join(d, fn), 'rb') as fh: raw = fh.read()            # the bytes checked (hashed for the merge)
++            inputs[fn] = hashlib.sha256(raw).hexdigest()
++            if raw and not raw.endswith(b'\n'): problems.append(f'{fn}: torn last line')
++            for i, line in enumerate(raw.split(b'\n'), 1):
++                if not line.strip(): continue
++                try: rec = json.loads(line)
++                except Exception: problems.append(f'{fn}:{i}: not JSON (torn or garbage line)'); continue
++                if not isinstance(rec, dict) or not isinstance(rec.get('root'), str): problems.append(f'{fn}:{i}: not a record with a root'); continue
++                rid = rec['root']; t = rec.get('type'); where = f'{fn}:{i}'
++                if t not in TYPES: problems.append(f'{where}: unknown record type {t!r}'); continue
++                if rid not in mroots: problems.append(f'{where}: root {rid} is not a manifest root'); continue
++                if t == 'root_done': done.setdefault(rid, []).append((where, rec.get('ok'))); continue
++                key = (rid, rec.get('path'))
++                if t in ('handoff', 'item_done'):
++                    bag = hand if t == 'handoff' else items
++                    if key in bag: problems.append(f'{where}: duplicate {t} {key[1]} (also {bag[key][0]})'); continue
++                    bag[key] = (where, rec.get('ok'))
++                    if t == 'item_done' and rec.get('ok') is not True: problems.append(f'{where}: item_done {key[1]} has ok = {rec.get("ok")!r}')
++                    continue
++                if key in seen: problems.append(f'{where}: duplicate tree record {rid} {key[1]} (also {seen[key]})'); continue
++                seen[key] = where
++                if t == 'leaf':
++                    st = rec.get('status')
++                    if st == 'FAIL':
++                        fails.append(dict(family=F, root=rid, path=key[1], p0=rec.get('p0'), r=rec.get('r'), why=str(rec.get('res'))[:300], at=where))
++                    elif st not in ('cert', 'discard'): problems.append(f'{where}: leaf status {st!r}')
++        for rid in sorted(mroots):
++            ds = done.get(rid, [])
++            if len(ds) != 1: problems.append(f'{F} root {rid}: {len(ds)} root_done records' + (f' ({", ".join(w for w, _ in ds)})' if ds else ''))
++            elif ds[0][1] is not True: problems.append(f'{F} root {rid}: root_done has ok = {ds[0][1]!r} ({ds[0][0]})')
++        for key in sorted(set(hand) - set(items)): problems.append(f'{F} root {key[0]}: handoff {key[1]} has no item_done ({hand[key][0]})')
++        cdir = os.path.join(d, 'claims', F); claims = {}
++        for c in (sorted(os.listdir(cdir)) if os.path.isdir(cdir) else []):
++            if c.startswith('.'): continue                              # temporary files of the atomic claim protocol
++            try:
++                with open(os.path.join(cdir, c)) as fh: owner = fh.read().strip()
++            except OSError as e: problems.append(f'{F} claim {c}: unreadable ({e})'); continue
++            if c not in mroots: problems.append(f'{F} claim {c}: not a manifest root')
++            if not re.fullmatch(r'[1-9][0-9]?', owner) or (N is not None and int(owner) > N): problems.append(f'{F} claim {c}: owner {owner!r} is not a worker 1..{N}')
++            claims[c] = owner
++        for rid in sorted(mroots):
++            if rid not in claims: problems.append(f'{F} root {rid}: never claimed')
++            elif rid not in done: problems.append(f'{F} root {rid}: claimed by worker {claims[rid]} but without root_done (orphaned or unfinished)')
++    return dict(problems=problems, fails=fails, inputs=inputs, roots=roots, N=N)
++
++def main():
++    args = [x for x in sys.argv[1:] if not x.startswith('--')]
++    if not args: print(__doc__); sys.exit(2)
++    fams = tuple(args[1:]) or ALL
++    res = check(args[0], fams, require_lock='--no-lock' not in sys.argv)
++    for p in res['problems'][:200]: print('INCOMPLETE:', p)
++    if len(res['problems']) > 200: print(f'INCOMPLETE: ... {len(res["problems"]) - 200} more')
++    for x in res['fails']: print('FAIL LEAF:', json.dumps(x))
++    ok = not res['problems'] and not res['fails']
++    print(json.dumps(dict(complete=ok, problems=len(res['problems']), fail_leaves=len(res['fails']), roots=res['roots'], N=res['N'],
++                          files=len(res['inputs']))))
++    sys.exit(0 if ok else 1)
++
++if __name__ == '__main__':
++    main()
+--- /dev/null
++++ b/launch_recert.sh (new)
+@@ -0,0 +1,16 @@
++#!/bin/bash
++# Queued launch of the re-certification through research-run.  Started by the coordinator (not by the agent that prepared it),
++# never nested inside research-run.  research-run execs the job as /usr/bin/nice -n 10 CMD; recert_all.sh keeps the TARGET niceness 10 (no double nice).
++# Sizing (round 4, measured with /usr/bin/time -l): one recert worker on heavy PP roots (BD k=6, FARL k=5, INC; 2,148 leaves)
++# peaks at 0.43 GB RSS; resume bookkeeping of a PP share adds <= 0.07 GB (status-only, measured with tracemalloc) and the FARL
++# problem cache ~0.02 GB: 0.52 GB per worker.  Rule: W = largest <= 4 with W x 0.52 x 1.2 + 0.3 <= 2.5 GB  ->  W = 3;
++# --memory-gb = 3 x 0.52 x 1.2 + 0.3 = 2.17 -> 2.5.  The job's exit status is recert_all.sh's: 0 iff certs_complete.py finds
++# every root of every family done with no FAIL leaf.
++D=/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts
++W=3; MEM=2.5
++/bin/mkdir -p "$D/certs4" || exit 2
++{
++  echo "launch_recert: $(/bin/date '+%F %T') W=$W memory-gb=$MEM"
++  /Users/admin/.local/bin/research-run run --cpu "$W" --memory-gb "$MEM" --max-wait 0 --label darts-recert -- /bin/bash "$D/recert_all.sh" "$W"
++  echo "launch_recert: research-run exit $? $(/bin/date '+%F %T')"
++} >> "$D/certs4/launch.out" 2>&1
+--- /dev/null
++++ b/launch_replay.sh (new)
+@@ -0,0 +1,21 @@
++#!/bin/bash
++# Queued launch of the proof replay through research-run, after the re-certification is complete and the round-4 review has
++# cleared.  Started by the coordinator (not by the agent that prepared it), never nested inside research-run.
++# Sizing rule (coordinator, 2026-10-02): SHARDS = largest <= 4 with SHARDS x (1.50 GB x L / 621,307) x 1.1 + 0.4 <= 6.0 GB, where
++# 1.50 GB is the measured peak RSS (/usr/bin/time -l) of one replay3 shard of certs3/pp.merged.jsonl (621,307 lines; every shard
++# parses the whole log) and L is the line count of the certs4 PP worker logs (= the merged log the PP shards parse); the driver
++# replays the logs one after another, so the PP shards are the peak.  --memory-gb = that figure rounded up to 0.5 GB.
++# The driver aborts within seconds (certs_complete) if certs4 is incomplete or has a FAIL leaf.
++D=/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts
++set -o pipefail
++L=$(/bin/cat "$D"/certs4/pp.w*.jsonl | /usr/bin/wc -l | /usr/bin/tr -d ' ') || { echo "no certs4 PP worker logs"; exit 2; }
++read -r SH MEM < <(/usr/bin/awk -v L="$L" 'BEGIN { per = 1.50 * L / 621307 * 1.1; s = 0
++  for (k = 4; k >= 1; k--) if (k * per + 0.4 <= 6.0) { s = k; break }
++  m = s * per + 0.4; h = int(m * 2); if (h < m * 2) h++; printf "%d %.1f\n", s, h / 2 }')
++if ! [[ "$SH" =~ ^[1-4]$ ]]; then echo "launch_replay: PP log of $L lines does not fit the 6 GB rule"; exit 2; fi
++{
++  echo "launch_replay: $(/bin/date '+%F %T') certs4 PP lines $L -> SHARDS=$SH memory-gb=$MEM"
++  /Users/admin/.local/bin/research-run run --cpu "$SH" --memory-gb "$MEM" --max-wait 0 --label darts-replay -- \
++    /usr/bin/env PIN="$D/review/PINNED.sha256" SHARDS="$SH" /bin/bash "$D/replay_all.sh"
++  echo "launch_replay: research-run exit $? $(/bin/date '+%F %T')"
++} >> "$D/certs4/launch.out" 2>&1
+--- /dev/null
++++ b/make_pin.py (new)
+@@ -0,0 +1,17 @@
++"""Write a pin list ('sha256  path' lines, sorted) of everything a proof replay depends on: every transitive decision source of
++every stage of replay_all.py (bootstrap, replays, merge, gates), the launcher replay_all.sh, the lint allowlist, every manifest,
++the old logs (certs/, certs2/), the chart caches (refcache/*: unpickled by the verifier, so pinned and checked before loading)
++and the certs3 logs read by the containment tests.  Usage: make_pin.py OUT"""
++import sys, os, glob
++HERE = os.path.dirname(os.path.realpath(__file__)); sys.path.insert(0, HERE); os.chdir(HERE)
++from binding import closure, sha_file
++import importlib.util
++spec = importlib.util.spec_from_file_location('replay_all_mod', os.path.join(HERE, 'replay_all.py'))
++ra = importlib.util.module_from_spec(spec); spec.loader.exec_module(ra)
++files = (set(closure(ra.ENTRY_POINTS)) | {'replay_all.sh', 'rigor_allowlist.json'} | set(glob.glob('manifests/*.json'))
++         | set(glob.glob('certs/*.jsonl')) | set(glob.glob('certs2/*.jsonl')) | set(glob.glob('refcache/*'))
++         | {'certs3/pp.merged.jsonl', 'certs3/sp_spk.merged.jsonl', 'certs3/fp.merged.jsonl'})
++out = sys.argv[1]
++with open(out, 'w') as fo:
++    for f in sorted(files): fo.write(f'{sha_file(f)}  {f}\n')
++print(len(files), 'files pinned ->', out)
+--- /dev/null
++++ b/smoke_launch.sh (new)
+@@ -0,0 +1,26 @@
++#!/bin/bash
++# Dry runs of the exact launch path under the real launcher, 1 CPU each.  NOT run by the agent that prepared them: executing
++# research-run was denied to it by the permission system; whether these are run is the user's decision.
++#   smoke_launch.sh recert   re-certify family FF (42 roots, 540 leaves) with recert_all.sh 1 into recert_tests/smoke_<stamp>
++#   smoke_launch.sh replay   replay crit_collar (4 legacy certificates) and the newest smoke FF directory through the full
++#                            proof-path harness in test mode (pin, completeness, merge, binding, FP checks, receipt; never PASS:
++#                            expected exit 3 = "MACHINERY TEST OK (NOT A PROOF)"), SHARDS=1
++# Output appended to recert_tests/smoke.out.  Expected wall time: about 1 minute each once admitted.
++D=/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts
++RR=/Users/admin/.local/bin/research-run
++case "$1" in
++  recert)
++    S="$D/recert_tests/smoke_$(/bin/date '+%Y%m%dT%H%M%S')"
++    { echo "smoke recert $(/bin/date '+%F %T') dir $S"
++      "$RR" run --cpu 1 --memory-gb 1 --max-wait 0 --label darts-smoke-recert -- \
++        /usr/bin/env RECERT_DIR="$S" RECERT_FAMILIES=FF /bin/bash "$D/recert_all.sh" 1
++      echo "smoke recert: research-run exit $? $(/bin/date '+%F %T')"; } >> "$D/recert_tests/smoke.out" 2>&1 ;;
++  replay)
++    S=$(/bin/ls -d "$D"/recert_tests/smoke_2* 2>/dev/null | /usr/bin/tail -1)
++    [ -n "$S" ] || { echo "run smoke_launch.sh recert first"; exit 2; }
++    { echo "smoke replay $(/bin/date '+%F %T') certs ${S#$D/}"
++      "$RR" run --cpu 1 --memory-gb 1 --max-wait 0 --label darts-smoke-replay -- \
++        /usr/bin/env PIN="$D/review/PINNED.sha256" SHARDS=1 /bin/bash "$D/replay_all.sh" --mode test --only crit_collar,ff --gates none --certs "${S#$D/}"
++      echo "smoke replay: research-run exit $? $(/bin/date '+%F %T')"; } >> "$D/recert_tests/smoke.out" 2>&1 ;;
++  *) echo "usage: smoke_launch.sh recert|replay"; exit 2 ;;
++esac

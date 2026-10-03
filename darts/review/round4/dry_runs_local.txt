@@ -1,0 +1,23 @@
+== (a) local equivalent of the recert dry run: env -i PATH=/usr/bin:/bin HOME /usr/bin/nice -n 10 env RECERT_DIR=<recert_tests/smoke_local_*> RECERT_FAMILIES=FF recert_all.sh 1 (cwd /)
+exit=0 wall=15s
+recert_all: N=1 dir=/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/recert_tests/smoke_local_20261002T091520 families='FF' niceness 10 -> +0 code f7482a1406cc207ec20b8c35e1a0db2dd1accc86caed9724ebe9b7c1b97e8252 start 2026-10-02 09:15:20
+recert_all: workers finished 2026-10-02 09:15:35; completeness check:
+{"complete": true, "problems": 0, "fail_leaves": 0, "roots": {"FF": 42}, "N": 1, "files": 1}
+
+== (b) local equivalent of the replay dry run, WITH all gates: env -i ... /usr/bin/nice -n 10 env PIN=review/PINNED.sha256 SHARDS=1 replay_all.sh --mode test --only crit_collar,ff --certs <the (a) directory> (cwd /)
+gate lemma_sector.py: exit 0
+gate lemma_longarm.py: exit 0
+gate check_charts.py 8: exit 0
+gate rigor_lint.py: exit 0
+gate test_containment.py: exit 0
+gate hull_to_box.py 56 64 0.0339 0.12 0.5 0.875: exit 0
+gate check_cbox_cover.py: exit 0
+gate accounting.py: exit 0
+replay crit_collar: shards ok 1/1, validation problems 0
+replay ff: shards ok 1/1, validation problems 0
+REPLAY_ALL STATUS: MACHINERY TEST OK (NOT A PROOF)  receipt replays/test_runs/receipts/smoke_gates_r4.jsonl  run directory replays/test_runs/run_smoke_gates_r4
+RECEIPT FINAL DIGEST (self_sha256 of the end record): a45bce19d7a650b2d8f563ae934ca1380558d47f15eeb722b439b2674fb52c02
+RECEIPT FILE SHA256: b869fd219b612ac13365ee017309d06ad7c094ae3801f0201c1819387df74052
+exit=3 wall=147s
+
+receipt kinds: start complete gate x8 merge replay replay end; driver niceness 10; children niceness [10] [10]; test_containment gate: PASS (62767 checks, 0 failures); check_charts: OK (all caches rebuilt IDENTICAL); accounting ok

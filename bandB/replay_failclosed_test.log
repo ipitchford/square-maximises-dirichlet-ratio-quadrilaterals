@@ -1,0 +1,27 @@
+fail-closed tests on runs/recert_chart2.jsonl  Thu Oct  1 16:36:51 BST 2026
+ok    ok: exit 3   
+ok    unknown_status: exit 1   FAIL: line 3: does not match any whitelisted record schema: {"chart":2,"path":"abcdabcdac","status":"LEMMA_Z","rule":"c2 <= 7/200 c0","lo":["1/10","0/
+ok    malformed: exit 1   FAIL: line 4: does not match any whitelisted record schema: {"chart":2,"path":"abcdabcdaCac","status":"CERT","lo":["1/10","0/1","1/8","0/1"],"hi":["19
+ok    extra_field: exit 1   FAIL: line 4: does not match any whitelisted record schema: {"chart":2,"path":"abcdabcdaCac","status":"CERT","lo":["1/10","0/1","1/8","0/1"],"hi":["19
+ok    dup_line: exit 1   FAIL: line 5: duplicate line
+ok    dup_path: exit 1   FAIL: line 5: duplicate path abcdabcdaCac
+ok    missing_leaf: exit 1   FAIL: subtree abcdabcd: marker says 10 leaves, log has 9
+ok    missing_marker: exit 1   FAIL: subtree markers are not exactly the 256 depth-8 prefixes (255 markers)
+ok    fail_floor: exit 1   FAIL: line 6: FAIL_FLOOR leaf abcdabcdaCAc — refined below the floor, NOT PROVED
+ok    wrong_box: exit 1   FAIL: line 9: logged box differs from the box of path abcdabcdACac
+ok    noncanonical: exit 1   FAIL: line 9: non-canonical rational
+ok    bad_rule: exit 1   FAIL: line 3: rule 'c2 <= 7/100 c0' not whitelisted for LEMMA_A in chart 2
+ok    false_exclusion: exit 1   FAIL: re-verification failed: line 11 path abcdabcdACAc LEMMA_A
+ok    summary_mismatch: exit 1   FAIL: summary counts Dict("CERT" => 7573, "OUTSIDE_CHART" => 315, "LEMMA_A" => 161) differ from the records Dict("CERT" => 7572, "OUTSIDE_CHART" => 31
+ok    summary_extra_field: exit 1   FAIL: line 8305: does not match any whitelisted record schema: {"summary":{"chart":2,"leaves":8048,"counts":{"CERT":7572,"LEMMA_A":161,"OUTSIDE_CHART"
+ok    summary_dup_key: exit 1   FAIL: summary count keys not strictly sorted (duplicate or reordered keys)
+ok    summary_bad_subtrees: exit 1   FAIL: summary subtree count mismatch
+ok    summary_bad_depth: exit 1   FAIL: summary max_depth mismatch
+ok    missing_summary: exit 1   FAIL: missing summary line
+ok    mixed_chart: exit 1   FAIL: line 5: logged box differs from the box of path abcdabcdaCaC
+ok    trailing_garbage: exit 1   FAIL: line 8305: summary line is not the last line
+ok    empty: exit 1   FAIL: empty log
+ok    forged_parent_cert: exit 1   FAIL: re-verification failed: line 4 path abcdabcdaCa CERT
+ok    ok: exit 1   FAIL: need exactly one log for chart 1 and one for chart 2, got charts [2]
+fail-closed test: PASS  Thu Oct  1 16:43:37 BST 2026
+exit 0

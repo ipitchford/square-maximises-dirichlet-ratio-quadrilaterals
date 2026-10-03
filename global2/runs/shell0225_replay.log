@@ -1,0 +1,4 @@
+coverage: 8217 leaves, 0 uncovered, 0 bound mismatches, 0 records unused
+exclusions re-checked: 1, failed: 0
+certificates re-verified: 8216, failed: 0, min logged margin 2.5-kappa = 0.00000, time 1076s
+REPLAY OK

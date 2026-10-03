@@ -1,0 +1,23 @@
+replay started 2026-10-01T16:43:46.881  threads 3  cert_sample 0  partial false
+  source sha256 replay.jl 712ea04940d8faca64cb07808001c772f382b3c88fec7e07771b742c0d16277b
+  source sha256 tiling.jl b3300997d500b659240d97c525a80fd71bd3de4a38039dee7b54782869a24ad2
+  source sha256 cert.jl 6ba48ef36a0e4c11a227663137efc8b6a61c09e79e57b32e6dc105aecbb021b3
+  source sha256 cert_float.jl 2245450d6d217a7e026aa19eae733c0042e7eb3e3d118ca007ed9cac34924bfe
+  source sha256 geom.jl 551b37f94511f2c5264660841aa3f36db06476a1aea1fa851905f05e41f241af
+
+== runs/recert_chart1.jsonl  (45426 lines, sha256 4c0a099b931c2978bbe3745577c59af9994aff93f24a404d658148a647767d04)
+tiling: PASS ok: 45169 leaves tile the chart-1 root exactly
+phase 1 (schemas, boxes, markers, summary, tiling): ok; statuses Dict("CERT" => 36696, "OUT_OF_BAND" => 8094, "LEMMA_B" => 141, "OUTSIDE_CHART" => 128, "LEMMA_A" => 110)
+phase 2: re-derived exclusions 8473, re-run certificates 36696 (worst margin R2/(2.5E) ≤ 0.9999985), failures 0, 455.1 s
+{"replay_result":{"chart":1,"verdict":"PASSED","leaves":45169,"counts":{"CERT":36696,"LEMMA_A":110,"LEMMA_B":141,"OUTSIDE_CHART":128,"OUT_OF_BAND":8094},"exclusions_rederived":8473,"certificates_rerun":36696,"worst_margin_R2_over_2.5E_hi":"0.9999985269147025","errors":0,"results_sha256":"afc14a38c44ab008d7d36737499ac5817e07ec6a1b5390be93e874d72a86b65f"}}
+
+== runs/recert_chart2.jsonl  (8305 lines, sha256 c000783b12be553c84ad47f0c243b7066b5be7a88352d41b632c6b3d465670f1)
+tiling: PASS ok: 8048 leaves tile the chart-2 root exactly
+phase 1 (schemas, boxes, markers, summary, tiling): ok; statuses Dict("CERT" => 7572, "OUTSIDE_CHART" => 315, "LEMMA_A" => 161)
+phase 2: re-derived exclusions 476, re-run certificates 7572 (worst margin R2/(2.5E) ≤ 0.9999679), failures 0, 122.0 s
+{"replay_result":{"chart":2,"verdict":"PASSED","leaves":8048,"counts":{"CERT":7572,"LEMMA_A":161,"OUTSIDE_CHART":315},"exclusions_rederived":476,"certificates_rerun":7572,"worst_margin_R2_over_2.5E_hi":"0.9999679032558332","errors":0,"results_sha256":"42d6fb96df52072c2a69a93e5bed4936fb6c02703b935574e80ec9d246507637"}}
+
+chart 1: 45169 leaves; tiling exact; CERT 36696 (re-run 36696), LEMMA_A 110, LEMMA_B 141, OUT_OF_BAND 8094, OUTSIDE_CHART 128; errors 0; worst margin ≤ 0.9999985
+chart 2: 8048 leaves; tiling exact; CERT 7572 (re-run 7572), LEMMA_A 161, LEMMA_B 0, OUT_OF_BAND 0, OUTSIDE_CHART 315; errors 0; worst margin ≤ 0.9999679
+
+REPLAY PASSED  (582.5 s)

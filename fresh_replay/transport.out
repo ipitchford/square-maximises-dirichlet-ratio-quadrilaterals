@@ -1,0 +1,96 @@
+Queued: existing host workload leaves insufficient CPU headroom
+Started: fresh-transport (pid 92575)
+log /Users/admin/claude-sandbox/quad-ppw-2026-09-30/publication/fresh/square-maximises-dirichlet-ratio-quadrilaterals/global2/runs/transport_cert.jsonl sha256 cb187ebb05553ae4a45ad273e4e1304400fdc8246999e2234c1ea835eddd7bd7
+verifier sha256 4322dcc65eff1ccd0c1d93df584637c47590009c1b7330c56d22a3b12e9976e1 (julia 1.12.7, Arblib 1.8.1, PREC 128; replay_t.jl cover_t.jl cover.jl geom.jl rules.jl fsolve.jl tm.jl assemble.jl criterion.jl transport.jl bounds_tm.jl transport1.jl xcheck_cf.jl strictjson.jl logcheck.jl config.toml)
+coverage: 100342 records, 50183 leaves Dict("COMPOUND" => 3117, "E2" => 13933, "certified" => 31426, "E4" => 138, "SHELL" => 1, "E3T" => 1568), 0 uncovered, 0 bound mismatches, 0 unreached records
+results file /Users/admin/claude-sandbox/quad-ppw-2026-09-30/publication/fresh/square-maximises-dirichlet-ratio-quadrilaterals/global2/runs/transport_replay_fresh.jsonl: 0 bound results accepted, rejected Dict{String, Int64}()
+to check now: 50182 (18756 exclusion/compound, 31426 certificates)
+[21:09:13] checked 902 / 50182, failures 0, elapsed 60s, ETA 3282s
+[21:10:13] checked 1960 / 50182, failures 0, elapsed 120s, ETA 2954s
+[21:11:13] checked 3120 / 50182, failures 0, elapsed 180s, ETA 2718s
+[21:12:13] checked 4275 / 50182, failures 0, elapsed 240s, ETA 2579s
+[21:13:13] checked 5397 / 50182, failures 0, elapsed 300s, ETA 2491s
+[21:14:13] checked 6608 / 50182, failures 0, elapsed 360s, ETA 2375s
+[21:15:13] checked 7746 / 50182, failures 0, elapsed 420s, ETA 2302s
+[21:16:13] checked 8870 / 50182, failures 0, elapsed 480s, ETA 2237s
+[21:17:13] checked 10012 / 50182, failures 0, elapsed 540s, ETA 2168s
+[21:18:13] checked 11158 / 50182, failures 0, elapsed 601s, ETA 2100s
+[21:19:13] checked 12036 / 50182, failures 0, elapsed 661s, ETA 2094s
+[21:20:14] checked 12743 / 50182, failures 0, elapsed 721s, ETA 2117s
+[21:21:14] checked 13370 / 50182, failures 0, elapsed 781s, ETA 2150s
+[21:22:14] checked 14005 / 50182, failures 0, elapsed 841s, ETA 2173s
+[21:23:14] checked 14665 / 50182, failures 0, elapsed 901s, ETA 2183s
+[21:24:14] checked 15314 / 50182, failures 0, elapsed 961s, ETA 2189s
+[21:25:14] checked 15987 / 50182, failures 0, elapsed 1021s, ETA 2185s
+[21:26:14] checked 16419 / 50182, failures 0, elapsed 1082s, ETA 2224s
+[21:27:15] checked 16874 / 50182, failures 0, elapsed 1142s, ETA 2255s
+[21:28:15] checked 17289 / 50182, failures 0, elapsed 1202s, ETA 2288s
+[21:29:15] checked 17904 / 50182, failures 0, elapsed 1262s, ETA 2276s
+[21:30:15] checked 18567 / 50182, failures 0, elapsed 1322s, ETA 2252s
+[21:31:15] checked 19309 / 50182, failures 0, elapsed 1382s, ETA 2210s
+[21:32:16] checked 20062 / 50182, failures 0, elapsed 1443s, ETA 2166s
+[21:33:16] checked 20767 / 50182, failures 0, elapsed 1503s, ETA 2129s
+[21:34:16] checked 21504 / 50182, failures 0, elapsed 1563s, ETA 2084s
+[21:35:16] checked 22212 / 50182, failures 0, elapsed 1623s, ETA 2044s
+[21:36:16] checked 22924 / 50182, failures 0, elapsed 1683s, ETA 2002s
+[21:37:16] checked 23648 / 50182, failures 0, elapsed 1743s, ETA 1956s
+[21:38:16] checked 24383 / 50182, failures 0, elapsed 1803s, ETA 1908s
+[21:39:16] checked 25149 / 50182, failures 0, elapsed 1863s, ETA 1855s
+[21:40:16] checked 25923 / 50182, failures 0, elapsed 1923s, ETA 1800s
+[21:41:16] checked 26684 / 50182, failures 0, elapsed 1983s, ETA 1747s
+[21:42:16] checked 27465 / 50182, failures 0, elapsed 2044s, ETA 1690s
+[21:43:17] checked 28275 / 50182, failures 0, elapsed 2104s, ETA 1630s
+[21:44:17] checked 29131 / 50182, failures 0, elapsed 2164s, ETA 1564s
+[21:45:17] checked 29961 / 50182, failures 0, elapsed 2224s, ETA 1501s
+[21:46:17] checked 30749 / 50182, failures 0, elapsed 2284s, ETA 1443s
+[21:47:17] checked 31505 / 50182, failures 0, elapsed 2344s, ETA 1390s
+[21:48:17] checked 32316 / 50182, failures 0, elapsed 2404s, ETA 1329s
+[21:49:17] checked 33141 / 50182, failures 0, elapsed 2464s, ETA 1267s
+[21:50:17] checked 33972 / 50182, failures 0, elapsed 2524s, ETA 1204s
+[21:51:17] checked 34769 / 50182, failures 0, elapsed 2584s, ETA 1146s
+[21:52:17] checked 35608 / 50182, failures 0, elapsed 2644s, ETA 1082s
+[21:53:17] checked 36420 / 50182, failures 0, elapsed 2704s, ETA 1022s
+[21:54:17] checked 37243 / 50182, failures 0, elapsed 2765s, ETA 960s
+[21:55:17] checked 38085 / 50182, failures 0, elapsed 2825s, ETA 897s
+[21:56:18] checked 38928 / 50182, failures 0, elapsed 2885s, ETA 834s
+[21:57:18] checked 39727 / 50182, failures 0, elapsed 2945s, ETA 775s
+[21:58:18] checked 40560 / 50182, failures 0, elapsed 3005s, ETA 713s
+[21:59:18] checked 41422 / 50182, failures 0, elapsed 3065s, ETA 648s
+[22:00:18] checked 42249 / 50182, failures 0, elapsed 3125s, ETA 587s
+[22:01:18] checked 43107 / 50182, failures 0, elapsed 3185s, ETA 523s
+[22:02:18] checked 43988 / 50182, failures 0, elapsed 3245s, ETA 457s
+[22:03:18] checked 44942 / 50182, failures 0, elapsed 3306s, ETA 385s
+[22:04:19] checked 45881 / 50182, failures 0, elapsed 3366s, ETA 316s
+[22:05:19] checked 46799 / 50182, failures 0, elapsed 3426s, ETA 248s
+[22:06:19] checked 47734 / 50182, failures 0, elapsed 3486s, ETA 179s
+[22:07:19] checked 48685 / 50182, failures 0, elapsed 3546s, ETA 109s
+[22:08:19] checked 49625 / 50182, failures 0, elapsed 3606s, ETA 40s
+this invocation: checked 50182 leaves in 3645s wall (3 threads)
+  COMPOUND   checked   3117  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 14803  check time 131 thread-s (0.042 s each)
+  E2         checked  13933  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 13933  check time 32 thread-s (0.002 s each)
+  E3T        checked   1568  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 1568  check time 54 thread-s (0.035 s each)
+  E4         checked    138  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 138  check time 0 thread-s (0.000 s each)
+  certified  checked  31426  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 31426  check time 10646 thread-s (0.339 s each)
+certificates re-verified: 31426 of 31426; exclusion/compound leaves re-checked: 18756 of 18756; SHELL leaves 1 (exact containment)
+smallest certified margin 5/2 − κ*: 5.0514e-06 (replay bisection over the 3262 ladder-fallback certificates; largest κ* 2.499994948581 at T8.b0.b0.b1.b0.d1.b0.a1.c0.d0.b0.a1.c1.d0.b0.d1.a1.b0.c0); ladder-logged certificates: margin ≥ 4.4875e-02; unresolved 0
+wall time: this invocation 3647 s; all 1 recorded invocations under this identity 3647 s
+receipt written: /Users/admin/claude-sandbox/quad-ppw-2026-09-30/publication/fresh/square-maximises-dirichlet-ratio-quadrilaterals/global2/runs/transport_replay_fresh_RECEIPT.json (results sha256 3653bc21efb579b0017262fef75280842a9ff78efc5e97d6ad2dfe962567d044)
+REPLAY OK
+     3654.41 real      9271.13 user       105.61 sys
+          2537865216  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+            32220960  page reclaims
+               14926  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 511  voluntary context switches
+             8451151  involuntary context switches
+      77405715363876  instructions retired
+      29654631028546  cycles elapsed
+          2645855784  peak memory footprint

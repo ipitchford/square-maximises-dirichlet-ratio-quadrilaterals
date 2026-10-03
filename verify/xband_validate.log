@@ -1,0 +1,83 @@
+/Users/admin/claude-sandbox/quad-ppw-2026-09-30/verify/xband_validate.py:16: DeprecationWarning: Arrays of 2-dimensional vectors are deprecated. Use arrays of 3-dimensional vectors instead. (deprecated in NumPy 2.0)
+  return all(np.cross(V[(i+1) % 4]-V[i], V[(i+2) % 4]-V[i]) > 0 for i in range(4))
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.385 lam1_FEM=107.2773 E=98.4761 (slack +0.0820) lam2_FEM=181.4961 R2=189.2230 (slack +0.0426) cert_ratio=1.9215 true_xi=1.6918
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.322 lam1_FEM=185.5253 E=171.3013 (slack +0.0767) lam2_FEM=309.9601 R2=316.2473 (slack +0.0203) cert_ratio=1.8461 true_xi=1.6707
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.390 lam1_FEM=95.4224 E=85.5363 (slack +0.1036) lam2_FEM=133.5425 R2=140.6137 (slack +0.0530) cert_ratio=1.6439 true_xi=1.3995
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.330 lam1_FEM=181.0655 E=165.1509 (slack +0.0879) lam2_FEM=309.8468 R2=320.7893 (slack +0.0353) cert_ratio=1.9424 true_xi=1.7112
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.297 lam1_FEM=198.5860 E=185.5805 (slack +0.0655) lam2_FEM=334.9900 R2=340.3461 (slack +0.0160) cert_ratio=1.8340 true_xi=1.6869
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.187 lam1_FEM=358.3824 E=351.2430 (slack +0.0199) lam2_FEM=524.0524 R2=527.3934 (slack +0.0064) cert_ratio=1.5015 true_xi=1.4623
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.214 lam1_FEM=278.8807 E=270.0415 (slack +0.0317) lam2_FEM=412.7031 R2=416.8759 (slack +0.0101) cert_ratio=1.5437 true_xi=1.4799
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.368 lam1_FEM=146.5130 E=133.1304 (slack +0.0913) lam2_FEM=264.5349 R2=272.1354 (slack +0.0287) cert_ratio=2.0441 true_xi=1.8055
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.122 lam1_FEM=911.4271 E=892.8165 (slack +0.0204) lam2_FEM=1263.0321 R2=1265.9524 (slack +0.0023) cert_ratio=1.4179 true_xi=1.3858
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.101 lam1_FEM=1200.4432 E=1186.5290 (slack +0.0116) lam2_FEM=1535.1812 R2=1536.2584 (slack +0.0007) cert_ratio=1.2947 true_xi=1.2788
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.301 lam1_FEM=211.2218 E=197.7734 (slack +0.0637) lam2_FEM=331.3124 R2=338.1790 (slack +0.0207) cert_ratio=1.7099 true_xi=1.5686
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.325 lam1_FEM=189.5932 E=174.2026 (slack +0.0812) lam2_FEM=316.5364 R2=324.2154 (slack +0.0243) cert_ratio=1.8611 true_xi=1.6696
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.292 lam1_FEM=221.0401 E=212.0828 (slack +0.0405) lam2_FEM=357.7619 R2=362.0815 (slack +0.0121) cert_ratio=1.7073 true_xi=1.6185
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.154 lam1_FEM=561.5024 E=546.0788 (slack +0.0275) lam2_FEM=809.0233 R2=813.0811 (slack +0.0050) cert_ratio=1.4889 true_xi=1.4408
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.365 lam1_FEM=125.4304 E=116.1809 (slack +0.0737) lam2_FEM=215.0293 R2=221.9287 (slack +0.0321) cert_ratio=1.9102 true_xi=1.7143
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.339 lam1_FEM=178.4447 E=162.6868 (slack +0.0883) lam2_FEM=302.2584 R2=311.5079 (slack +0.0306) cert_ratio=1.9148 true_xi=1.6938
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.117 lam1_FEM=911.6369 E=897.5071 (slack +0.0155) lam2_FEM=1206.4027 R2=1208.6301 (slack +0.0018) cert_ratio=1.3467 true_xi=1.3233
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.202 lam1_FEM=291.1149 E=287.5470 (slack +0.0123) lam2_FEM=388.7220 R2=390.9382 (slack +0.0057) cert_ratio=1.3596 true_xi=1.3353
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.200 lam1_FEM=389.4717 E=374.2136 (slack +0.0392) lam2_FEM=583.6665 R2=589.9796 (slack +0.0108) cert_ratio=1.5766 true_xi=1.4986
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.307 lam1_FEM=164.4973 E=155.3763 (slack +0.0554) lam2_FEM=278.6758 R2=283.1475 (slack +0.0160) cert_ratio=1.8223 true_xi=1.6941
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.383 lam1_FEM=102.6253 E=94.6870 (slack +0.0774) lam2_FEM=182.4259 R2=190.0368 (slack +0.0417) cert_ratio=2.0070 true_xi=1.7776
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.117 lam1_FEM=962.8417 E=939.8257 (slack +0.0239) lam2_FEM=1292.5816 R2=1296.9344 (slack +0.0034) cert_ratio=1.3800 true_xi=1.3425
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.384 lam1_FEM=131.4489 E=119.8290 (slack +0.0884) lam2_FEM=236.2148 R2=243.1221 (slack +0.0292) cert_ratio=2.0289 true_xi=1.7970
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.289 lam1_FEM=208.8738 E=195.0820 (slack +0.0660) lam2_FEM=344.7212 R2=350.2954 (slack +0.0162) cert_ratio=1.7956 true_xi=1.6504
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.194 lam1_FEM=371.4758 E=362.5834 (slack +0.0239) lam2_FEM=566.1020 R2=568.6461 (slack +0.0045) cert_ratio=1.5683 true_xi=1.5239
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.246 lam1_FEM=232.8936 E=226.4639 (slack +0.0276) lam2_FEM=344.1179 R2=346.6384 (slack +0.0073) cert_ratio=1.5307 true_xi=1.4776
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.228 lam1_FEM=298.1733 E=286.2550 (slack +0.0400) lam2_FEM=473.8854 R2=477.2863 (slack +0.0072) cert_ratio=1.6673 true_xi=1.5893
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.388 lam1_FEM=120.0189 E=111.3972 (slack +0.0718) lam2_FEM=211.9666 R2=216.9774 (slack +0.0236) cert_ratio=1.9478 true_xi=1.7661
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.107 lam1_FEM=1104.6326 E=1087.7465 (slack +0.0153) lam2_FEM=1431.4067 R2=1433.5409 (slack +0.0015) cert_ratio=1.3179 true_xi=1.2958
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.208 lam1_FEM=339.8954 E=327.4248 (slack +0.0367) lam2_FEM=503.3861 R2=509.1476 (slack +0.0114) cert_ratio=1.5550 true_xi=1.4810
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.193 lam1_FEM=359.5299 E=348.4433 (slack +0.0308) lam2_FEM=483.6759 R2=487.4392 (slack +0.0078) cert_ratio=1.3989 true_xi=1.3453
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.188 lam1_FEM=340.1791 E=335.2024 (slack +0.0146) lam2_FEM=469.5290 R2=472.3212 (slack +0.0059) cert_ratio=1.4091 true_xi=1.3802
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.321 lam1_FEM=135.8591 E=127.7406 (slack +0.0598) lam2_FEM=225.3885 R2=231.3926 (slack +0.0266) cert_ratio=1.8114 true_xi=1.6590
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.205 lam1_FEM=332.4158 E=322.2728 (slack +0.0305) lam2_FEM=477.3282 R2=482.4941 (slack +0.0108) cert_ratio=1.4972 true_xi=1.4359
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.145 lam1_FEM=561.6444 E=550.5732 (slack +0.0197) lam2_FEM=658.5407 R2=660.6328 (slack +0.0032) cert_ratio=1.1999 true_xi=1.1725
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.307 lam1_FEM=151.3996 E=146.7256 (slack +0.0309) lam2_FEM=216.2487 R2=218.7819 (slack +0.0117) cert_ratio=1.4911 true_xi=1.4283
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.381 lam1_FEM=101.0388 E=91.6769 (slack +0.0927) lam2_FEM=159.7252 R2=169.2149 (slack +0.0594) cert_ratio=1.8458 true_xi=1.5808
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.287 lam1_FEM=206.3336 E=193.7039 (slack +0.0612) lam2_FEM=346.3153 R2=353.1501 (slack +0.0197) cert_ratio=1.8231 true_xi=1.6784
+Transforming over 1000 vertices to C_CONTIGUOUS.
+I s=0.148 lam1_FEM=483.9191 E=473.6808 (slack +0.0212) lam2_FEM=547.3873 R2=550.0779 (slack +0.0049) cert_ratio=1.1613 true_xi=1.1312
+Transforming over 1000 vertices to C_CONTIGUOUS.
+II s=0.195 lam1_FEM=409.7124 E=391.2154 (slack +0.0451) lam2_FEM=622.4824 R2=629.7300 (slack +0.0116) cert_ratio=1.6097 true_xi=1.5193
+WORST relative slacks: lower 0.011590849879944612 upper 0.0007016790605121169 (both must be > 0)

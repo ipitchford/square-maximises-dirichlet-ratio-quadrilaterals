@@ -1,0 +1,13 @@
+[tensors] m=10 mLL=12 rho0=0.08 built in 7.5s; ghat=1.5742; rem TK=['3.68e+03', '1.76e+03', '3.68e+03'] rem TLL max=1.99e+07; at rho0: TK 3.16e-09, TLL 1.09e-07
+  200 pairs, 5s
+  400 pairs, 10s
+  600 pairs, 15s
+  800 pairs, 20s
+  1000 pairs, 24s
+  1200 pairs, 29s
+  1400 pairs, 34s
+  1600 pairs, 39s
+  1800 pairs, 44s
+  2000 pairs, 49s
+assembled 2080 pairs in 51s
+saved replay/coeffs.pkl

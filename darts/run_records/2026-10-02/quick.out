@@ -1,0 +1,31 @@
+QUICK launch 2026-10-02 12:10:12 SHARDS=3 memory-gb=5.5 caller-nice=0
+Queued: insufficient estimated reclaimable RAM plus desktop reserve
+QUICK research-run exit 143 2026-10-02 12:10:52
+QUICK launch 2026-10-02 12:11:00 SHARDS=2 memory-gb=4.0 caller-nice=0 (rule: 2 x 1.65 x 617367/621307 + 0.4 = 3.68 -> 4.0)
+Started: darts-quick (pid 19861)
+gate lemma_sector.py: exit 0
+gate lemma_longarm.py: exit 0
+gate check_charts.py 8: exit 0
+gate rigor_lint.py: exit 0
+gate test_containment.py: exit 0
+gate hull_to_box.py 56 64 0.0339 0.12 0.5 0.875: exit 0
+gate check_cbox_cover.py: exit 0
+gate accounting.py: exit 0
+replay crit_collar: shards ok 2/2, validation problems 0
+replay crit_spike_X1: shards ok 2/2, validation problems 0
+replay main_cbox: shards ok 2/2, validation problems 0
+replay shallow_crit: shards ok 2/2, validation problems 0
+replay kf_collar: shards ok 2/2, validation problems 0
+replay kf_spike: shards ok 2/2, validation problems 0
+replay pp: shards ok 2/2, validation problems 0
+replay sp_col: shards ok 2/2, validation problems 0
+replay sp_spk: shards ok 2/2, validation problems 0
+replay pf: shards ok 2/2, validation problems 0
+replay fp: shards ok 2/2, validation problems 0
+replay ff: shards ok 2/2, validation problems 0
+replay sf_col: shards ok 2/2, validation problems 0
+replay sf_spk: shards ok 2/2, validation problems 0
+REPLAY_ALL STATUS: STRUCTURE-ONLY (NOT A PROOF)  receipt replays/receipts/20261002T121100_1f0f004a.jsonl  run directory replays/run_20261002T121100_1f0f004a
+RECEIPT FINAL DIGEST (self_sha256 of the end record): 62e5d71a85b2307a66c23c1906d72d5085944058651c6d69cc79703ac1a47d4a
+RECEIPT FILE SHA256: b40a52783ca35d276d45763ab4d55aa2d8a065954cb0d658b127ebc8d8a0e0fb
+QUICK research-run exit 3 2026-10-02 12:19:42

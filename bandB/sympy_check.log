@@ -1,0 +1,42 @@
+PASS 1a  int |grad u|^2 dy  = weighted form N
+PASS 1b  int u^2 dy = f^2 h / 2
+PASS 1c  int sin^2 = 1/2
+PASS 1d  int eta sin(pi eta) pi cos(pi eta) = -1/4
+PASS 1e  int eta cos^2 = 1/4
+PASS 1f  int eta^2 cos^2 = 1/6 + 1/(4 pi^2)
+PASS 2a  int f'g'h/2 = (fb-fa)(gb-ga)(ha+hb)/(4L)
+PASS 2b  int (f'g+fg')h'/4 = (h'/4)(fb gb - fa ga)
+PASS 2c  int f g h/2 = L/24 [..]
+PASS 3a  closed form I00 (log) at 5 rational points
+PASS 3a  closed form I01 (log) at 5 rational points
+PASS 3a  closed form I11 (log) at 5 rational points
+PASS 3b  F G/H integrand expansion
+PASS 3c  series coefficients n=0: C_n, B_n, A_n = (-1)^n C_n
+PASS 3c  series coefficients n=1: C_n, B_n, A_n = (-1)^n C_n
+PASS 3c  series coefficients n=2: C_n, B_n, A_n = (-1)^n C_n
+PASS 3c  series coefficients n=3: C_n, B_n, A_n = (-1)^n C_n
+PASS 3c  series coefficients n=4: C_n, B_n, A_n = (-1)^n C_n
+PASS 3c  series coefficients n=5: C_n, B_n, A_n = (-1)^n C_n
+PASS 3c  series coefficients n=6: C_n, B_n, A_n = (-1)^n C_n
+PASS 3c  series coefficients n=7: C_n, B_n, A_n = (-1)^n C_n
+PASS 3c  series coefficients n=8: C_n, B_n, A_n = (-1)^n C_n
+PASS 3d  series of I00 converges to the exact value (40 terms, |err| < 1e-25)
+PASS 3d  series of I01 converges to the exact value (40 terms, |err| < 1e-25)
+PASS 3d  series of I11 converges to the exact value (40 terms, |err| < 1e-25)
+PASS 3e  end element [0,L]: int f g/h = L fb gb/(2 hb)
+PASS 3f  end element [.,1]: int f g/h = L fa ga/(2 ha)
+PASS 4a  chart I: c0 = y1, c2 = y3
+PASS 4b  chart I: c1 = (P2-P1)x(P3-P1) = y3(1 + t - x1 - t x3)
+PASS 4c  chart I: c3 = (P0-P3)x(P1-P3) = y3(x1 + t x3)
+PASS 4d  chart I: every c_i, c_i - (7/200)c_{i+2} and vertex-difference component is multilinear
+PASS 4e  chart II: c0 = y2, c3 = y3
+PASS 4f  chart II: c1 = y2(1-x3) - y3(1-x2)
+PASS 4g  chart II: c2 = x2 y3 - x3 y2
+PASS 4h  chart II: every c_i, c_i - (7/200)c_{i+2} and vertex-difference component is multilinear
+PASS 4i  chart I: e_i x (P_(i+2)-P_i) = c_i and e_i x (P_(i+3)-P_i) = c_(i+3)
+PASS 4i  chart II: e_i x (P_(i+2)-P_i) = c_i and e_i x (P_(i+3)-P_i) = c_(i+3)
+PASS 5a  T-(x;l,u) = min(x/u, (1-x)/(1-l)) has its kink at u/(1+u-l)
+PASS 5b  apex height ylo*k/u = ylo/(1+u-l)
+PASS 5c  a'b'/2 + h'^2 C6 is the quadratic form of [[C6, 1/4-C6],[1/4-C6, C6]]
+PASS 5d  that form is positive semidefinite (C6 > 0, det = C6^2-(1/4-C6)^2 = (2C6-1/4)/4 > 0) => ce >= 1/2
+ALL PASS

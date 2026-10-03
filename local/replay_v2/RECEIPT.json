@@ -1,0 +1,71 @@
+{
+ "claim": "0 < |p|_inf <= 1/20 implies xi(Q_p) < 5/2 (Theorem 2)",
+ "code": {
+  "assemble.py": "34ef4ca08eb4f43608c480d6b09e4c806afedf179eaaa05720c0deef6af4acea",
+  "cover2.py": "035f84bd46ec854fc7df1f914784c07b9fe95a90d63e3aabf47ca8b5cd5f6e47",
+  "dump_local_data.py": "8e579138b597f93a9190085255069352a0800c8285d52861768edfa28327bbf8",
+  "engine2.py": "7734ce5e1b2bfea49df9ca80e4f7683b73352812d0140bd2a65136c119e2ca3f",
+  "lemma_firstorder.py": "94a4b34388dee74392e1cb783e2d748f98e85ead9126d29a9dd979f864c6dae4",
+  "lemma_residual.py": "13fbfd6da3a8f4ca08ad901438a0826b2cdc70c4a3a3fffbe4cb0d0939a02b6b",
+  "localcert.py": "dcd9b3875c3db1051d0b201364f923b94a66c3e26f295662e8a339863cd75c15",
+  "mtm.py": "e9ef64ff7548c0bd2cf2874dae560bd01847630f1109656cf18adba27ac3ffcd",
+  "replay_local_v2.sh": "49de72fe2a1cb9b02a26c0d4f27f16d450d56fa5c816df9e362e18645579ddc4",
+  "schur_mtm.py": "6d4e25719cbca5a6b3d2e741d9c3477cbd1f706ec55f0b833032d1728d7c53d8"
+ },
+ "outputs": {
+  "assemble.log": "a60e0550736e25c7c2590df4ef2138d3f9f4ccadfaf40dee5861ed27c5685da9",
+  "coeffs.pkl": "3042fd0cb9c49cc832cbb974042163270ea57cb45189d6c5ba14c7f96f1a0c3d",
+  "corrections.json": "368a268ba2c4c2b938f7826ae91bbba26ceadce99cbef1187c2f3a0374c83ece",
+  "cover.log": "ab15d0f3a1e0dd609ebe3857b67b8a993b34351bf930d59618336050baa34f9b",
+  "dump.log": "4b235e33a828de70e01dd538df442d34d947cf075908d0dfd60b1ab20e96d7d7",
+  "lemma_firstorder.log": "f2d588eb24b0705dde42315c933f387f1dfc8ae62067692ffa631872a8c9589d",
+  "lemma_residual.log": "99dac5cdb9b7d7e465d275f1de6d45034b1f2890b15cfbd7cb20f4ba17db0755",
+  "remainders.json": "e1516200a53db6b83a9f3d5860451d52ac0c5eb181426bdb9c990fa8dedeb07d",
+  "schur.log": "ec0adb6c217c6aa92f9a7202fadee79baa7fb569ee1d1a42a90165c0485e4ee5",
+  "schur.pkl": "e48fe8753f8ec7e9271c70ab9aa357b7b8ea7fefd736f957f51e8bf67a148f0a",
+  "schur_cover2.json": "e048f2cc827d4219808e307cc01b72ff910a7ddeec6d22cfade69271b1364140"
+ },
+ "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+ "python": "3.13.5 (main, Jun 11 2025, 15:36:57) [Clang 17.0.0 (clang-1700.0.13.3)]",
+ "python_flint": "0.9.0",
+ "summary": {
+  "certified_boxes": 960,
+  "crit_count": {
+   "det": 8320,
+   "tr": 1280
+  },
+  "cube_halfwidth": "1/20",
+  "evaluations": 1408,
+  "failures": 0,
+  "levels": [
+   "36",
+   "37",
+   "38",
+   "39",
+   "40",
+   "41",
+   "42",
+   "43",
+   "44",
+   "45",
+   "46",
+   "93/2",
+   "47",
+   "95/2",
+   "48",
+   "97/2",
+   "49"
+  ],
+  "max_depth": 4,
+  "meta": {
+   "N": 10,
+   "fn": "replay_v2/coeffs.pkl",
+   "m": 12,
+   "mLL": 14,
+   "rho0": "1/10"
+  },
+  "min_smax": "1/20",
+  "schur": "replay_v2/schur.pkl",
+  "seconds": 63.5
+ }
+}

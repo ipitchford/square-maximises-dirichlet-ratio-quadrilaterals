@@ -1,0 +1,8 @@
+chart I tiny-t box is LEMMA_A: True
+chart I very thin box is LEMMA_B: True
+chart II box with x3 > x2 everywhere is OUTSIDE_CHART: True
+c_i formulas verified exactly at 200 random points per chart
+chart 1: records 45169, leaves 45169, exclusions 8473 checked, volume exact, cert sample 0/0, problems 0 []
+chart 2: records 8048, leaves 8048, exclusions 476 checked, volume exact, cert sample 0/0, problems 0 []
+XBANDCOVER PASS
+exit=0

@@ -1,0 +1,12 @@
+SAMPLE launch 2026-10-02 12:20:01
+Started: darts-sample (pid 21119)
+12:25:52 PP exit 1 AttributeError: 'numpy.ndarray' object has no attribute 'end_checks'
+12:21:25 SP_col exit 0 {"log": "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/certs4/sp_col.merged.jsonl", "family": "SP_col", "shard": "23/64", "partial": false, "recert": true, "lines": 86393, "roots": 143, "skipped": 39, "leaves_checked": 1760, "ok": 1760, "failures": 0, 
+12:22:49 SP_spk exit 1 AttributeError: 'numpy.ndarray' object has no attribute 'end_checks'
+12:23:42 FP exit 1 AttributeError: 'numpy.ndarray' object has no attribute 'end_checks'
+12:24:03 PF exit 0 {"log": "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/certs4/pf.merged.jsonl", "family": "PF", "shard": "23/64", "partial": false, "recert": true, "lines": 17090, "roots": 309, "skipped": 692, "leaves_checked": 169, "ok": 169, "failures": 0, "binding_
+12:24:20 FF exit 0 {"log": "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/certs4/ff.merged.jsonl", "family": "FF", "shard": "23/64", "partial": false, "recert": true, "lines": 1080, "roots": 42, "skipped": 49, "leaves_checked": 55, "ok": 55, "failures": 0, "binding_sha25
+12:24:35 SF_col exit 0 {"log": "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/certs4/sf_col.merged.jsonl", "family": "SF_col", "shard": "23/64", "partial": false, "recert": true, "lines": 786, "roots": 13, "skipped": 0, "leaves_checked": 0, "ok": 0, "failures": 0, "binding_s
+12:24:52 SF_spk exit 0 {"log": "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/certs4/sf_spk.merged.jsonl", "family": "SF_spk", "shard": "23/64", "partial": false, "recert": true, "lines": 1992, "roots": 86, "skipped": 5, "leaves_checked": 15, "ok": 15, "failures": 0, "bindin
+SAMPLE streamA exit 1 streamB exit 1
+SAMPLE research-run exit 1 2026-10-02 12:25:52

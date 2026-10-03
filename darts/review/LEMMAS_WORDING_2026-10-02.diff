@@ -1,0 +1,76 @@
+--- darts/LEMMAS.reviewed_2026-10-02.md	2026-10-02 20:12:10
++++ darts/LEMMAS.md	2026-10-02 20:12:10
+@@ -77,7 +77,7 @@
+ **1.9 Verified inertia.** If the float LDLᵀ factorisation (no pivoting, band b) of a symmetric float matrix A_fl has exactly one
+ negative pivot and no zero pivot, then L̂D̂L̂ᵀ = A_fl + ΔA with |ΔA| ≤ γ_{b+1}|L̂||D̂||L̂ᵀ| (Higham, ASNA, Thm 9.3 and the remark on
+ banded matrices; symmetric elimination is Doolittle with U = DLᵀ), and by Sylvester A_fl + ΔA has exactly one negative and no zero
+-eigenvalue. With A_ex = K − σ'M (exact) and ‖A_fl − A_ex‖₂ ≤ e_A, Weyl gives λ₂(A_ex) ≥ −(e_A + ‖ΔA‖₂); since M is diagonal
++eigenvalue. With A_ex = K − σ'M (exact) and ‖A_fl − A_ex‖₂ ≤ e_A, Weyl gives λ₂(A_ex) > −(e_A + ‖ΔA‖₂) (strict, since λ₂(A_fl + ΔA) > 0); since M is diagonal
+ positive (CR), λ₂(K − σM) ≥ λ₂(A_ex) + (σ'−σ)min_i M_ii > 0 for σ := σ' − (e_A + ‖ΔA‖₂)/min M_ii. Hence the pencil has at most one
+ eigenvalue ≤ σ, i.e. λ_{2,h} > σ. (‖·‖₂ ≤ max row sum for the symmetric bound matrices.) Implemented in `ldl.py`, `sigma.py`.
+ 
+@@ -100,7 +100,7 @@
+ *Proof.* dist(·, segment BD) is convex, so its maximum on the triangle ABD is attained at a vertex, i.e. it is δ; hence
+ ABD ⊂ N̄_δ(BD) ⊂ N̄_δ(CBD). With I the incentre of CBD, each side line of CBD is at distance r from I, so
+ N̄_δ(CBD) ⊂ I + (1 + δ/r)(CBD − I) =: H. Thus Q ⊂ int H and λ₁(Q) ≥ λ₁(CBD)/(1+δ/r)²; Q ⊃ CBD gives λ₂(Q) ≤ λ₂(CBD)
+-≤ (7/3)λ₁(CBD) (triangle theorem: Siudeja 2010; Arbon–Mannan–Psenka–Ragavan 2020). Finally (7/3)·1.035² = 2.4995… ∎
++≤ (7/3)λ₁(CBD) (triangle theorem: Siudeja 2010; Arbon–Mannan–Psenka–Ragavan 2022). Finally (7/3)·1.035² = 2.4995… ∎
+ 
+ *Coverage.* In the BD chart, A = D + ρ(cos φ, sin φ): δ ≤ ρ. For C equilateral (|BD| = 1, r = 0.2887) this is ρ ≤ 0.0101.
+ This collar is a neighbourhood of the face b_A = 0 *only where A is close to D*; where the sliver ABD is long (A far along the ray
+@@ -155,7 +155,7 @@
+ (b) If α ∈ [α_k, α_{k+1}] with α_k = 0.0997 + 0.0025k (exact decimals), k = 0..30 (31 intervals; α_31 = 0.1772), then
+ Σ(α, x*) contains a sector of angle α_k
+ with the same apex and radius, whose second Dirichlet eigenvalue is j²_{ν,2}/x*² with ν = π/α_k (eigenfunctions J_{mν}(j r/x*)
+-sin(mν(θ − θ₀)); the second eigenvalue is j_{ν,2} because j_{ν,2} < 2ν < j_{2ν,1}). Hence λ₂(Q) ≤ j²_{ν,2}/x*², while
++sin(mν(θ − θ₀)); the second eigenvalue is j²_{ν,2}/x*² because j_{ν,2} < 2ν < j_{2ν,1}). Hence λ₂(Q) ≤ j²_{ν,2}/x*², while
+ λ₁(Q) ≥ π²/ℓ² ≥ π²/(x* tan α_{k+1})² (chord bound, as in 5.1). So ξ(Q) ≤ (j_{ν,2} tan α_{k+1}/π)². For each k, `lemma_sector.py`
+ certifies in ball arithmetic (128 bits) an upper bound X_k > j_{ν,2} by the sign pattern J_ν(Y_k) < 0 < J_ν(X_k) with 0 < Y_k < X_k
+ checked explicitly (J_ν > 0 on (0, j_{ν,1})), checks X_k < 2ν, and checks (X_k tan α_{k+1}/π)² < 5/2; the largest value is
+@@ -172,8 +172,8 @@
+ Q = {0 < x < 1, n(x) < y < t(x)}, so every vertical chord of Q is a single interval of length c(x) = t(x) − n(x) ≤ ℓ := max c,
+ and λ₁(Q) ≥ π²/ℓ² (1.3). Q_L := Q ∩ {x < d_x} = {0 < x < d_x, (d_y/d_x)x < y < t(x)} is convex with apex C (lower boundary
+ linear, upper concave, both 0 at x = 0); likewise Q_R := Q ∩ {x > d_x} with apex A. Let x* be a maximiser of c. If x* ≤ d_x apply
+-1.5 to Q_L (reflected so that the apex is at the origin): Q contains a parallelogram with vertical sides (3/4)ℓ, length x*/4 and
+-shear |s| ≤ max(t(x*), n(x*))/x* ≤ tan θ_C (θ = 1/4); here ℓ ≤ t(x*) ≤ x* tan θ_C. If x* ≥ d_x apply 1.5 to Q_R with x* replaced by
++1.5 to Q_L (whose apex C is at the origin): Q contains a parallelogram with vertical sides (3/4)ℓ, length x*/4 and
++shear |s| ≤ max(t(x*), n(x*))/x* ≤ tan θ_C (θ = 1/4); here ℓ ≤ t(x*) ≤ x* tan θ_C. If x* ≥ d_x apply 1.5 to Q_R, reflected by x ↦ 1 − x so that its apex A is at the origin, with x* replaced by
+ 1 − x* and θ_C by θ_A. In both cases 1.4 gives λ₂(Q) ≤ π²(1+τ²)(4/(3ℓ))² + 4π²(4/L)² with ℓ/L ≤ τ, L the distance from x* to the
+ apex used. Divide. ∎
+ 
+@@ -203,7 +203,7 @@
+   (+ Lemma 6.1) reduces them to compact families in (C, direction of BA, L). Charts implemented (`charts.far_problem`,
+   `deep_problem`, `far2_problem`) and test boxes certified, but too weak for steep arms (PILOT §5); not used. The final cover handles
+   this face with the BO2 certificate with tails (Lemma 11.3 (ii), families PF/FP/FF, ρ ≥ 20; §13). Lemma 9.5 closes the
+-  part of this face with b_X ∈ [40°, 140°] analytically (for |BX| ≥ L_k|BD|); the part with b_X < 39.23° or > 140.77° is open.
++  part of this face with b_X ∈ [40°, 140°] analytically (for |BX| ≥ L_k|BD|); outside [40°, 140°] Lemma 9.5 does not apply (its bound cannot reach 5/2 at all when b_X ≤ 39.23° or b_X ≥ 140.77°), and there the face is covered by the BO2 families alone.
+ * **Corner θ_B → 0:** Lemmas 5.1 and 5.3 (complete for θ_B ≤ 0.1772). **Corner θ_B → π (flat hull):** Lemma 5.2.
+ 
+ ## 8. The box certificate (cert.py) — statement and rigour
+@@ -299,7 +299,7 @@
+ near side by (H2), so it does not meet T), and its third side is σ := [Q₁, X]. By Lemma 6.1 the mixed problem on T (Neumann on σ)
+ has μ₁ ≥ π²/|σ|² ≥ π²/|Q₁Q₂|², since σ ⊂ [Q₁, Q₂]; and |Q₁Q₂|² = |(1 + (L − k₀u − L)u, −k₀u)|² = (1 − k₀u²)² + (k₀u)².
+ (c) The near part Q' := Q ∩ {near side of ℓ} = int(CBD ∪ polygon B D X Q₁ ∪ ...) is contained in P: the polygon BDXQ₁ lies in the
+-convex quadrilateral B D Q₂ Q₁ (X ∈ [Q₁, Q₂]; BQ₁ and DQ₂ are parallel, of positive lengths L and L − k₀u), which is the union of
++convex quadrilateral B D Q₂ Q₁ (X ∈ [Q₁, Q₂]; BQ₁ and DQ₂ are parallel, of positive lengths L√(1 + u²) and (L − k₀u)√(1 + u²)), which is the union of
+ the pieces S1 and S2. The boundary of Q' consists of σ ⊂ Q₁Q₂ (the Neumann edge of P) and of parts of ∂Q; the part of ∂Q' inside
+ P (the segment DX of DA) carries the Dirichlet condition. Extension by zero maps the form domain of the mixed problem on Q'
+ (functions vanishing on ∂Q' \ σ) into that of the mixed problem on P, so μ₁(Q'; Neumann on σ) ≥ μ₁(P; Neumann on Q₁Q₂) (1.2).
+@@ -357,7 +357,7 @@
+ (Dirichlet at finite ends).
+ *Proof.* Fix x. The slice is a union of disjoint open intervals J (its components); φ(x, ·) has compact support in the slice,
+ so on each J it vanishes near both ends and the 1-D Poincaré inequality gives ∫_J |∂_yφ|² ≥ (π/|J|)² ∫_J φ² ≥ (π/ℓ(x))² ∫_J φ²;
+-summing over J, ∫ |∂_yφ|² dy ≥ V(x) v(x)². For the x-derivative: v² is smooth where positive and
++summing over J, ∫ |∂_yφ|² dy ≥ V(x) v(x)². For the x-derivative: v² is smooth, v is smooth where positive, and
+ d(v²)/dx = 2∫ φ φ_x dy (differentiation under the integral is legitimate because φ has compact support in Ω, so no
+ boundary terms arise), hence |v′| ≤ (∫ φ_x² dy)^{1/2} by Cauchy–Schwarz where v > 0, and v′ = 0 a.e. on {v = 0}. Integrate
+ ∫|∇φ|² = ∫∫ (φ_x² + φ_y²) ≥ ∫ (v′² + V v²). Density of C_c^∞(Ω) in H¹₀(Ω) gives the eigenvalue statement. ∎
+@@ -394,7 +394,7 @@
+     different sides of the line BD, which are different components). Then every slice of every dart of 𝓕 with x ∈ S_k has all
+     components of length ≤ H_k.
+ (iv) With V = π²/H_k² on S_k and V = π²/c² beyond a cut on a side towards which some far arm extends (V_∞ = π²/(max c)²),
+-    Lemma 11.1 gives λ₁(Q) ≥ μ for every Q ∈ 𝓕, where μ is the bottom of the spectrum of −d²/dx² + V. μ > E is certified by
++    Lemma 11.1 gives λ₁(Q) ≥ μ for every Q ∈ 𝓕, where μ is the bottom of the spectrum of −d²/dx² + V. μ ≥ E is certified by
+     Sturm shooting in ball arithmetic (`bo2._no_zero_arb`): the solution with v(x_L) = 0, v′(x_L) = 1 (or, at an unbounded left
+     end, v = 1, v′ = √(V_L − E): the decaying exponential) stays positive across all cells (hyperbolic cells: positivity at
+     both ends; oscillatory cells: phase condition), and at an unbounded right end v′ + √(V_R − E) v > 0 (then v stays positive

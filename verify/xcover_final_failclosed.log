@@ -1,0 +1,7 @@
+leaf counts: {'COMPOUND': 3117, 'E2': 13933, 'E3T': 1568, 'certified': 31426, 'E4': 138, 'SHELL': 1}
+pending (no record): 0 []
+volume fractions: {'COMPOUND': 0.926248265634076, 'E2': 0.02504352820453891, 'E3T': 0.0036452242680415567, 'certified': 0.004546052008635186, 'E4': 0.04041416379169939, 'SHELL': 0.0001027660930089509}  sum = 1.0
+orphan records: 0
+problems: 0 []
+XCOVER PASS
+exit=0

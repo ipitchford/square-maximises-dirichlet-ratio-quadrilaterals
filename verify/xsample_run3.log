@@ -1,0 +1,4 @@
+33 boxes to check
+[1/33] T1.d1.d1.a1.b1.c1.d0 ok=True certs=1 subboxes=8 251s (verified so far 1)
+[2/33] T10.b0.c0.b0.c0.b0.c0.d1.b0.c0.d0.b1.c0. ok=True certs=1 subboxes=1 10s (verified so far 2)
+[3/33] T10.b0.c0.b0.c0.b0.c0.d1.b0.c1.d1.b0.c0. ok=True certs=1 subboxes=1 12s (verified so far 3)

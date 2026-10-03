@@ -1,0 +1,17 @@
+chart I tiny-t box is LEMMA_A: True
+chart I very thin box is LEMMA_B: True
+chart II box with x3 > x2 everywhere is OUTSIDE_CHART: True
+c_i formulas verified exactly at 200 random points per chart
+PROVENANCE {"log_chart1": "4c0a099b931c2978bbe3745577c59af9994aff93f24a404d658148a647767d04", "log_chart2": "c000783b12be553c84ad47f0c243b7066b5be7a88352d41b632c6b3d465670f1", "xbandcover.py": "e327d1a1c34f08a406f6c482d1b47a746cbed2aba4fc658745fa1c2492c98036", "xband.py": "9b727cbbbeacb881ef38549c20c6c14c448bc60c6863c0d64a167c5418648821", "args": ["../bandB/runs/recert_chart1.jsonl", "../bandB/runs/recert_chart2.jsonl", "200"]}
+  [50/200] independent certificates ok 50
+  [100/200] independent certificates ok 100
+  [150/200] independent certificates ok 150
+  [200/200] independent certificates ok 200
+chart 1: records 45169, leaves 45169, exclusions 8473 checked, volume exact, cert sample 200/200, problems 0 []
+  [50/200] independent certificates ok 50
+  [100/200] independent certificates ok 100
+  [150/200] independent certificates ok 150
+  [200/200] independent certificates ok 200
+chart 2: records 8048, leaves 8048, exclusions 476 checked, volume exact, cert sample 200/200, problems 0 []
+XBANDCOVER PASS
+exit=0

@@ -1,0 +1,89 @@
+ok   R2 SHARDS='0' rejected
+ok   R2 SHARDS='-1' rejected
+ok   R2 SHARDS='abc' rejected
+ok   R2 SHARDS='07' rejected
+ok   R2 SHARDS='65' rejected
+ok   R2 QUICK='0' rejected
+ok   R2 QUICK='false' rejected
+ok   R2 QUICK='yes' rejected
+ok   R2/7 exit codes: 0 only for a proof PASS
+ok   genuine replay of crit_collar passes
+ok   R2 wrong-family replay fails
+ok   R2 replay_ok accepts the genuine replay
+ok   R2 replay_ok rejects a wrong expected family
+ok   R2 summary-only output rejected
+ok   R2 dropped receipt rejected
+ok   R2 forged record hash rejected
+ok   7 receipt metadata differing from its log record rejected
+ok   R2 log changed during the replay -> failure
+ok   R2 replay refuses to start under FE_UPWARD
+ok   R2 replay refuses to start under FE_DOWNWARD
+ok   R2 replay refuses to start under FE_TOWARDZERO
+ok   7 FPCR.FZ detected (or unsupported by this CPU)  (DETECTED floating-point environment is not IEEE round-to-nea)
+ok   7 FPCR.FZ16 detected (or unsupported by this CPU)  (DETECTED floating-point environment is not IEEE round-to-nea)
+ok   7 FPCR.AH detected (or unsupported by this CPU)  (UNSUPPORTED)
+ok   7 FPCR.FIZ detected (or unsupported by this CPU)  (UNSUPPORTED)
+ok   7 a rounding-mode change inside a leaf is caught by the per-leaf guard
+ok   1 runtime inventory recomputed at every call (no memoisation)
+ok   1 the loaded Python framework binary is bound
+ok   1 sys.flags, _xoptions and the pycache prefix are part of the runtime identity
+ok   1 a stale .pyc with a valid header: executed normally, ignored under the proof flags  (normal 2, proof 1)
+ok   1 python -O is refused
+ok   1 a late-loaded module outside the inventory and every RECORD is reported
+ok   1 a late-loaded module differing from its installer RECORD is reported
+ok   2 a pin without the chart caches aborts the driver
+ok   2 a cache file whose bytes differ from the pin is not unpickled
+ok   2 an extra (unpinned) cache file is reported and not loaded
+ok   3 the pin file changed during the run -> FAIL
+ok   3 a pinned log differing from its pin entry aborts
+ok   3 a merged log changed after its merge -> FAIL
+ok   4 an existing output file is never overwritten (exclusive creation)
+ok   4 a shard output changed after its validation is caught at the end
+ok   4 a missing summary is a failure
+ok   6 a polluted caller environment does not reach the children (machinery run passes)  (REPLAY_ALL STATUS: MACHINERY TEST OK (NOT A PROOF)  receipt replays/test_runs/receipts/p5_7a4d28.jso)
+ok   5 the printed final digest is the end record's self hash
+ok   6 children run with the fixed sanitised environment
+ok   5 a forged terminal status is rejected
+ok   5 reordered records are rejected
+ok   5 a non-canonical record is rejected
+ok   5 a torn receipt is rejected
+ok   5 a record with an extra key is rejected
+ok   5 the receipt write loop survives partial writes
+ok   6 a symlinked launcher next to a counterfeit driver runs the canonical driver
+ok   6 a PATH shim named nice is never executed
+ok   7 lint flags NumPy aliases, from-numpy names, ufunc reductions, np.all and .var()  (['F5 npmax (from numpy)', 'F5 sum (from numpy)', 'F5 np.sum', 'F5 ufunc.reduce', 'F5 np.all', 'F5 .var()', 'F1 float()'])
+ok   7 an annotation inside a string literal is not an annotation
+ok   7 the Lemma 9.6 interval check accepts a valid and rejects a violating configuration
+ok   4b driver launched under nice -n 10 (from 0): driver and every child at niceness 10, not 20  (driver 10, children [10, 10])
+ok   4b driver launched at niceness 0: driver and every child at 10  (driver 10, children [10, 10])
+ok   4b default worker counts are 6 (replay_all.sh SHARDS, replay_all.py --shards, recert_all.sh N)
+ok   4b recert_all.sh 2 under nice -n 10 (cwd /, shim PATH, polluted environment): complete, every worker at niceness 10  (exit 0, 9 s, niceness [10, 10], cert_all: workers finished 2026-10-02 09:19:56; completeness check:
+{"complete": true, "problems": 0, "fail_leaves": 0, "roots": {"FF": 42}, "N": 2, "files": 2})
+ok   4b resume with the same N from niceness 0: workers at 10, nothing redone, complete  (exit 0)
+ok   4b resume with another N is refused (exit 2)
+ok   4b resume with the default N (6) on a directory started with 2 is refused
+ok   4b resume with other re-certification code is refused
+ok   4b a worker ID above the recorded N is refused
+ok   4b a claim naming no worker 1..N stops the worker and the completeness check
+ok   4b a second process with the same worker ID is refused
+ok   4b a torn last line is reported, then cut off at the next start (directory complete again)
+ok   4b completeness check flags: missing_root_done  (FF root FF_4_0_7_0: 0 root_done records)
+ok   4b completeness check flags: not_ok  (FF root FF_4_0_7_0: root_done has ok = False (ff.w1.jsonl:2))
+ok   4b completeness check flags: dup_root_done  (FF root FF_4_0_7_0: 2 root_done records (ff.w1.jsonl:2, ff.w1.jsonl:561))
+ok   4b completeness check flags: handoff  (FF root FF_4_0_7_0: handoff FF_4_0_7_00 has no item_done (ff.w1.jsonl:561))
+ok   4b completeness check flags: garbage  (ff.w1.jsonl:6: not JSON (torn or garbage line))
+ok   4b completeness check flags: dup_tree  (ff.w1.jsonl:561: duplicate tree record FF_4_0_7_0 FF_4_0_7_0 (also ff.w1.jsonl:1))
+ok   4b completeness check flags: unclaimed  (FF root FF_4_0_7_0: never claimed)
+ok   4b completeness check flags: stray_file  (ff.0.jsonl: not a worker log name (merge_pool.py would merge it))
+ok   4b completeness check flags: id_above_n  (ff.w5.jsonl: worker ID above N = 2)
+ok   4b completeness check flags: no_lock  (RECERT_N missing or malformed (recert_all.sh records the worker count at the first start))
+ok   4b completeness check lists a FAIL leaf
+ok   4b completeness check passes the complete directory
+ok   4b driver aborts on a FAIL leaf before any gate, merge or replay, listing it  (['start', 'complete', 'abort'])
+ok   4b driver replays the complete re-certified family (recert -> completeness -> merge -> replay3, 2 shards)  (['start', 'complete', 'merge', 'replay', 'end'] 55e3b0a5b576fbacd890f17078b241e2d1
+RECEIPT FILE SHA256: 0cd51e7c115fd183246cd401706a0b1039b02cf6e6bf32ed8819643d239101fc)
+test_replay_infra: PASS (82 probes, 0 failed); scratch replays/test_runs/infra_cd9e8742
+real 285.07
+user 406.32
+sys 38.20
+exit=0

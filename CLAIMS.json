@@ -1,0 +1,227 @@
+{
+ "schemaVersion": "1.0",
+ "title": "The square maximises the ratio of the first two Dirichlet eigenvalues among quadrilaterals",
+ "version": "0.1.0-candidate",
+ "doi": "10.5281/zenodo.23109314",
+ "creator": "Anonymous",
+ "publisher": "Evidence Press",
+ "status": "unrefereed candidate",
+ "claims": [
+  {
+   "id": "T1",
+   "kind": "theorem",
+   "paperLocation": "§1, Theorem 1",
+   "statement": "For every simple quadrilateral Q in R^2, convex or not, lambda_2(Q)/lambda_1(Q) <= 5/2 for the Dirichlet Laplacian, with equality if and only if Q is a square.",
+   "latex": "\\forall Q \\text{ simple quadrilateral}:\\ \\lambda_2(Q)/\\lambda_1(Q)\\le 5/2,\\ \\text{equality iff } Q \\text{ is a square}",
+   "definitions": "A simple quadrilateral is the open region bounded by a closed four-sided polygon without self-intersections whose interior angles all differ from pi; if an angle equals pi the region is a triangle and the triangle theorem applies.",
+   "dependsOn": [
+    "T1prime",
+    "T5"
+   ],
+   "status": "proved (computer-assisted)"
+  },
+  {
+   "id": "T1prime",
+   "kind": "theorem",
+   "paperLocation": "§4.6, Theorem 1'",
+   "statement": "For every convex quadrilateral Q, lambda_2/lambda_1 <= 5/2, with equality iff Q is a square.",
+   "dependsOn": [
+    "LA",
+    "LB",
+    "T2",
+    "T3",
+    "TRANSPORT",
+    "LBprime",
+    "EO-T2.1"
+   ],
+   "status": "proved (computer-assisted)"
+  },
+  {
+   "id": "LA",
+   "kind": "lemma",
+   "paperLocation": "§2.2, Lemma A",
+   "statement": "If c_i <= eta c_{i+2} for some i then xi(Q) <= (7/3)(1+eta)^2; xi < 5/2 when eta <= 0.035.",
+   "dependsOn": [
+    "AMPR-triangle"
+   ],
+   "status": "proved (written argument)"
+  },
+  {
+   "id": "LB",
+   "kind": "lemma",
+   "paperLocation": "§2.3, Lemma B",
+   "statement": "For every bounded convex planar domain with s = width/diameter and every theta in (0,1): xi <= 4 s^2/theta^2 + 1/(1-theta)^2; with theta = 1/4, xi <= 64 s^2 + 16/9 <= 2.4178 < 5/2 for s <= 1/10.",
+   "status": "proved (written argument)"
+  },
+  {
+   "id": "T2",
+   "kind": "theorem",
+   "paperLocation": "§3, Theorem 2",
+   "statement": "For every p with 0 < |p|_inf <= 1/20, xi(Q_p) < 5/2.",
+   "method": "inertia criterion (Lemma 3.1) for a 3x3 Rayleigh-Ritz pencil of transported modes, Kato-Temple bound, multivariate Taylor models (N=10, m=12, m_LL=14, rho_0=1/10); exact first-order structure (Lemma 3.2, Corollary 3.3)",
+   "evidence": {
+    "records": "local/replay_v2/",
+    "replay": "local/replay_local_v2.sh",
+    "receipt": "local/replay_v2/RECEIPT.json",
+    "checker": "verify/xlocal.py",
+    "certifiedObjects": "960 direction boxes x 10 s-intervals (8320 decided by det S, 1280 by tr S)"
+   },
+   "status": "proved (computer-assisted)"
+  },
+  {
+   "id": "T3",
+   "kind": "theorem",
+   "paperLocation": "§4.4, Theorem 3",
+   "statement": "For every convex Q_p with 0 < |p|_inf <= 0.225, xi(Q_p) < 5/2.",
+   "dependsOn": [
+    "T2"
+   ],
+   "method": "shell 0.049 < |p|_inf <= 0.225: Rayleigh-Ritz upper bound for lambda_2, Lehmann-Goerisch lower bound for lambda_1 with a global polynomial flux",
+   "evidence": {
+    "log": "global2/runs/shell0225_cert.jsonl",
+    "replay": "global2/replay.jl",
+    "replayLog": "global2/runs/shell0225_replay_failclosed_full.log",
+    "checker": "verify/xcover.py",
+    "certifiedObjects": "8217 leaves: 8216 certificates (8209 Lehmann-Goerisch, 7 domain monotonicity), 1 exclusion"
+   },
+   "status": "proved (computer-assisted)"
+  },
+  {
+   "id": "TRANSPORT",
+   "kind": "certified cover",
+   "paperLocation": "§4.4",
+   "statement": "Every convex Q_p in the fundamental domain outside the region of Theorem 3, Lemma A and Lemma B, and not in the band of Lemma B', satisfies xi(Q_p) < 5/2.",
+   "method": "test functions and Piola-transformed flux transported from the box centre by a piecewise-affine map",
+   "evidence": {
+    "log": "global2/runs/transport_cert.jsonl",
+    "replay": "global2/replay_t.jl",
+    "receipt": "global2/runs/transport_replay_clean_RECEIPT.json",
+    "checkers": [
+     "verify/xcover.py",
+     "verify/xcert.py"
+    ],
+    "certifiedObjects": "50183 leaves: 31426 certificates, 18756 exclusion and compound leaves, 1 shell leaf by exact containment"
+   },
+   "status": "proved (computer-assisted)"
+  },
+  {
+   "id": "LBprime",
+   "kind": "lemma",
+   "paperLocation": "§4.5, Lemma B'",
+   "statement": "Every convex quadrilateral with 1/10 < width/diameter <= 2/5 satisfies xi < 5/2.",
+   "method": "diameter-normalised charts; Born-Oppenheimer lower bound for lambda_1 certified by Sturm oscillation; weighted one-dimensional Ritz upper bound for lambda_2",
+   "evidence": {
+    "logs": [
+     "bandB/runs/recert_chart1.jsonl",
+     "bandB/runs/recert_chart2.jsonl"
+    ],
+    "replay": "bandB/replay.jl",
+    "replayLog": "bandB/replay.log",
+    "checkers": [
+     "verify/xbandcover.py",
+     "verify/xband.py"
+    ],
+    "certifiedObjects": "44268 certificates, 8949 exclusions (chart 1: 45169 leaves; chart 2: 8048 leaves)"
+   },
+   "status": "proved (computer-assisted)"
+  },
+  {
+   "id": "T5",
+   "kind": "theorem",
+   "paperLocation": "§5, Theorem 5; Supplement S",
+   "statement": "For every simple non-convex quadrilateral (dart) Q, xi(Q) < 5/2.",
+   "method": "analytic lemmas (shallow notch, collapse collar, thin wedges, flat hull, tails, mixed-boundary bracketing, one-dimensional bounds with exponential tails) and certified covers (finite elements with Liu's lower bound and a Temple step, one-dimensional BO2 bounds, inclusion) in charts uniform in the arm lengths; exact global decomposition (Supplement S, Theorem 13.2)",
+   "evidence": {
+    "lemmas": "darts/LEMMAS.md (typeset as paper/SUPPLEMENT_S.pdf)",
+    "logs": "darts/certs/, darts/certs2/, darts/certs4/ (14 logs)",
+    "pin": "darts/review/PINNED.sha256",
+    "replay": "darts/replay_all.sh",
+    "receipt": "see REPLAY_RECEIPT.md (fresh-extraction proof replay)",
+    "checkers": [
+     "verify/xreceipt.py",
+     "verify/xdart.py"
+    ],
+    "certifiedObjects": "462849 leaves in 14 logs"
+   },
+   "status": "proved (computer-assisted)"
+  },
+  {
+   "id": "ARBON-SLOPE",
+   "kind": "calculation",
+   "paperLocation": "§1",
+   "statement": "For the isosceles trapezoid direction b the exact first-order term of xi vanishes; rule (3.16) of Arbon (2022) gives -sqrt(16384+729 pi^4)/(18 pi^2) ~ -1.664 per unit t (or -3/2 for two simultaneous two-vertex moves); for one two-vertex move the true slope is -3/4 and the rule gives ~ -0.832.",
+   "evidence": {
+    "script": "referee_response/arbon_perturbation.py",
+    "log": "referee_response/arbon_perturbation.log"
+   },
+   "status": "exact symbolic calculation"
+  }
+ ],
+ "notClaimed": [
+  "the supremum of xi over darts (the value 7/3 in §5.1 is a numerical observation, not proved and not used)",
+  "a quantitative stability statement near the square",
+  "formal verification; independent reproduction by an unaffiliated party; specialist or journal peer review",
+  "historical priority beyond the bounded search in PRIOR_ART.md"
+ ],
+ "externalDependencies": [
+  {
+   "id": "EO-T2.1",
+   "source": "Endo and Osting (2026), arXiv:2609.02784, Theorem 2.1",
+   "use": "every convex quadrilateral is similar to some Q_p with all c_i(p) > 0"
+  },
+  {
+   "id": "AMPR-triangle",
+   "source": "Arbon, Mannan, Psenka and Ragavan (2022), J. Spectr. Theory 12(2) 515-533, doi:10.4171/JST/409",
+   "use": "xi(T) <= 7/3 for every triangle T"
+  },
+  {
+   "id": "Krahn-Szego",
+   "source": "Krahn (1926); Hong (1954); Polya (1955)",
+   "use": "lambda_2(Omega) >= 2 pi j_{0,1}^2/|Omega|"
+  },
+  {
+   "id": "Andrews-Clutterbuck",
+   "source": "Andrews and Clutterbuck (2011), J. Amer. Math. Soc. 24, 899-916",
+   "use": "lambda_2 - lambda_1 >= 3 pi^2/D^2 for convex domains"
+  },
+  {
+   "id": "Hersch",
+   "source": "Hersch (1960), Z. Angew. Math. Phys. 11, 387-413",
+   "use": "lambda_1 >= pi^2/(4 r^2) for convex domains"
+  },
+  {
+   "id": "Liu-CR",
+   "source": "Liu (2015), Appl. Math. Comput. 267, 341-355",
+   "use": "guaranteed Crouzeix-Raviart lower bound with C_h = 0.1893 h"
+  },
+  {
+   "id": "Lehmann-Goerisch",
+   "source": "Lehmann (1949, 1950); Goerisch and Haunhorst (1985); Behnke and Goerisch (1994)",
+   "use": "Lemma 4.1 (proved in the paper for n = 1)"
+  },
+  {
+   "id": "Temple-Kato",
+   "source": "Temple (1928); Kato (1949)",
+   "use": "Temple's inequality"
+  },
+  {
+   "id": "Haynsworth",
+   "source": "Haynsworth (1968)",
+   "use": "inertia additivity of Schur complements"
+  },
+  {
+   "id": "Allegretto-Piepenbrink",
+   "source": "Allegretto (1974); Piepenbrink (1974)",
+   "use": "a positive solution bounds the spectrum from below (one-dimensional tails)"
+  }
+ ],
+ "assurance": {
+  "internalReplay": "passed (see REPLAY_RECEIPT.md)",
+  "separatelyWrittenChecks": "partial (see ASSURANCE.md)",
+  "independentRerun": "not established",
+  "independentReimplementation": "not established",
+  "formalVerification": "not established",
+  "specialistReview": "not established",
+  "editorialPeerReview": "not established"
+ }
+}

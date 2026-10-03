@@ -1,0 +1,141 @@
+=== 2026-10-01 15:37:34 CLEAN replay start: nice -n 10 julia --heap-size-hint=1500M -t 3 replay_t.jl runs/transport_cert.jsonl --results runs/transport_replay_clean.jsonl (prediction ~2.2e4 thread-s = 1.5-3 h wall on 3 threads)
+log runs/transport_cert.jsonl sha256 cb187ebb05553ae4a45ad273e4e1304400fdc8246999e2234c1ea835eddd7bd7
+verifier sha256 4322dcc65eff1ccd0c1d93df584637c47590009c1b7330c56d22a3b12e9976e1 (julia 1.12.7, Arblib 1.8.1, PREC 128; replay_t.jl cover_t.jl cover.jl geom.jl rules.jl fsolve.jl tm.jl assemble.jl criterion.jl transport.jl bounds_tm.jl transport1.jl xcheck_cf.jl strictjson.jl logcheck.jl config.toml)
+coverage: 100342 records, 50183 leaves Dict("COMPOUND" => 3117, "E2" => 13933, "certified" => 31426, "E4" => 138, "SHELL" => 1, "E3T" => 1568), 0 uncovered, 0 bound mismatches, 0 unreached records
+results file runs/transport_replay_clean.jsonl: 0 bound results accepted, rejected Dict{String, Int64}()
+to check now: 50182 (18756 exclusion/compound, 31426 certificates)
+[15:38:45] checked 480 / 50182, failures 0, elapsed 61s, ETA 6268s
+[15:39:45] checked 721 / 50182, failures 0, elapsed 121s, ETA 8278s
+[15:40:45] checked 1050 / 50182, failures 0, elapsed 181s, ETA 8459s
+[15:41:45] checked 1321 / 50182, failures 0, elapsed 241s, ETA 8909s
+[15:42:45] checked 1947 / 50182, failures 0, elapsed 301s, ETA 7456s
+[15:43:46] checked 2288 / 50182, failures 0, elapsed 361s, ETA 7561s
+[15:44:46] checked 2479 / 50182, failures 0, elapsed 421s, ETA 8106s
+[15:45:46] checked 2924 / 50182, failures 0, elapsed 481s, ETA 7779s
+[15:46:46] checked 3120 / 50182, failures 0, elapsed 541s, ETA 8168s
+[15:47:46] checked 3525 / 50182, failures 0, elapsed 602s, ETA 7963s
+[15:48:46] checked 4028 / 50182, failures 0, elapsed 662s, ETA 7583s
+[15:49:46] checked 4455 / 50182, failures 0, elapsed 722s, ETA 7409s
+[15:50:47] checked 4958 / 50182, failures 0, elapsed 782s, ETA 7134s
+[15:51:47] checked 5312 / 50182, failures 0, elapsed 843s, ETA 7119s
+[15:52:47] checked 5838 / 50182, failures 0, elapsed 903s, ETA 6857s
+[15:53:47] checked 6485 / 50182, failures 0, elapsed 963s, ETA 6488s
+[15:54:48] checked 7112 / 50182, failures 0, elapsed 1023s, ETA 6197s
+[15:55:48] checked 7731 / 50182, failures 0, elapsed 1083s, ETA 5949s
+[15:56:48] checked 8176 / 50182, failures 0, elapsed 1144s, ETA 5876s
+[15:57:48] checked 8595 / 50182, failures 0, elapsed 1204s, ETA 5825s
+[15:58:48] checked 8947 / 50182, failures 0, elapsed 1264s, ETA 5825s
+[15:59:49] checked 9430 / 50182, failures 0, elapsed 1324s, ETA 5723s
+[16:00:49] checked 9738 / 50182, failures 0, elapsed 1384s, ETA 5749s
+[16:01:49] checked 10252 / 50182, failures 0, elapsed 1445s, ETA 5626s
+[16:02:49] checked 10666 / 50182, failures 0, elapsed 1505s, ETA 5575s
+[16:03:49] checked 11097 / 50182, failures 0, elapsed 1565s, ETA 5512s
+[16:04:49] checked 11486 / 50182, failures 0, elapsed 1625s, ETA 5474s
+[16:05:49] checked 11646 / 50182, failures 0, elapsed 1685s, ETA 5576s
+[16:06:50] checked 11783 / 50182, failures 0, elapsed 1745s, ETA 5688s
+[16:07:50] checked 11984 / 50182, failures 0, elapsed 1806s, ETA 5755s
+[16:08:50] checked 12251 / 50182, failures 0, elapsed 1866s, ETA 5776s
+[16:09:50] checked 12449 / 50182, failures 0, elapsed 1926s, ETA 5837s
+[16:10:50] checked 12602 / 50182, failures 0, elapsed 1986s, ETA 5922s
+[16:11:50] checked 12762 / 50182, failures 0, elapsed 2046s, ETA 5999s
+[16:12:51] checked 12953 / 50182, failures 0, elapsed 2106s, ETA 6054s
+[16:13:52] checked 13175 / 50182, failures 0, elapsed 2167s, ETA 6088s
+[16:14:52] checked 13352 / 50182, failures 0, elapsed 2228s, ETA 6146s
+[16:15:53] checked 13474 / 50182, failures 0, elapsed 2288s, ETA 6234s
+[16:16:53] checked 13649 / 50182, failures 0, elapsed 2348s, ETA 6286s
+[16:17:54] checked 13827 / 50182, failures 0, elapsed 2409s, ETA 6334s
+[16:18:54] checked 14067 / 50182, failures 0, elapsed 2469s, ETA 6339s
+[16:19:54] checked 14392 / 50182, failures 0, elapsed 2529s, ETA 6290s
+[16:20:54] checked 14722 / 50182, failures 0, elapsed 2589s, ETA 6237s
+[16:21:55] checked 14902 / 50182, failures 0, elapsed 2650s, ETA 6275s
+[16:22:56] checked 15020 / 50182, failures 0, elapsed 2711s, ETA 6347s
+[16:23:57] checked 15111 / 50182, failures 0, elapsed 2773s, ETA 6435s
+[16:24:57] checked 15327 / 50182, failures 0, elapsed 2833s, ETA 6442s
+[16:25:57] checked 15672 / 50182, failures 0, elapsed 2893s, ETA 6370s
+[16:26:58] checked 15878 / 50182, failures 0, elapsed 2953s, ETA 6380s
+[16:27:58] checked 16149 / 50182, failures 0, elapsed 3013s, ETA 6350s
+[16:28:58] checked 16624 / 50182, failures 0, elapsed 3073s, ETA 6204s
+[16:29:58] checked 16996 / 50182, failures 0, elapsed 3134s, ETA 6118s
+[16:30:58] checked 17225 / 50182, failures 0, elapsed 3194s, ETA 6110s
+[16:31:58] checked 17636 / 50182, failures 0, elapsed 3254s, ETA 6005s
+[16:32:58] checked 18033 / 50182, failures 0, elapsed 3314s, ETA 5908s
+[16:33:58] checked 18386 / 50182, failures 0, elapsed 3374s, ETA 5835s
+[16:34:58] checked 18751 / 50182, failures 0, elapsed 3434s, ETA 5756s
+[16:35:59] checked 19139 / 50182, failures 0, elapsed 3494s, ETA 5668s
+[16:36:59] checked 19604 / 50182, failures 0, elapsed 3555s, ETA 5544s
+[16:37:59] checked 20080 / 50182, failures 0, elapsed 3615s, ETA 5419s
+[16:38:59] checked 20538 / 50182, failures 0, elapsed 3675s, ETA 5304s
+[16:39:59] checked 20966 / 50182, failures 0, elapsed 3735s, ETA 5205s
+[16:40:59] checked 21401 / 50182, failures 0, elapsed 3795s, ETA 5104s
+[16:42:00] checked 21715 / 50182, failures 0, elapsed 3855s, ETA 5054s
+[16:43:00] checked 21918 / 50182, failures 0, elapsed 3916s, ETA 5049s
+[16:44:00] checked 22226 / 50182, failures 0, elapsed 3976s, ETA 5001s
+[16:45:00] checked 22504 / 50182, failures 0, elapsed 4036s, ETA 4964s
+[16:46:00] checked 22840 / 50182, failures 0, elapsed 4096s, ETA 4903s
+[16:47:00] checked 23113 / 50182, failures 0, elapsed 4156s, ETA 4867s
+[16:48:01] checked 23374 / 50182, failures 0, elapsed 4216s, ETA 4836s
+[16:49:01] checked 23616 / 50182, failures 0, elapsed 4276s, ETA 4810s
+[16:50:01] checked 23976 / 50182, failures 0, elapsed 4336s, ETA 4740s
+[16:51:01] checked 24318 / 50182, failures 0, elapsed 4396s, ETA 4676s
+[16:52:01] checked 24603 / 50182, failures 0, elapsed 4456s, ETA 4633s
+[16:53:01] checked 24901 / 50182, failures 0, elapsed 4516s, ETA 4585s
+[16:54:01] checked 25372 / 50182, failures 0, elapsed 4577s, ETA 4475s
+[16:55:01] checked 25879 / 50182, failures 0, elapsed 4637s, ETA 4355s
+[16:56:01] checked 26359 / 50182, failures 0, elapsed 4697s, ETA 4245s
+[16:57:02] checked 26839 / 50182, failures 0, elapsed 4757s, ETA 4138s
+[16:58:02] checked 27383 / 50182, failures 0, elapsed 4818s, ETA 4011s
+[16:59:02] checked 27883 / 50182, failures 0, elapsed 4878s, ETA 3901s
+[17:00:02] checked 28409 / 50182, failures 0, elapsed 4938s, ETA 3784s
+[17:01:02] checked 28958 / 50182, failures 0, elapsed 4998s, ETA 3663s
+[17:02:02] checked 29460 / 50182, failures 0, elapsed 5058s, ETA 3558s
+[17:03:02] checked 30023 / 50182, failures 0, elapsed 5118s, ETA 3437s
+[17:04:03] checked 30544 / 50182, failures 0, elapsed 5178s, ETA 3329s
+[17:05:03] checked 31052 / 50182, failures 0, elapsed 5238s, ETA 3227s
+[17:06:03] checked 31558 / 50182, failures 0, elapsed 5299s, ETA 3127s
+[17:07:03] checked 32048 / 50182, failures 0, elapsed 5359s, ETA 3032s
+[17:08:03] checked 32574 / 50182, failures 0, elapsed 5419s, ETA 2929s
+[17:09:04] checked 33144 / 50182, failures 0, elapsed 5479s, ETA 2817s
+[17:10:04] checked 33677 / 50182, failures 0, elapsed 5539s, ETA 2715s
+[17:11:04] checked 34125 / 50182, failures 0, elapsed 5600s, ETA 2635s
+[17:12:04] checked 34601 / 50182, failures 0, elapsed 5660s, ETA 2549s
+[17:13:04] checked 35118 / 50182, failures 0, elapsed 5720s, ETA 2454s
+[17:14:05] checked 35541 / 50182, failures 0, elapsed 5780s, ETA 2381s
+[17:15:05] checked 36080 / 50182, failures 0, elapsed 5840s, ETA 2283s
+[17:16:05] checked 36639 / 50182, failures 0, elapsed 5900s, ETA 2181s
+[17:17:05] checked 37209 / 50182, failures 0, elapsed 5961s, ETA 2078s
+[17:18:05] checked 37762 / 50182, failures 0, elapsed 6021s, ETA 1980s
+[17:19:05] checked 38308 / 50182, failures 0, elapsed 6081s, ETA 1885s
+[17:20:06] checked 38872 / 50182, failures 0, elapsed 6141s, ETA 1787s
+[17:21:06] checked 39450 / 50182, failures 0, elapsed 6201s, ETA 1687s
+[17:22:06] checked 40014 / 50182, failures 0, elapsed 6261s, ETA 1591s
+[17:23:06] checked 40554 / 50182, failures 0, elapsed 6321s, ETA 1501s
+[17:24:06] checked 41091 / 50182, failures 0, elapsed 6382s, ETA 1412s
+[17:25:06] checked 41653 / 50182, failures 0, elapsed 6442s, ETA 1319s
+[17:26:06] checked 42195 / 50182, failures 0, elapsed 6502s, ETA 1231s
+[17:27:06] checked 42745 / 50182, failures 0, elapsed 6562s, ETA 1142s
+[17:28:06] checked 43276 / 50182, failures 0, elapsed 6622s, ETA 1057s
+[17:29:07] checked 43857 / 50182, failures 0, elapsed 6682s, ETA 964s
+[17:30:07] checked 44413 / 50182, failures 0, elapsed 6742s, ETA 876s
+[17:31:07] checked 44807 / 50182, failures 0, elapsed 6803s, ETA 816s
+[17:32:07] checked 45317 / 50182, failures 0, elapsed 6863s, ETA 737s
+[17:33:07] checked 45882 / 50182, failures 0, elapsed 6923s, ETA 649s
+[17:34:07] checked 46345 / 50182, failures 0, elapsed 6983s, ETA 578s
+[17:35:08] checked 46811 / 50182, failures 0, elapsed 7043s, ETA 507s
+[17:36:08] checked 47224 / 50182, failures 0, elapsed 7103s, ETA 445s
+[17:37:08] checked 47691 / 50182, failures 0, elapsed 7164s, ETA 374s
+[17:38:08] checked 48179 / 50182, failures 0, elapsed 7224s, ETA 300s
+[17:39:08] checked 48597 / 50182, failures 0, elapsed 7284s, ETA 238s
+[17:40:08] checked 49073 / 50182, failures 0, elapsed 7344s, ETA 166s
+[17:41:08] checked 49622 / 50182, failures 0, elapsed 7404s, ETA 84s
+[17:42:09] checked 50097 / 50182, failures 0, elapsed 7464s, ETA 13s
+this invocation: checked 50182 leaves in 7478s wall (3 threads)
+  COMPOUND   checked   3117  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 14803  check time 280 thread-s (0.090 s each)
+  E2         checked  13933  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 13933  check time 57 thread-s (0.004 s each)
+  E3T        checked   1568  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 1568  check time 120 thread-s (0.076 s each)
+  E4         checked    138  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 138  check time 0 thread-s (0.001 s each)
+  certified  checked  31426  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 31426  check time 21848 thread-s (0.695 s each)
+certificates re-verified: 31426 of 31426; exclusion/compound leaves re-checked: 18756 of 18756; SHELL leaves 1 (exact containment)
+smallest certified margin 5/2 − κ*: 5.0514e-06 (replay bisection over the 3262 ladder-fallback certificates; largest κ* 2.499994948581 at T8.b0.b0.b1.b0.d1.b0.a1.c0.d0.b0.a1.c1.d0.b0.d1.a1.b0.c0); ladder-logged certificates: margin ≥ 4.4875e-02; unresolved 0
+wall time: this invocation 7481 s; all 1 recorded invocations under this identity 7481 s
+receipt written: runs/transport_replay_clean_RECEIPT.json (results sha256 c9fa7f8b6dca757d1fa0c2c0d99c77f3e51928156677d53e1ee346c621422c69)
+REPLAY OK

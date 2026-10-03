@@ -1,0 +1,35 @@
+Every file changed since the round-3 pin (review/round3_PINNED.sha256 + review/round3_files.sha256), tagged; column 3 = the
+first 12 hex digits of the current sha256.  Round-3 bases verified by sha256 (pilot_runs/pre_round4/, and gcert.py / ldl.py /
+hull_to_box.py reconstructed from review/round3_incremental.diff on the round-2 snapshot).  Diff: review/round4/incremental.diff.
+No KERNEL semantic change: gcert.py, ldl.py, hull_to_box.py differ by comments only (AST-identical); chart.py only in the
+cache-loading path.  fam5.py, charts.py, bo2.py, bo1d.py, bocert.py, p2*.py, tm.py, poly.py, refexact.py, nanguard.py,
+regions.py, inc.py, gsigma.py, schur.py, grid.py, run_fam.py, cover3.py, cover5.py, merge_pool.py, lemma_*.py and every
+manifest / legacy log / certs3 log: sha256 equal to round 3; pool.py: unmodified since before the round-3 pin.
+
+KERNEL (comment only)      gcert.py               fb00421d6fa2  3 RIGOR annotations required by the extended lint (Poly.var, np.all, np.maximum.reduce); AST identical to round 3
+KERNEL (comment only)      ldl.py                 c2cb014b2996  1 RIGOR annotation (np.outer in the factorisation, accounted by the backward-error bound); AST identical to round 3
+KERNEL (comment only)      hull_to_box.py         418ff9daba68  lemma gate (Corollary H'): 1 RIGOR annotation (TM.var); AST identical to round 3
+KERNEL (provenance only)   chart.py               4c69235c8d45  chart caches: in a pinned run the refcache inventory must equal the pin and a cache file is unpickled only after its bytes match the pin; no cache writes; CACHE via realpath. Chart construction (_build) unchanged
+PRODUCTION-DRIVER          recert.py              377b8d5e3cd4  RECERT_N lock and worker-ID check, one process per worker ID (flock), claim validation, atomic claims (link), torn tail cut at start, start event with niceness, status-only resume bookkeeping (memory), FAIL counted on resume, idempotent split, --code-id. recert_leaf (the certificate recomputation) unchanged
+PRODUCTION-DRIVER          recert_all.sh          6a35f7295cac  rewritten: absolute paths, env -i, -I -S -B via bootstrap.py, target niceness 10, default N = 6, N / code / families recorded at first start and enforced on resume, RECERT_DIR only for test directories, exit = certs_complete verdict
+PRODUCTION-DRIVER (new)    launch_recert.sh       95f547df0160  queued launch: research-run --cpu 3 --memory-gb 2.5 --max-wait 0 --label darts-recert -- recert_all.sh 3; log certs4/launch.out
+PRODUCTION-DRIVER (new)    launch_replay.sh       c0e5aee79d19  queued launch: SHARDS / memory from the certs4 PP line count (rule: SHARDS x 1.65 x L/621307 + 0.4 <= 6 GB), research-run --label darts-replay -- replay_all.sh with the reviewed pin
+PRODUCTION-DRIVER (new)    smoke_launch.sh        6ada80324ef9  dry runs under research-run, 1 CPU: recert_all.sh 1 on FF; replay_all.sh --mode test --only crit_collar,ff SHARDS=1 (not run: research-run execution denied to the preparing agent)
+HARNESS                    binding.py             1308b96394d3  fresh runtime inventory (no memo): loaded Mach-O images incl. the Python framework, stdlib, numerical packages, *.pth and top-level site modules; RECORD check of late imports; flags / xoptions / pycache prefix bound; -O refused
+HARNESS (new)              bootstrap.py           0a5804015ec2  isolated start of every proof process (-I -S -B, empty pycache prefix; venv site-packages appended; script must lie in the package)
+HARNESS (new)              certs_complete.py      4f63553a71a8  pre-replay completeness gate of certs4 (also run by recert_all.sh at the end)
+HARNESS (new)              make_pin.py            63ba280e6fab  pin list: closure of the entry points, wrapper, allowlist, manifests, legacy logs, refcache/*, certs3 merged logs
+HARNESS                    replay_all.py          b3375c0b3416  round-3 items 1-7; completeness gate before any gate / merge / replay; merge inputs must equal the checked bytes; target niceness; default 6 shards; receipt kind complete
+HARNESS                    replay_all.sh          3453acb999b7  absolute constants, env -i, -I -S -B, bootstrap.py, mktemp pycache prefix, default SHARDS 6
+HARNESS                    replay_common.py       11e37e8df873  start / end checks: proof flags, FP, cache inventory, fresh inventory, loaded modules
+HARNESS                    replay2.py             612cb8a4dca5  start checks, snapshots, O_EXCL outputs, family, summary fields (failures, late_loaded, binding sources / refcache, niceness)
+HARNESS                    replay3.py             7c4ad72d7c95  as replay2.py
+HARNESS                    replay_ok.py           567c50fb9fe4  validate on byte snapshots; binding from the summaries; metadata cross-check against the log record; CLI checks recorded sources / caches
+HARNESS                    check_charts.py        6b851608dcc5  gate: pinned caches loaded through chart.load_pinned before the rebuild-and-compare
+HARNESS                    rigor_lint.py          7855e1066748  NumPy aliases, from-numpy names, ufunc reductions, np.all / any, .var / .std, tokenize-based annotations
+HARNESS                    rigor_allowlist.json   5918ef4dabd4  per-site allowlist (171 sites)
+HARNESS (tests)            test_containment.py    dc3157a51d69  Lemma 9.6 by analytic extrema over u-intervals (farl_conditions_interval) in addition to the sampled test
+HARNESS (tests)            test_replay_infra.py   48eacc83c9f9  82 probes: round-2 S2-S7, round-3 items 1-7, round-4b launch path
+HARNESS (tool)             summarize.py           0bab93e6b9d8  receipt summary via replay_all.read_receipt
+DOCS                       README.md              0f867839b4cb  status, threat model (§5), launch, round 4 (§9), files
+DOCS                       PILOT.md               6a07a263003c  round-4 measurements, sizing, predictions

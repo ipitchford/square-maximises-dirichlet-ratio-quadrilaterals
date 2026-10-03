@@ -1,0 +1,21 @@
+Started: fresh-local (pid 2921)
+LOCAL THEOREM REPLAYED: 960 direction boxes, 0 failures, cube half-width 1/20 (exact), 63.4 s
+RECEIPT replay_v2/RECEIPT.json sha256 4210833462c2611b4775741a5d63ad95d570ef1440ca30f78619b3c9845f2fd7
+      571.03 real       565.51 user         4.51 sys
+          4862705664  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+             1685991  page reclaims
+                1502  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2144  voluntary context switches
+               21604  involuntary context switches
+            50794302  instructions retired
+            28606195  cycles elapsed
+             1573224  peak memory footprint

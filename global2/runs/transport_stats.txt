@@ -1,0 +1,18 @@
+records by status: {'SHELL': 1, 'split': 50159, 'E4': 138, 'COMPOUND': 3117, 'E2': 13933, 'E3T': 1568, 'certified': 31426}
+leaves: 50183  splits: 50159
+volume by status: {'SHELL': 0.0032, 'E4': 1.2584, 'COMPOUND': 28.842, 'E2': 0.77982, 'E3T': 0.11351, 'certified': 0.14156}
+certified 31426:
+   mode         {'LG': 31421, 'MONO': 5}
+   bound family {'const/boot': 28424, 'KS': 3002}
+   bound        {'const': 28424, 'KS': 3002}
+   fo           {'True': 31383, 'False': 43}
+   n            {'8': 31426}
+   shift        {'0': 16491, '1': 14935}
+   which        {'zsz': 22264, 'tr': 9056, 'det': 106}
+logged kappa_cert (ladder value; refine with margin_refine_t.jl): max 2.500000, #(=2.5 fallback) 3262, median 2.3145, min 1.6583
+   kappa_cert 5/25/50/75/95%: 1.986 2.174 2.314 2.408 2.500
+box volume: median 1.119e-07, min 5.007e-10, max 1.690e-04; total certified volume 1.4156e-01
+time per certified box (one thread, incl. screen): mean 0.671 s (Float64 part 0.245 s); median 0.474 s; sum over all leaves 21304 thread-s
+largest logged kappa_cert box: T14.a0.d0.a0.b0.c1.d1.a0 kappa_cert 2.5 kappa_f64 2.5 bound KS LG
+COMPOUND sub-leaves by condition: {'E2': 11592, 'E3T': 2770, 'E4': 441}  max depth 6  mean depth 3.37
+FAIL/ERROR leaves: 0

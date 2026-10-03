@@ -1,0 +1,8 @@
+[deps]
+AbstractAlgebra = "c3fe647b-3220-5bb0-a1ea-a7954cac585d"
+Arblib = "fb37089c-8514-4489-9461-98f9c8763369"
+ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
+Groebner = "0b43b601-686d-58a3-8a1c-6623616c7cd4"
+IntervalArithmetic = "d1acc4aa-44c8-5952-acd4-ba5d80a2a253"
+TaylorModels = "314ce334-5f6e-57ae-acf6-00b6e903104a"
+TaylorSeries = "6aa5eb33-94cf-58f4-a9d0-e4b2c4fc25ea"

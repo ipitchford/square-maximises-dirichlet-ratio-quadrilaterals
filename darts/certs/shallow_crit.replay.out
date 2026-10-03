@@ -1,0 +1,1 @@
+{"log": "certs/shallow_crit.jsonl", "region": "BOX", "roots": 256, "leaves_checked": 5635, "ok": 5635, "bad": 0, "time_s": 1555.1}

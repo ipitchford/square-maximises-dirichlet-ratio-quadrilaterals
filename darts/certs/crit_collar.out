@@ -1,0 +1,5 @@
+{"root": "COL_00", "ok": true, "stats": {"cert": 1, "discard": 0, "fail_leaf": 0, "ldl": 1}, "wall": 0.3}
+{"root": "COL_01", "ok": true, "stats": {"cert": 2, "discard": 0, "fail_leaf": 0, "ldl": 2}, "wall": 0.8}
+{"root": "COL_10", "ok": true, "stats": {"cert": 3, "discard": 0, "fail_leaf": 0, "ldl": 3}, "wall": 1.1}
+{"root": "COL_11", "ok": true, "stats": {"cert": 4, "discard": 0, "fail_leaf": 0, "ldl": 4}, "wall": 1.5}
+DONE {"cert": 4, "discard": 0, "fail_leaf": 0, "ldl": 4} 1.5

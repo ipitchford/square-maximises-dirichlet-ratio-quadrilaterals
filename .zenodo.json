@@ -1,0 +1,65 @@
+{
+  "title": "The square maximises the ratio of the first two Dirichlet eigenvalues among quadrilaterals",
+  "upload_type": "publication",
+  "publication_type": "preprint",
+  "creators": [
+    {
+      "name": "Anonymous"
+    }
+  ],
+  "version": "0.1.0-candidate",
+  "license": "cc-zero",
+  "access_right": "open",
+  "publication_date": "2026-10-03",
+  "keywords": [
+    "Dirichlet Laplacian",
+    "eigenvalue ratio",
+    "Payne–Pólya–Weinberger inequality",
+    "Ashbaugh–Benguria inequality",
+    "quadrilaterals",
+    "spectral geometry",
+    "shape optimisation",
+    "computer-assisted proof",
+    "validated numerics",
+    "ball arithmetic",
+    "Lehmann–Goerisch method"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/ipitchford/square-maximises-dirichlet-ratio-quadrilaterals",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://evidencepress.org/releases/square-maximises-dirichlet-ratio-quadrilaterals/",
+      "relation": "isDocumentedBy",
+      "scheme": "url"
+    },
+    {
+      "identifier": "10.4171/JST/409",
+      "relation": "references",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1512/iumj.2010.59.3744",
+      "relation": "references",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1088/1751-8113/41/5/055201",
+      "relation": "references",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "arXiv:2207.05814",
+      "relation": "references",
+      "scheme": "arxiv"
+    },
+    {
+      "identifier": "arXiv:2609.02784",
+      "relation": "references",
+      "scheme": "arxiv"
+    }
+  ],
+  "description": "Unrefereed candidate. Proves that for every simple quadrilateral Q in the plane, convex or not, the ratio λ2(Q)/λ1(Q) of the first two eigenvalues of the Dirichlet Laplacian is at most 5/2, with equality only for squares: the case k = 4 of the polygonal Payne–Pólya–Weinberger conjecture (Siudeja; Antunes–Freitas). The triangle case is known (Siudeja 2010; Arbon, Mannan, Psenka and Ragavan 2022); for quadrilaterals only local maximality of the square in a small neighbourhood had been stated (Arbon 2022), and the paper identifies two gaps in that argument. The proof is computer-assisted. Analytic lemmas remove near-triangles and thin shapes. A certified local step covers an explicit neighbourhood of the square through an inertia criterion for a 3×3 Rayleigh–Ritz pencil and a Kato–Temple bound expanded as Taylor models. Certified box covers of the remaining convex shapes bound λ2 by Rayleigh–Ritz and λ1 by a Lehmann–Goerisch inequality with an exactly divergence-matched flux, transported by a piecewise-affine map and a Piola transform. A band of elongated shapes is covered by one-dimensional bounds certified by Sturm oscillation. Non-convex quadrilaterals are handled by analytic lemmas (mixed-boundary bracketing, one-dimensional bounds with exponential tails) and certified covers in charts uniform in the arm lengths. Every inequality that enters the proof is decided in ball arithmetic (Arb) or exact rational arithmetic, and every cover was replayed by a fail-closed verifier, finally from a fresh extraction of the frozen archive components. The package contains the manuscript, Supplement S (complete non-convex proofs), all certificate inputs and final logs, verifiers, separately written checkers, replay receipts and the response to an external referee report. Provenance: the research, code and text were produced by AI systems (Anthropic Claude, with an OpenAI model as adversarial reviewer) under the direction of the publisher, Evidence Press; no human mathematical contribution is claimed. Producer-side replay and separately written checks only; no formal verification, independent reproduction by an unaffiliated party, specialist or journal peer review; the dart certificates have no second implementation; novelty is established only within a bounded literature search."
+}

@@ -1,0 +1,1 @@
+12:34:22 PP 23/64 exit 0 {"log": "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/certs4/pp.merged.jsonl", "family": "PP", "shard": "23/64", "partial": false, "recert": true, "lines": 617367, "roots": 2047, "skipped": 11967, "leaves_checked": 3177, "ok": 3177, "failures": 0, "binding_sha256": "43d5d0e9015441d874f62c73

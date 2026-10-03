@@ -1,0 +1,29 @@
+PROOF launch 2026-10-02 12:35:06 SHARDS=2 memory-gb=4.0 caller-nice=0 pin=7e564f3f
+Queued: insufficient estimated reclaimable RAM plus desktop reserve
+Started: darts-proof (pid 28614)
+gate lemma_sector.py: exit 0
+gate lemma_longarm.py: exit 0
+gate check_charts.py 8: exit 0
+gate rigor_lint.py: exit 0
+gate test_containment.py: exit 0
+gate hull_to_box.py 56 64 0.0339 0.12 0.5 0.875: exit 0
+gate check_cbox_cover.py: exit 0
+gate accounting.py: exit 0
+replay crit_collar: shards ok 2/2, validation problems 0
+replay crit_spike_X1: shards ok 2/2, validation problems 0
+replay main_cbox: shards ok 2/2, validation problems 0
+replay shallow_crit: shards ok 2/2, validation problems 0
+replay kf_collar: shards ok 2/2, validation problems 0
+replay kf_spike: shards ok 2/2, validation problems 0
+replay pp: shards ok 2/2, validation problems 0
+replay sp_col: shards ok 2/2, validation problems 0
+replay sp_spk: shards ok 2/2, validation problems 0
+replay pf: shards ok 2/2, validation problems 0
+replay fp: shards ok 2/2, validation problems 0
+replay ff: shards ok 2/2, validation problems 0
+replay sf_col: shards ok 2/2, validation problems 0
+replay sf_spk: shards ok 2/2, validation problems 0
+REPLAY_ALL STATUS: PASS  receipt replays/receipts/20261002T130555_a1b1ffb8.jsonl  run directory replays/run_20261002T130555_a1b1ffb8
+RECEIPT FINAL DIGEST (self_sha256 of the end record): 35d4a6fbdbbdafacb001746a5b3bcebdc4973f735b26b7f70cd6d6be90c66eee
+RECEIPT FILE SHA256: a2759b4fcd03361de493049622f5eb3aa2368259f8ad86d169b09bc6ae4c3a7a
+PROOF research-run exit 0 2026-10-02 18:43:30

@@ -1,0 +1,5 @@
+flip-sign: exit 1 | XLOCAL FAIL: 1 problems / box 5 s-int 3: bound 41209902964304557304444791222810344662787758776257330220120315305161305188209/28269553036454149273332760011886696253239742350009903329945699220681916416 is not negative
+drop-box: exit 1 | XLOCAL FAIL: 1 problems / face (3, -1): volume 63/8 != 8
+raise-level: exit 1 | XLOCAL FAIL: 1 problems / box 0 s-int 9: level 49 exceeds both lower bounds (rect 42.020823)
+duplicate-box: exit 1 | XLOCAL FAIL: 2 problems / face (3, -1): volume 65/8 != 8 / face (3, -1): boxes 3,64 overlap
+drop-s-interval: exit 1 | XLOCAL FAIL: 1 problems / box 7: 9 s-intervals, expected 10

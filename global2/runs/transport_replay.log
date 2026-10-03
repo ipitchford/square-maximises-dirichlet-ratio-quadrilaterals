@@ -1,0 +1,194 @@
+=== 2026-10-01 09:01:14 replay start: nice -n 10 julia -t 6 replay_t.jl runs/transport_cert.jsonl (prediction: 14,300 thread-s of checks = 40-80 min wall on 6 threads)
+coverage: 50183 leaves Dict("COMPOUND" => 3117, "E2" => 13933, "certified" => 31426, "E4" => 138, "SHELL" => 1, "E3T" => 1568), 0 uncovered, 0 bound mismatches, 100342 records (0 unreached)
+results file runs/transport_cert_replay_results.jsonl: 0 leaves already checked (resumed)
+to check now: 50182 (18756 exclusion/compound, 31426 certificates)
+[09:02:28] checked 170 / 50182, failures 0, elapsed 63s, ETA 18400s
+[09:03:36] checked 271 / 50182, failures 0, elapsed 130s, ETA 23907s
+[09:04:36] checked 412 / 50182, failures 0, elapsed 190s, ETA 22953s
+[09:05:39] checked 465 / 50182, failures 0, elapsed 253s, ETA 27053s
+[09:06:39] checked 633 / 50182, failures 0, elapsed 313s, ETA 24506s
+[09:07:50] checked 803 / 50182, failures 0, elapsed 384s, ETA 23601s
+[09:08:51] checked 918 / 50182, failures 0, elapsed 446s, ETA 23918s
+[09:09:55] checked 1057 / 50182, failures 0, elapsed 509s, ETA 23661s
+[09:11:00] checked 1310 / 50182, failures 0, elapsed 574s, ETA 21411s
+[09:16:04] checked 1350 / 50182, failures 0, elapsed 878s, ETA 31758s
+=== 2026-10-01 09:21:12 replay stopped by its author (machine swapping: 27 GB swap used, process paged out); restarting with the centred-form exclusion check first, 4 threads, heap-size hint
+=== 2026-10-01 09:21:37 replay resumed: nice -n 10 julia --heap-size-hint=1500M -t 4 replay_t.jl runs/transport_cert.jsonl --recheck-tm
+coverage: 50183 leaves Dict("COMPOUND" => 3117, "E2" => 13933, "certified" => 31426, "E4" => 138, "SHELL" => 1, "E3T" => 1568), 0 uncovered, 0 bound mismatches, 100342 records (0 unreached)
+results file runs/transport_cert_replay_results.jsonl: 1374 leaves already checked (resumed)
+to check now: 49035 (18456 exclusion/compound, 30579 certificates)
+[09:22:44] checked 629 / 49035, failures 0, elapsed 60s, ETA 4626s
+
+[26284] signal 15: Terminated: 15
+in expression starting at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:319
+gc_mark_obj8 at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+gc_mark_and_steal at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+gc_mark_loop_parallel at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+jl_parallel_gc_threadfun at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+_pthread_start at /usr/lib/system/libsystem_pthread.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+gc_mark_and_steal at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+gc_mark_loop_parallel at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+jl_parallel_gc_threadfun at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+_pthread_start at /usr/lib/system/libsystem_pthread.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+gc_mark_obj8 at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+gc_mark_and_steal at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+gc_mark_loop_parallel at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+jl_parallel_gc_threadfun at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+_pthread_start at /usr/lib/system/libsystem_pthread.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+#ArbMatrix#121 at /Users/admin/.julia/packages/Arblib/mUT7x/src/matrix.jl:86
+ArbMatrix at /Users/admin/.julia/packages/Arblib/mUT7x/src/matrix.jl:86 [inlined]
+_mat at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport1.jl:126 [inlined]
+mmT at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport1.jl:129
+transport1_refs at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport1.jl:249
+rebuild_cert_t at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:145
+#check_cert_t#336 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:182
+check_cert_t at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:181 [inlined]
+macro expansion at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:255 [inlined]
+#replay_main##17 at ./threadingconstructs.jl:279
+#replay_main##15 at ./threadingconstructs.jl:246 [inlined]
+#threading_run##0 at ./threadingconstructs.jl:178
+unknown function (ip: 0x167698183) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+gc_mark_objarray at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+gc_mark_and_steal at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+gc_mark_loop_parallel at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+_jl_gc_collect at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+ijl_gc_collect at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+jl_gc_small_alloc_noinline at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+jl_gc_alloc_ at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+jl_alloc_genericmemory_unchecked at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+GenericMemory at ./boot.jl:588 [inlined]
+new_as_memoryref at ./boot.jl:604 [inlined]
+Array at ./boot.jl:651 [inlined]
+Array at ./boot.jl:661 [inlined]
+similar at ./abstractarray.jl:867 [inlined]
+similar at ./abstractarray.jl:866 [inlined]
+similar at ./broadcast.jl:228 [inlined]
+similar at ./broadcast.jl:227 [inlined]
+copy at ./broadcast.jl:919 [inlined]
+materialize at ./broadcast.jl:894 [inlined]
+robust_geneig at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:191
+choose_at at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport1.jl:91
+#tsolve1#187 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport1.jl:109
+tsolve1 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport1.jl:20
+unknown function (ip: 0x167fcc1d3) at (unknown file)
+rebuild_cert_t at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:143
+#check_cert_t#336 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:182
+check_cert_t at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:181 [inlined]
+macro expansion at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:255 [inlined]
+#replay_main##17 at ./threadingconstructs.jl:279
+#replay_main##15 at ./threadingconstructs.jl:246 [inlined]
+#threading_run##0 at ./threadingconstructs.jl:178
+unknown function (ip: 0x167698183) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+#ArbMatrix#121 at /Users/admin/.julia/packages/Arblib/mUT7x/src/matrix.jl:86
+ArbMatrix at /Users/admin/.julia/packages/Arblib/mUT7x/src/matrix.jl:86 [inlined]
+_mat at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport1.jl:126 [inlined]
+mmT at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport1.jl:129
+transport1_refs at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport1.jl:249
+rebuild_cert_t at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:145
+#check_cert_t#336 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:182
+check_cert_t at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:181 [inlined]
+macro expansion at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/replay_t.jl:255 [inlined]
+#replay_main##17 at ./threadingconstructs.jl:279
+#replay_main##15 at ./threadingconstructs.jl:246 [inlined]
+#threading_run##0 at ./threadingconstructs.jl:178
+unknown function (ip: 0x167698183) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+Allocations: 537544359 (Pool: 537543846; Big: 513); GC: 601
+=== 2026-10-01 09:23:15 replay stopped by its author to add the certified kappa* bisection for ladder-fallback certificates; resumed: nice -n 10 julia --heap-size-hint=1500M -t 4 replay_t.jl runs/transport_cert.jsonl --recheck-tm --recheck-kstar
+coverage: 50183 leaves Dict("COMPOUND" => 3117, "E2" => 13933, "certified" => 31426, "E4" => 138, "SHELL" => 1, "E3T" => 1568), 0 uncovered, 0 bound mismatches, 100342 records (0 unreached)
+results file runs/transport_cert_replay_results.jsonl: 2523 leaves already checked (resumed)
+to check now: 48061 (18029 exclusion/compound, 30032 certificates)
+[09:24:25] checked 775 / 48061, failures 0, elapsed 60s, ETA 3661s
+[09:25:25] checked 1435 / 48061, failures 0, elapsed 120s, ETA 3899s
+[09:26:25] checked 2106 / 48061, failures 0, elapsed 180s, ETA 3931s
+[09:27:25] checked 2752 / 48061, failures 0, elapsed 240s, ETA 3954s
+[09:28:25] checked 3168 / 48061, failures 0, elapsed 300s, ETA 4257s
+[09:29:25] checked 3825 / 48061, failures 0, elapsed 360s, ETA 4168s
+[09:30:26] checked 4342 / 48061, failures 0, elapsed 421s, ETA 4238s
+[09:31:26] checked 4693 / 48061, failures 0, elapsed 481s, ETA 4445s
+[09:32:26] checked 5198 / 48061, failures 0, elapsed 541s, ETA 4463s
+[09:33:26] checked 5732 / 48061, failures 0, elapsed 601s, ETA 4441s
+[09:34:27] checked 6294 / 48061, failures 0, elapsed 662s, ETA 4392s
+[09:35:27] checked 6943 / 48061, failures 0, elapsed 722s, ETA 4276s
+[09:36:27] checked 7570 / 48061, failures 0, elapsed 782s, ETA 4183s
+[09:37:27] checked 8144 / 48061, failures 0, elapsed 842s, ETA 4127s
+[09:38:27] checked 8759 / 48061, failures 0, elapsed 902s, ETA 4047s
+[09:39:27] checked 9352 / 48061, failures 0, elapsed 962s, ETA 3982s
+[09:40:27] checked 10132 / 48061, failures 0, elapsed 1022s, ETA 3827s
+[09:41:27] checked 11136 / 48061, failures 0, elapsed 1082s, ETA 3588s
+[09:42:27] checked 12070 / 48061, failures 0, elapsed 1142s, ETA 3407s
+[09:43:27] checked 12897 / 48061, failures 0, elapsed 1203s, ETA 3279s
+[09:44:27] checked 13617 / 48061, failures 0, elapsed 1263s, ETA 3194s
+[09:45:28] checked 14290 / 48061, failures 0, elapsed 1323s, ETA 3126s
+[09:46:28] checked 14905 / 48061, failures 0, elapsed 1383s, ETA 3076s
+[09:47:28] checked 15531 / 48061, failures 0, elapsed 1443s, ETA 3022s
+[09:48:28] checked 16138 / 48061, failures 0, elapsed 1503s, ETA 2973s
+[09:49:28] checked 16761 / 48061, failures 0, elapsed 1563s, ETA 2919s
+[09:50:28] checked 17389 / 48061, failures 0, elapsed 1623s, ETA 2863s
+[09:51:28] checked 18017 / 48061, failures 0, elapsed 1683s, ETA 2807s
+[09:52:28] checked 18653 / 48061, failures 0, elapsed 1743s, ETA 2749s
+[09:53:28] checked 19282 / 48061, failures 0, elapsed 1803s, ETA 2692s
+[09:54:28] checked 19945 / 48061, failures 0, elapsed 1864s, ETA 2627s
+[09:55:28] checked 20624 / 48061, failures 0, elapsed 1924s, ETA 2559s
+[09:56:29] checked 21336 / 48061, failures 0, elapsed 1984s, ETA 2485s
+[09:57:29] checked 22053 / 48061, failures 0, elapsed 2044s, ETA 2411s
+[09:58:29] checked 22719 / 48061, failures 0, elapsed 2104s, ETA 2347s
+[09:59:29] checked 23422 / 48061, failures 0, elapsed 2164s, ETA 2277s
+[10:00:29] checked 24107 / 48061, failures 0, elapsed 2224s, ETA 2210s
+[10:01:29] checked 24748 / 48061, failures 0, elapsed 2284s, ETA 2152s
+[10:02:29] checked 25156 / 48061, failures 0, elapsed 2344s, ETA 2135s
+[10:03:29] checked 25605 / 48061, failures 0, elapsed 2404s, ETA 2109s
+[10:04:30] checked 26052 / 48061, failures 0, elapsed 2465s, ETA 2082s
+[10:05:30] checked 26522 / 48061, failures 0, elapsed 2525s, ETA 2051s
+[10:06:30] checked 27057 / 48061, failures 0, elapsed 2585s, ETA 2007s
+[10:07:30] checked 27686 / 48061, failures 0, elapsed 2645s, ETA 1947s
+[10:08:30] checked 28359 / 48061, failures 0, elapsed 2705s, ETA 1879s
+[10:09:30] checked 29051 / 48061, failures 0, elapsed 2766s, ETA 1810s
+[10:10:31] checked 29641 / 48061, failures 0, elapsed 2826s, ETA 1756s
+[10:11:31] checked 30298 / 48061, failures 0, elapsed 2886s, ETA 1692s
+[10:12:31] checked 30987 / 48061, failures 0, elapsed 2946s, ETA 1623s
+[10:13:31] checked 31741 / 48061, failures 0, elapsed 3006s, ETA 1546s
+[10:14:31] checked 32396 / 48061, failures 0, elapsed 3066s, ETA 1483s
+[10:15:31] checked 33063 / 48061, failures 0, elapsed 3127s, ETA 1418s
+[10:16:31] checked 33779 / 48061, failures 0, elapsed 3187s, ETA 1347s
+[10:17:32] checked 34518 / 48061, failures 0, elapsed 3247s, ETA 1274s
+[10:18:32] checked 35244 / 48061, failures 0, elapsed 3307s, ETA 1203s
+[10:19:32] checked 35919 / 48061, failures 0, elapsed 3367s, ETA 1138s
+[10:20:32] checked 36623 / 48061, failures 0, elapsed 3427s, ETA 1070s
+[10:21:32] checked 37322 / 48061, failures 0, elapsed 3487s, ETA 1003s
+[10:22:32] checked 38112 / 48061, failures 0, elapsed 3547s, ETA 926s
+[10:23:32] checked 38908 / 48061, failures 0, elapsed 3607s, ETA 849s
+[10:24:32] checked 39787 / 48061, failures 0, elapsed 3668s, ETA 763s
+[10:25:32] checked 40636 / 48061, failures 0, elapsed 3728s, ETA 681s
+[10:26:33] checked 41462 / 48061, failures 0, elapsed 3788s, ETA 603s
+[10:27:33] checked 42266 / 48061, failures 0, elapsed 3848s, ETA 528s
+[10:28:33] checked 43104 / 48061, failures 0, elapsed 3908s, ETA 449s
+[10:29:33] checked 43920 / 48061, failures 0, elapsed 3968s, ETA 374s
+[10:30:33] checked 44727 / 48061, failures 0, elapsed 4028s, ETA 300s
+[10:31:33] checked 45575 / 48061, failures 0, elapsed 4088s, ETA 223s
+[10:32:33] checked 46353 / 48061, failures 0, elapsed 4148s, ETA 153s
+[10:33:33] checked 47035 / 48061, failures 0, elapsed 4208s, ETA 92s
+[10:34:33] checked 47706 / 48061, failures 0, elapsed 4268s, ETA 32s
+this run: checked 48061 leaves in 4305s wall (4 threads)
+  COMPOUND   checked   3117  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 14803  check time 249 thread-s (0.080 s each)
+  E2         checked  13933  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 13933  check time 300 thread-s (0.022 s each)
+  E3T        checked   1568  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 1568  check time 149 thread-s (0.095 s each)
+  E4         checked    138  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 138  check time 1 thread-s (0.008 s each)
+  certified  checked  31426  failed 0  TM-only leaves 0 (TM-only sub-checks 0)  sub-leaves 31426  check time 19455 thread-s (0.619 s each)
+certificates re-verified: 31426 of 31426 logged (sample limit none), not checked 0
+certified margin 5/2 − κ*: smallest 0.0000e+00 (ladder κ for kappa_cert < 2.5, replay bisection κ* for the 2.5 fallbacks); largest bisected κ* 2.500000 at T20.b0.b0.b0.a0.b1.d0.a1.b0.c0.d1.a0.b1.c0.d1.a0.b0.a1.d0.b1.a0; fallback boxes without κ*: 0
+TM-only exclusion re-checks (independent subdivision inconclusive): 0 sub-checks in 0 leaves
+total wall time of this invocation 4309s
+REPLAY OK

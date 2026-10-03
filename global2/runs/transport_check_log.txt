@@ -1,0 +1,7 @@
+lines 100342, unparsable 0, distinct paths 100342, duplicate paths 0 (conflicting 0)
+tree: 24 roots, 50183 leaves, max depth 34; missing records 0, lo/hi mismatches 0, orphan records 0, nodes reached twice 0, FAIL/ERROR/pilot leaves 0
+leaves by status: {'certified': 31426, 'E2': 13933, 'COMPOUND': 3117, 'E3T': 1568, 'E4': 138, 'SHELL': 1}
+leaf volume by status: {'COMPOUND': 28.84214, 'E2': 0.7798223, 'E3T': 0.1135075, 'certified': 0.141558, 'E4': 1.258444, 'SHELL': 0.0032}  total 3.113868e+01
+a-priori box volume 3.113868e+01; |leaf volume sum - box volume| = 3.197e-13
+backup: 97463 lines, line prefix of the log: True; records after the resume: 2879, of which re-recording a backup path: 0
+LOG STRUCTURE OK

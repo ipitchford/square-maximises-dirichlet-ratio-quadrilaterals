@@ -1,0 +1,3 @@
+xlocal: local/replay_v2/schur_cover2.json sha256 e048f2cc827d4219808e307cc01b72ff910a7ddeec6d22cfade69271b1364140
+xlocal: 960 boxes on 8 faces; criteria {'det': 8320, 'tr': 1280}; summary in file: 960 boxes, 0 failures
+XLOCAL PASS: exact tiling of all 8 faces, s in (0,1/20] covered, every shift level admissible, every logged bound negative

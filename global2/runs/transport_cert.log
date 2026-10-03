@@ -1,0 +1,217 @@
+[07:22:21] processed 2260, pending 1008, leaves Dict("E3T" => 79, "COMPOUND" => 181, "E2" => 36, "certified" => 299, "E4" => 41, "SHELL" => 1, "split" => 1620), elapsed 60s
+[07:23:21] processed 4068, pending 1499, leaves Dict("E3T" => 173, "COMPOUND" => 237, "E2" => 97, "certified" => 731, "E4" => 58, "SHELL" => 1, "split" => 2771), elapsed 120s
+[07:24:21] processed 6035, pending 2140, leaves Dict("E3T" => 245, "COMPOUND" => 313, "E2" => 220, "certified" => 1107, "E4" => 74, "SHELL" => 1, "split" => 4075), elapsed 180s
+[07:25:21] processed 7979, pending 2794, leaves Dict("E3T" => 288, "COMPOUND" => 372, "E2" => 389, "certified" => 1471, "E4" => 84, "SHELL" => 1, "split" => 5374), elapsed 240s
+[07:26:21] processed 9838, pending 3291, leaves Dict("E3T" => 322, "COMPOUND" => 438, "E2" => 582, "certified" => 1855, "E4" => 88, "SHELL" => 1, "split" => 6552), elapsed 300s
+[07:27:21] processed 11598, pending 3627, leaves Dict("E3T" => 409, "COMPOUND" => 506, "E2" => 738, "certified" => 2253, "E4" => 91, "SHELL" => 1, "split" => 7600), elapsed 360s
+[07:28:21] processed 13579, pending 4188, leaves Dict("E3T" => 446, "COMPOUND" => 564, "E2" => 970, "certified" => 2624, "E4" => 103, "SHELL" => 1, "split" => 8871), elapsed 420s
+[07:29:21] processed 15380, pending 4539, leaves Dict("E3T" => 487, "COMPOUND" => 611, "E2" => 1133, "certified" => 3091, "E4" => 110, "SHELL" => 1, "split" => 9947), elapsed 480s
+[07:30:21] processed 17371, pending 5118, leaves Dict("E3T" => 506, "COMPOUND" => 645, "E2" => 1378, "certified" => 3498, "E4" => 111, "SHELL" => 1, "split" => 11232), elapsed 540s
+[07:31:22] processed 19238, pending 5500, leaves Dict("E3T" => 570, "COMPOUND" => 706, "E2" => 1618, "certified" => 3866, "E4" => 120, "SHELL" => 1, "split" => 12356), elapsed 600s
+[07:32:22] processed 20852, pending 5821, leaves Dict("E3T" => 581, "COMPOUND" => 731, "E2" => 1853, "certified" => 4239, "E4" => 123, "SHELL" => 1, "split" => 13324), elapsed 660s
+[07:33:22] processed 22543, pending 6244, leaves Dict("E3T" => 586, "COMPOUND" => 745, "E2" => 2026, "certified" => 4681, "E4" => 123, "SHELL" => 1, "split" => 14381), elapsed 721s
+[07:34:22] processed 24464, pending 6791, leaves Dict("E3T" => 649, "COMPOUND" => 822, "E2" => 2202, "certified" => 5046, "E4" => 129, "SHELL" => 1, "split" => 15615), elapsed 781s
+[07:35:22] processed 26001, pending 6802, leaves Dict("E3T" => 653, "COMPOUND" => 859, "E2" => 2420, "certified" => 5550, "E4" => 129, "SHELL" => 1, "split" => 16389), elapsed 841s
+[07:36:22] processed 27836, pending 7121, leaves Dict("E3T" => 663, "COMPOUND" => 890, "E2" => 2655, "certified" => 6028, "E4" => 133, "SHELL" => 1, "split" => 17466), elapsed 901s
+[07:37:22] processed 29634, pending 7503, leaves Dict("E3T" => 690, "COMPOUND" => 917, "E2" => 2837, "certified" => 6500, "E4" => 133, "SHELL" => 1, "split" => 18556), elapsed 961s
+[07:38:22] processed 31133, pending 7880, leaves Dict("E3T" => 745, "COMPOUND" => 982, "E2" => 2972, "certified" => 6801, "E4" => 138, "SHELL" => 1, "split" => 19494), elapsed 1021s
+[07:39:22] processed 31858, pending 7787, leaves Dict("E3T" => 747, "COMPOUND" => 1018, "E2" => 3100, "certified" => 7044, "E4" => 138, "SHELL" => 1, "split" => 19810), elapsed 1081s
+[07:40:22] processed 32601, pending 7866, leaves Dict("E3T" => 747, "COMPOUND" => 1034, "E2" => 3161, "certified" => 7299, "E4" => 138, "SHELL" => 1, "split" => 20221), elapsed 1141s
+[07:41:22] processed 34000, pending 7993, leaves Dict("E3T" => 764, "COMPOUND" => 1077, "E2" => 3346, "certified" => 7690, "E4" => 138, "SHELL" => 1, "split" => 20984), elapsed 1201s
+[07:42:22] processed 35646, pending 8241, leaves Dict("E3T" => 773, "COMPOUND" => 1092, "E2" => 3623, "certified" => 8088, "E4" => 138, "SHELL" => 1, "split" => 21931), elapsed 1261s
+[07:43:22] processed 37261, pending 8342, leaves Dict("E3T" => 806, "COMPOUND" => 1128, "E2" => 3824, "certified" => 8575, "E4" => 138, "SHELL" => 1, "split" => 22789), elapsed 1321s
+[07:44:22] processed 39106, pending 8651, leaves Dict("E3T" => 864, "COMPOUND" => 1203, "E2" => 4042, "certified" => 8992, "E4" => 138, "SHELL" => 1, "split" => 23866), elapsed 1381s
+[07:45:22] processed 40464, pending 8457, leaves Dict("E3T" => 869, "COMPOUND" => 1237, "E2" => 4225, "certified" => 9546, "E4" => 138, "SHELL" => 1, "split" => 24448), elapsed 1441s
+[07:46:22] processed 41888, pending 8345, leaves Dict("E3T" => 890, "COMPOUND" => 1287, "E2" => 4458, "certified" => 10010, "E4" => 138, "SHELL" => 1, "split" => 25104), elapsed 1501s
+[07:47:22] processed 43386, pending 8485, leaves Dict("E3T" => 895, "COMPOUND" => 1322, "E2" => 4626, "certified" => 10481, "E4" => 138, "SHELL" => 1, "split" => 25923), elapsed 1561s
+[07:48:22] processed 44534, pending 8693, leaves Dict("E3T" => 895, "COMPOUND" => 1342, "E2" => 4782, "certified" => 10775, "E4" => 138, "SHELL" => 1, "split" => 26601), elapsed 1621s
+[07:49:22] processed 45050, pending 8619, leaves Dict("E3T" => 900, "COMPOUND" => 1351, "E2" => 4869, "certified" => 10969, "E4" => 138, "SHELL" => 1, "split" => 26822), elapsed 1681s
+[07:50:22] processed 46220, pending 8627, leaves Dict("E3T" => 927, "COMPOUND" => 1399, "E2" => 4977, "certified" => 11367, "E4" => 138, "SHELL" => 1, "split" => 27411), elapsed 1741s
+[07:51:22] processed 47926, pending 8729, leaves Dict("E3T" => 983, "COMPOUND" => 1491, "E2" => 5190, "certified" => 11808, "E4" => 138, "SHELL" => 1, "split" => 28315), elapsed 1801s
+[07:52:23] processed 48844, pending 8442, leaves Dict("E3T" => 984, "COMPOUND" => 1537, "E2" => 5327, "certified" => 12226, "E4" => 138, "SHELL" => 1, "split" => 28630), elapsed 1862s
+[07:53:23] processed 49574, pending 8227, leaves Dict("E3T" => 989, "COMPOUND" => 1570, "E2" => 5474, "certified" => 12514, "E4" => 138, "SHELL" => 1, "split" => 28888), elapsed 1922s
+[07:54:23] processed 50918, pending 8113, leaves Dict("E3T" => 1000, "COMPOUND" => 1597, "E2" => 5689, "certified" => 12990, "E4" => 138, "SHELL" => 1, "split" => 29503), elapsed 1982s
+[07:55:23] processed 51958, pending 8245, leaves Dict("E3T" => 1000, "COMPOUND" => 1608, "E2" => 5771, "certified" => 13351, "E4" => 138, "SHELL" => 1, "split" => 30089), elapsed 2042s
+[07:56:23] processed 53127, pending 8358, leaves Dict("E3T" => 1000, "COMPOUND" => 1624, "E2" => 5922, "certified" => 13712, "E4" => 138, "SHELL" => 1, "split" => 30730), elapsed 2102s
+[07:57:23] processed 54356, pending 8417, leaves Dict("E3T" => 1032, "COMPOUND" => 1671, "E2" => 6024, "certified" => 14116, "E4" => 138, "SHELL" => 1, "split" => 31374), elapsed 2162s
+[07:58:23] processed 55655, pending 8684, leaves Dict("E3T" => 1047, "COMPOUND" => 1710, "E2" => 6199, "certified" => 14403, "E4" => 138, "SHELL" => 1, "split" => 32157), elapsed 2222s
+[07:59:23] processed 56303, pending 8808, leaves Dict("E3T" => 1083, "COMPOUND" => 1725, "E2" => 6233, "certified" => 14580, "E4" => 138, "SHELL" => 1, "split" => 32543), elapsed 2282s
+[08:00:23] processed 57058, pending 8391, leaves Dict("E3T" => 1086, "COMPOUND" => 1774, "E2" => 6388, "certified" => 14959, "E4" => 138, "SHELL" => 1, "split" => 32712), elapsed 2342s
+[08:01:23] processed 57748, pending 7921, leaves Dict("E3T" => 1089, "COMPOUND" => 1829, "E2" => 6547, "certified" => 15322, "E4" => 138, "SHELL" => 1, "split" => 32822), elapsed 2402s
+[08:02:23] processed 58806, pending 7803, leaves Dict("E3T" => 1094, "COMPOUND" => 1847, "E2" => 6724, "certified" => 15710, "E4" => 138, "SHELL" => 1, "split" => 33292), elapsed 2462s
+[08:03:23] processed 59857, pending 7744, leaves Dict("E3T" => 1096, "COMPOUND" => 1859, "E2" => 6845, "certified" => 16130, "E4" => 138, "SHELL" => 1, "split" => 33788), elapsed 2522s
+[08:04:23] processed 61116, pending 7753, leaves Dict("E3T" => 1096, "COMPOUND" => 1877, "E2" => 7019, "certified" => 16563, "E4" => 138, "SHELL" => 1, "split" => 34422), elapsed 2582s
+[08:05:23] processed 62525, pending 7922, leaves Dict("E3T" => 1122, "COMPOUND" => 1915, "E2" => 7188, "certified" => 16950, "E4" => 138, "SHELL" => 1, "split" => 35211), elapsed 2642s
+[08:06:24] processed 63766, pending 8139, leaves Dict("E3T" => 1141, "COMPOUND" => 1938, "E2" => 7350, "certified" => 17258, "E4" => 138, "SHELL" => 1, "split" => 35940), elapsed 2702s
+[08:07:24] processed 64677, pending 8284, leaves Dict("E3T" => 1162, "COMPOUND" => 1954, "E2" => 7469, "certified" => 17485, "E4" => 138, "SHELL" => 1, "split" => 36468), elapsed 2763s
+[08:08:24] processed 65832, pending 7945, leaves Dict("E3T" => 1195, "COMPOUND" => 2035, "E2" => 7727, "certified" => 17860, "E4" => 138, "SHELL" => 1, "split" => 36876), elapsed 2823s
+[08:09:24] processed 66677, pending 7824, leaves Dict("E3T" => 1199, "COMPOUND" => 2050, "E2" => 7831, "certified" => 18220, "E4" => 138, "SHELL" => 1, "split" => 37238), elapsed 2883s
+[08:10:24] processed 67718, pending 7627, leaves Dict("E3T" => 1199, "COMPOUND" => 2084, "E2" => 8009, "certified" => 18627, "E4" => 138, "SHELL" => 1, "split" => 37660), elapsed 2943s
+[08:11:24] processed 68779, pending 7359, leaves Dict("E3T" => 1199, "COMPOUND" => 2110, "E2" => 8232, "certified" => 19042, "E4" => 138, "SHELL" => 1, "split" => 38056), elapsed 3003s
+[08:12:25] processed 70108, pending 7216, leaves Dict("E3T" => 1205, "COMPOUND" => 2138, "E2" => 8497, "certified" => 19478, "E4" => 138, "SHELL" => 1, "split" => 38648), elapsed 3064s
+[08:13:25] processed 71258, pending 7145, leaves Dict("E3T" => 1226, "COMPOUND" => 2172, "E2" => 8665, "certified" => 19867, "E4" => 138, "SHELL" => 1, "split" => 39189), elapsed 3124s
+[08:14:25] processed 72495, pending 7265, leaves Dict("E3T" => 1238, "COMPOUND" => 2204, "E2" => 8830, "certified" => 20216, "E4" => 138, "SHELL" => 1, "split" => 39867), elapsed 3184s
+[08:15:25] processed 73712, pending 7414, leaves Dict("E3T" => 1300, "COMPOUND" => 2236, "E2" => 8989, "certified" => 20497, "E4" => 138, "SHELL" => 1, "split" => 40550), elapsed 3244s
+[08:16:25] processed 74704, pending 6995, leaves Dict("E3T" => 1307, "COMPOUND" => 2291, "E2" => 9206, "certified" => 20924, "E4" => 138, "SHELL" => 1, "split" => 40837), elapsed 3304s
+[08:17:25] processed 75678, pending 6545, leaves Dict("E3T" => 1307, "COMPOUND" => 2328, "E2" => 9403, "certified" => 21402, "E4" => 138, "SHELL" => 1, "split" => 41099), elapsed 3364s
+[08:18:27] processed 76494, pending 6324, leaves Dict("E3T" => 1307, "COMPOUND" => 2364, "E2" => 9546, "certified" => 21738, "E4" => 138, "SHELL" => 1, "split" => 41393), elapsed 3426s
+[08:19:28] processed 76998, pending 6150, leaves Dict("E3T" => 1307, "COMPOUND" => 2378, "E2" => 9655, "certified" => 21956, "E4" => 138, "SHELL" => 1, "split" => 41560), elapsed 3487s
+[08:20:28] processed 77578, pending 6016, leaves Dict("E3T" => 1318, "COMPOUND" => 2394, "E2" => 9763, "certified" => 22179, "E4" => 138, "SHELL" => 1, "split" => 41784), elapsed 3546s
+[08:21:28] processed 78356, pending 5859, leaves Dict("E3T" => 1328, "COMPOUND" => 2429, "E2" => 9876, "certified" => 22489, "E4" => 138, "SHELL" => 1, "split" => 42095), elapsed 3607s
+[08:22:28] processed 79367, pending 5886, leaves Dict("E3T" => 1341, "COMPOUND" => 2461, "E2" => 9982, "certified" => 22830, "E4" => 138, "SHELL" => 1, "split" => 42614), elapsed 3667s
+[08:23:28] processed 79998, pending 5863, leaves Dict("E3T" => 1354, "COMPOUND" => 2478, "E2" => 10080, "certified" => 23028, "E4" => 138, "SHELL" => 1, "split" => 42917), elapsed 3727s
+[08:24:28] processed 81266, pending 6069, leaves Dict("E3T" => 1392, "COMPOUND" => 2505, "E2" => 10227, "certified" => 23348, "E4" => 138, "SHELL" => 1, "split" => 43655), elapsed 3787s
+[08:25:28] processed 82020, pending 5423, leaves Dict("E3T" => 1393, "COMPOUND" => 2540, "E2" => 10448, "certified" => 23791, "E4" => 138, "SHELL" => 1, "split" => 43709), elapsed 3847s
+[08:26:29] processed 82216, pending 5249, leaves Dict("E3T" => 1393, "COMPOUND" => 2547, "E2" => 10520, "certified" => 23897, "E4" => 138, "SHELL" => 1, "split" => 43720), elapsed 3908s
+[08:27:34] processed 82440, pending 5090, leaves Dict("E3T" => 1393, "COMPOUND" => 2557, "E2" => 10582, "certified" => 24016, "E4" => 138, "SHELL" => 1, "split" => 43752), elapsed 3973s
+[08:28:34] processed 82697, pending 4902, leaves Dict("E3T" => 1393, "COMPOUND" => 2570, "E2" => 10664, "certified" => 24144, "E4" => 138, "SHELL" => 1, "split" => 43787), elapsed 4033s
+[08:29:34] processed 82948, pending 4715, leaves Dict("E3T" => 1393, "COMPOUND" => 2575, "E2" => 10748, "certified" => 24274, "E4" => 138, "SHELL" => 1, "split" => 43819), elapsed 4093s
+[08:30:37] processed 83162, pending 4557, leaves Dict("E3T" => 1393, "COMPOUND" => 2594, "E2" => 10821, "certified" => 24368, "E4" => 138, "SHELL" => 1, "split" => 43847), elapsed 4156s
+[08:31:38] processed 83413, pending 4437, leaves Dict("E3T" => 1396, "COMPOUND" => 2601, "E2" => 10876, "certified" => 24488, "E4" => 138, "SHELL" => 1, "split" => 43912), elapsed 4216s
+[08:32:38] processed 84106, pending 4305, leaves Dict("E3T" => 1405, "COMPOUND" => 2629, "E2" => 10980, "certified" => 24760, "E4" => 138, "SHELL" => 1, "split" => 44193), elapsed 4276s
+[08:33:38] processed 84707, pending 4293, leaves Dict("E3T" => 1405, "COMPOUND" => 2645, "E2" => 11046, "certified" => 24984, "E4" => 138, "SHELL" => 1, "split" => 44487), elapsed 4337s
+[08:34:38] processed 85172, pending 4373, leaves Dict("E3T" => 1410, "COMPOUND" => 2658, "E2" => 11089, "certified" => 25116, "E4" => 138, "SHELL" => 1, "split" => 44760), elapsed 4397s
+[08:35:38] processed 85819, pending 4350, leaves Dict("E3T" => 1413, "COMPOUND" => 2669, "E2" => 11174, "certified" => 25352, "E4" => 138, "SHELL" => 1, "split" => 45072), elapsed 4457s
+[08:36:38] processed 87501, pending 4438, leaves Dict("E3T" => 1444, "COMPOUND" => 2702, "E2" => 11417, "certified" => 25842, "E4" => 138, "SHELL" => 1, "split" => 45957), elapsed 4517s
+[08:37:38] processed 88644, pending 3855, leaves Dict("E3T" => 1451, "COMPOUND" => 2746, "E2" => 11697, "certified" => 26374, "E4" => 138, "SHELL" => 1, "split" => 46237), elapsed 4577s
+[08:38:39] processed 90018, pending 3443, leaves Dict("E3T" => 1460, "COMPOUND" => 2823, "E2" => 11909, "certified" => 26969, "E4" => 138, "SHELL" => 1, "split" => 46718), elapsed 4637s
+[08:39:39] processed 91656, pending 3577, leaves Dict("E3T" => 1500, "COMPOUND" => 2874, "E2" => 12086, "certified" => 27453, "E4" => 138, "SHELL" => 1, "split" => 47604), elapsed 4697s
+[08:40:43] processed 91952, pending 3509, leaves Dict("E3T" => 1504, "COMPOUND" => 2879, "E2" => 12144, "certified" => 27571, "E4" => 138, "SHELL" => 1, "split" => 47715), elapsed 4762s
+[08:41:45] processed 92701, pending 2921, leaves Dict("E3T" => 1504, "COMPOUND" => 2903, "E2" => 12371, "certified" => 27982, "E4" => 138, "SHELL" => 1, "split" => 47795), elapsed 4824s
+[08:42:45] processed 93707, pending 2332, leaves Dict("E3T" => 1507, "COMPOUND" => 2929, "E2" => 12619, "certified" => 28506, "E4" => 138, "SHELL" => 1, "split" => 48007), elapsed 4884s
+[08:43:45] processed 95387, pending 2334, leaves Dict("E3T" => 1539, "COMPOUND" => 2962, "E2" => 12827, "certified" => 29072, "E4" => 138, "SHELL" => 1, "split" => 48848), elapsed 4944s
+[08:44:45] processed 96929, pending 1894, leaves Dict("E3T" => 1546, "COMPOUND" => 3005, "E2" => 13150, "certified" => 29690, "E4" => 138, "SHELL" => 1, "split" => 49399), elapsed 5004s
+
+[83351] signal 15: Terminated: 15
+in expression starting at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:308
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+julia_resizeNOT._54848.1 at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/sys.dylib (unknown line)
+syevr! at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/lapack.jl:5427
+#eigen!#252 at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:24 [inlined]
+eigen! at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:18 [inlined]
+#_eigen#254 at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:61 [inlined]
+_eigen at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:59 [inlined]
+#eigen#253 at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:55 [inlined]
+eigen at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:54 [inlined]
+robust_geneig at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:189
+choose_at at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport1.jl:91
+#tsolve1#187 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport1.jl:109
+unknown function (ip: 0x158d88fd7) at (unknown file)
+unknown function (ip: 0x158c6b33f) at (unknown file)
+unknown function (ip: 0x158c6af5b) at (unknown file)
+tsolve1 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport1.jl:20 [inlined]
+#screen#251 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:126
+screen at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:123
+unknown function (ip: 0x158c38077) at (unknown file)
+process_transport at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:261
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:260
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:294
+unknown function (ip: 0x13edd029b) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+mapreduce_impl at ./reduce.jl:246
+mapreduce_impl at ./reduce.jl:270 [inlined]
+_mapreduce at ./reduce.jl:437 [inlined]
+_mapreduce_dim at ./reducedim.jl:334 [inlined]
+#mapreduce#750 at ./reducedim.jl:326 [inlined]
+mapreduce at ./reducedim.jl:326 [inlined]
+#_sum#760 at ./reducedim.jl:984 [inlined]
+_sum at ./reducedim.jl:984 [inlined]
+#sum#758 at ./reducedim.jl:980 [inlined]
+sum at ./reducedim.jl:980 [inlined]
+polybound at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/tm.jl:112 [inlined]
+tm_mul_full! at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/tm.jl:337
+_faddmul! at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/criterion.jl:252 [inlined]
+#crit_eval!#119 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/criterion.jl:338
+crit_eval! at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/criterion.jl:297
+unknown function (ip: 0x1652e01bf) at (unknown file)
+#screen#251 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:152
+screen at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:123
+unknown function (ip: 0x158c38077) at (unknown file)
+process_transport at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:261
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:260
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:294
+unknown function (ip: 0x13edd029b) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+julia_SUM._42578.1 at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/sys.dylib (unknown line)
+jfptr_SUM._42579.1 at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/sys.dylib (unknown line)
+transport_refs at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/transport.jl:204
+process_transport at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:246
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:260
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:294
+unknown function (ip: 0x13edd029b) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+gc_mark_loop_serial_ at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+gc_drain_own_chunkqueue at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+_jl_gc_collect at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+ijl_gc_collect at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+jl_gc_small_alloc_noinline at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+jl_gc_alloc_ at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+jl_alloc_genericmemory_unchecked at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+GenericMemory at ./boot.jl:588 [inlined]
+Array at ./boot.jl:647 [inlined]
+Array at ./boot.jl:660 [inlined]
+similar at ./abstractarray.jl:867 [inlined]
+similar at ./abstractarray.jl:866 [inlined]
+_array_for_inner at ./array.jl:670 [inlined]
+collect at ./array.jl:795
+tm_mul_full! at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/tm.jl:344 [inlined]
+thin_test at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:38
+#exclusion_t#245 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:50 [inlined]
+exclusion_t at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:47 [inlined]
+compound at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:83
+compound at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:90
+compound at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:90
+compound at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:90
+compound at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:90
+process_transport at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:233
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:260
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:294
+unknown function (ip: 0x13edd029b) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+mapreduce_impl at ./reduce.jl:246
+mapreduce_impl at ./reduce.jl:270 [inlined]
+_mapreduce at ./reduce.jl:437 [inlined]
+_mapreduce_dim at ./reducedim.jl:334 [inlined]
+#mapreduce#750 at ./reducedim.jl:326 [inlined]
+mapreduce at ./reducedim.jl:326 [inlined]
+#_sum#760 at ./reducedim.jl:984 [inlined]
+_sum at ./reducedim.jl:984 [inlined]
+#sum#758 at ./reducedim.jl:980 [inlined]
+sum at ./reducedim.jl:980 [inlined]
+polybound at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/tm.jl:112 [inlined]
+tm_mul_full! at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/tm.jl:337
+_fmul! at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/criterion.jl:250 [inlined]
+#crit_eval!#119 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/criterion.jl:341
+crit_eval! at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/criterion.jl:297
+unknown function (ip: 0x1652e01bf) at (unknown file)
+#screen#251 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:152
+screen at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:123
+unknown function (ip: 0x158c38077) at (unknown file)
+process_transport at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover_t.jl:261
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:260
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:294
+unknown function (ip: 0x13edd029b) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+Allocations: 91124122091 (Pool: 91124121556; Big: 535); GC: 15007
+=== 2026-10-01 08:52:41 RESUMED after system crash/reboot (previous process got SIGTERM at ~08:45)
+[08:53:44] processed 988, pending 1401, leaves Dict("E3T" => 3, "COMPOUND" => 32, "E2" => 209, "certified" => 515, "split" => 223), elapsed 60s
+[08:54:45] processed 1965, pending 611, leaves Dict("E3T" => 14, "COMPOUND" => 52, "E2" => 434, "certified" => 1048, "split" => 416), elapsed 120s
+DONE processed 2879, pending 0, leaves Dict("E3T" => 16, "COMPOUND" => 92, "E2" => 712, "certified" => 1519, "split" => 540), elapsed 163s

@@ -1,0 +1,2 @@
+XRECEIPT {"records": 33, "shards_per_log": 2, "summaries": 28, "leaves_checked": 462849, "final_digest": "62e5d71a85b2307a66c23c1906d72d5085944058651c6d69cc79703ac1a47d4a", "receipt_file_sha256": "b40a52783ca35d276d45763ab4d55aa2d8a065954cb0d658b127ebc8d8a0e0fb", "driver_inventory": "5b2e45a77b8c5982bf8acfd05fdb74444c1890d869cc21cf0c8e88f01cbd9594", "shard_inventory": "fcfbc91a85a1cab397acc435c31989e749595c232724d927a3a985fe67a72cb5", "verifier_sha256": "ce1d59bcb538b9333bcf84c99df92d459bd2d59709bdd09cc3d013bd73902b87"}
+XRECEIPT PASS

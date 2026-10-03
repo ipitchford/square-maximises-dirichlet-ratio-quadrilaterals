@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/bootstrap.py", line 26, in <module>
+    runpy.run_path(script, run_name='__main__')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replay3.py", line 271, in <module>
+    main()
+    ~~~~^^
+  File "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replay3.py", line 263, in main
+    for w in rc.end_checks('replay3.py', msnap['sha256'], a.family, vh, [msnap, lsnap], vdet): fail('end of run: ' + w)
+             ^^^^^^^^^^^^^
+AttributeError: 'numpy.ndarray' object has no attribute 'end_checks'

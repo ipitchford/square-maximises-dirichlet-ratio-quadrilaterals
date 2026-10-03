@@ -1,0 +1,8 @@
+SAMPLE2 launch 2026-10-02 12:28:14
+Started: darts-sample2 (pid 21582)
+12:34:22 PP 23/64 exit 0 {"log": "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/certs4/pp.merged.jsonl", "family": "PP", "shard": "23/64", "partial": false, "recert": true, "lines": 617367, "roots": 2047, "skipped": 11967, "leaves_checked": 3177, "ok": 3177, "failures": 0, "binding_sha256": "43d5d0e9015441d874f62c73
+12:29:52 SP_spk 23/64 exit 0 {"log": "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/certs4/sp_spk.merged.jsonl", "family": "SP_spk", "shard": "23/64", "partial": false, "recert": true, "lines": 125342, "roots": 1096, "skipped": 178, "leaves_checked": 1295, "ok": 1295, "failures": 0, "binding_sha256": "3f7f6d08b54be93152
+12:30:55 FP 23/64 exit 0 {"log": "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/certs4/fp.merged.jsonl", "family": "FP", "shard": "23/64", "partial": false, "recert": true, "lines": 58711, "roots": 296, "skipped": 978, "leaves_checked": 292, "ok": 292, "failures": 0, "binding_sha256": "023d3944b6d9abc21ccaab9ec4cd6b
+12:31:50 SP_col 42/64 exit 0 {"log": "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/certs4/sp_col.merged.jsonl", "family": "SP_col", "shard": "42/64", "partial": false, "recert": true, "lines": 86393, "roots": 143, "skipped": 39, "leaves_checked": 525, "ok": 525, "failures": 0, "binding_sha256": "0b7daa0c2e54e45d5ebd30c
+SAMPLE2 streamA exit 0 streamB exit 0
+SAMPLE2 research-run exit 0 2026-10-02 12:34:22

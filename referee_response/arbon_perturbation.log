@@ -1,0 +1,15 @@
+mode a: dlambda_1 = 0;  H = [[-6*pi**2, 0], [0, 6*pi**2]]
+mode b: dlambda_1 = 0;  H = [[0, 0], [0, 0]]
+mode c: dlambda_1 = 0;  H = [[0, 0], [0, 0]]
+mode d: dlambda_1 = 0;  H = [[0, 256/9], [256/9, 0]]
+
+b-direction (isosceles trapezoid with parallel sides 1+b and 1-b):
+  vertex v1 velocity [-1/2, 0]: dlambda_1 = -pi**2/2, M = [[-pi**2/2, -32/9], [-32/9, -2*pi**2]], min eig = -5*pi**2/4 - sqrt(16384 + 729*pi**4)/36
+  vertex v2 velocity [1/2, 0]: dlambda_1 = -pi**2/2, M = [[-pi**2/2, 32/9], [32/9, -2*pi**2]], min eig = -5*pi**2/4 - sqrt(16384 + 729*pi**4)/36
+  vertex v3 velocity [-1/2, 0]: dlambda_1 = pi**2/2, M = [[pi**2/2, 32/9], [32/9, 2*pi**2]], min eig = -sqrt(16384 + 729*pi**4)/36 + 5*pi**2/4
+  vertex v4 velocity [1/2, 0]: dlambda_1 = pi**2/2, M = [[pi**2/2, -32/9], [-32/9, 2*pi**2]], min eig = -sqrt(16384 + 729*pi**4)/36 + 5*pi**2/4
+  true first-order slope d xi/db at 0 = 0
+  sum over the 4 vertices of separate first-order slopes = -sqrt(16384 + 729*pi**4)/(18*pi**2) = -1.66407006365
+  sum over the 2 vertex pairs (top v3+v4, bottom v1+v2) = -3/2 = -1.50000000000
+
+moving only v3 and v4 (top pair): true slope = -3/4 = -0.750000000000; sum of the separate slopes = -sqrt(16384 + 729*pi**4)/(36*pi**2) = -0.832035031824

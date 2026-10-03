@@ -1,0 +1,157 @@
+XRECEIPT {"records": 33, "shards_per_log": 2, "summaries": 28, "leaves_checked": 462849, "final_digest": "35d4a6fbdbbdafacb001746a5b3bcebdc4973f735b26b7f70cd6d6be90c66eee", "receipt_file_sha256": "a2759b4fcd03361de493049622f5eb3aa2368259f8ad86d169b09bc6ae4c3a7a", "driver_inventory": "5b2e45a77b8c5982bf8acfd05fdb74444c1890d869cc21cf0c8e88f01cbd9594", "shard_inventory": "fcfbc91a85a1cab397acc435c31989e749595c232724d927a3a985fe67a72cb5", "verifier_sha256": "7f76c7f98ba1683a693d45acf3ac1d4db6c604fcdf48785e8ef954255e5a6505"}
+PROBLEM: start.mode 'proof' != quick
+PROBLEM: start.pin_sha256 is not the reviewed pin
+PROBLEM: start.pin_file '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/review/PINNED.sha256'
+PROBLEM: start.argv is not the plain quick invocation: ['/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replay_all.py', '--pin', '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/review/PINNED.sha256', '--shards', '2', '--mode', 'proof', '--certs', 'certs4']
+PROBLEM: start.wrapper_sha256 is not the pinned replay_all.sh
+PROBLEM: start.child_env {'DARTS_PIN': '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/PIN.sha256', 'HOME': '/Users/admin', 'OMP_NUM_THREADS': '1', 'OPENBLAS_NUM_THREADS': '1', 'PATH': '/usr/bin:/bin', 'TMPDIR': '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/tmp', 'VECLIB_MAXIMUM_THREADS': '1'}
+PROBLEM: gate ['lemma_sector.py']: output file missing or changed
+PROBLEM: gate ['lemma_longarm.py']: output file missing or changed
+PROBLEM: gate ['check_charts.py', '8']: output file missing or changed
+PROBLEM: gate ['rigor_lint.py']: output file missing or changed
+PROBLEM: gate ['test_containment.py']: output file missing or changed
+PROBLEM: gate ['hull_to_box.py', '56', '64', '0.0339', '0.12', '0.5', '0.875']: output file missing or changed
+PROBLEM: gate ['check_cbox_cover.py']: output file missing or changed
+PROBLEM: gate ['accounting.py']: output file missing or changed
+PROBLEM: replay crit_collar: shard output crit_collar.0.jsonl missing or changed
+PROBLEM: replay crit_collar: shard output crit_collar.1.jsonl missing or changed
+PROBLEM: replay crit_collar shard 0/2: recert True
+PROBLEM: replay crit_collar shard 0/2: binding sources not all pinned
+PROBLEM: replay crit_collar shard 0/2: child environment
+PROBLEM: replay crit_collar shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay crit_collar shard 1/2: recert True
+PROBLEM: replay crit_collar shard 1/2: binding sources not all pinned
+PROBLEM: replay crit_collar shard 1/2: child environment
+PROBLEM: replay crit_collar shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay crit_spike_X1: shard output crit_spike_X1.0.jsonl missing or changed
+PROBLEM: replay crit_spike_X1: shard output crit_spike_X1.1.jsonl missing or changed
+PROBLEM: replay crit_spike_X1 shard 0/2: recert True
+PROBLEM: replay crit_spike_X1 shard 0/2: binding sources not all pinned
+PROBLEM: replay crit_spike_X1 shard 0/2: child environment
+PROBLEM: replay crit_spike_X1 shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay crit_spike_X1 shard 1/2: recert True
+PROBLEM: replay crit_spike_X1 shard 1/2: binding sources not all pinned
+PROBLEM: replay crit_spike_X1 shard 1/2: child environment
+PROBLEM: replay crit_spike_X1 shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay main_cbox: shard output main_cbox.0.jsonl missing or changed
+PROBLEM: replay main_cbox: shard output main_cbox.1.jsonl missing or changed
+PROBLEM: replay main_cbox shard 0/2: recert True
+PROBLEM: replay main_cbox shard 0/2: binding sources not all pinned
+PROBLEM: replay main_cbox shard 0/2: child environment
+PROBLEM: replay main_cbox shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay main_cbox shard 1/2: recert True
+PROBLEM: replay main_cbox shard 1/2: binding sources not all pinned
+PROBLEM: replay main_cbox shard 1/2: child environment
+PROBLEM: replay main_cbox shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay shallow_crit: shard output shallow_crit.0.jsonl missing or changed
+PROBLEM: replay shallow_crit: shard output shallow_crit.1.jsonl missing or changed
+PROBLEM: replay shallow_crit shard 0/2: recert True
+PROBLEM: replay shallow_crit shard 0/2: binding sources not all pinned
+PROBLEM: replay shallow_crit shard 0/2: child environment
+PROBLEM: replay shallow_crit shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay shallow_crit shard 1/2: recert True
+PROBLEM: replay shallow_crit shard 1/2: binding sources not all pinned
+PROBLEM: replay shallow_crit shard 1/2: child environment
+PROBLEM: replay shallow_crit shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay kf_collar: shard output kf_collar.0.jsonl missing or changed
+PROBLEM: replay kf_collar: shard output kf_collar.1.jsonl missing or changed
+PROBLEM: replay kf_collar shard 0/2: recert True
+PROBLEM: replay kf_collar shard 0/2: binding sources not all pinned
+PROBLEM: replay kf_collar shard 0/2: child environment
+PROBLEM: replay kf_collar shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay kf_collar shard 1/2: recert True
+PROBLEM: replay kf_collar shard 1/2: binding sources not all pinned
+PROBLEM: replay kf_collar shard 1/2: child environment
+PROBLEM: replay kf_collar shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay kf_spike: shard output kf_spike.0.jsonl missing or changed
+PROBLEM: replay kf_spike: shard output kf_spike.1.jsonl missing or changed
+PROBLEM: replay kf_spike shard 0/2: recert True
+PROBLEM: replay kf_spike shard 0/2: binding sources not all pinned
+PROBLEM: replay kf_spike shard 0/2: child environment
+PROBLEM: replay kf_spike shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay kf_spike shard 1/2: recert True
+PROBLEM: replay kf_spike shard 1/2: binding sources not all pinned
+PROBLEM: replay kf_spike shard 1/2: child environment
+PROBLEM: replay kf_spike shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay pp: shard output pp.0.jsonl missing or changed
+PROBLEM: replay pp: shard output pp.1.jsonl missing or changed
+PROBLEM: replay pp shard 0/2: recert True
+PROBLEM: replay pp shard 0/2: binding sources not all pinned
+PROBLEM: replay pp shard 0/2: child environment
+PROBLEM: replay pp shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay pp shard 1/2: recert True
+PROBLEM: replay pp shard 1/2: binding sources not all pinned
+PROBLEM: replay pp shard 1/2: child environment
+PROBLEM: replay pp shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay sp_col: shard output sp_col.0.jsonl missing or changed
+PROBLEM: replay sp_col: shard output sp_col.1.jsonl missing or changed
+PROBLEM: replay sp_col shard 0/2: recert True
+PROBLEM: replay sp_col shard 0/2: binding sources not all pinned
+PROBLEM: replay sp_col shard 0/2: child environment
+PROBLEM: replay sp_col shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay sp_col shard 1/2: recert True
+PROBLEM: replay sp_col shard 1/2: binding sources not all pinned
+PROBLEM: replay sp_col shard 1/2: child environment
+PROBLEM: replay sp_col shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay sp_spk: shard output sp_spk.0.jsonl missing or changed
+PROBLEM: replay sp_spk: shard output sp_spk.1.jsonl missing or changed
+PROBLEM: replay sp_spk shard 0/2: recert True
+PROBLEM: replay sp_spk shard 0/2: binding sources not all pinned
+PROBLEM: replay sp_spk shard 0/2: child environment
+PROBLEM: replay sp_spk shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay sp_spk shard 1/2: recert True
+PROBLEM: replay sp_spk shard 1/2: binding sources not all pinned
+PROBLEM: replay sp_spk shard 1/2: child environment
+PROBLEM: replay sp_spk shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay pf: shard output pf.0.jsonl missing or changed
+PROBLEM: replay pf: shard output pf.1.jsonl missing or changed
+PROBLEM: replay pf shard 0/2: recert True
+PROBLEM: replay pf shard 0/2: binding sources not all pinned
+PROBLEM: replay pf shard 0/2: child environment
+PROBLEM: replay pf shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay pf shard 1/2: recert True
+PROBLEM: replay pf shard 1/2: binding sources not all pinned
+PROBLEM: replay pf shard 1/2: child environment
+PROBLEM: replay pf shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay fp: shard output fp.0.jsonl missing or changed
+PROBLEM: replay fp: shard output fp.1.jsonl missing or changed
+PROBLEM: replay fp shard 0/2: recert True
+PROBLEM: replay fp shard 0/2: binding sources not all pinned
+PROBLEM: replay fp shard 0/2: child environment
+PROBLEM: replay fp shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay fp shard 1/2: recert True
+PROBLEM: replay fp shard 1/2: binding sources not all pinned
+PROBLEM: replay fp shard 1/2: child environment
+PROBLEM: replay fp shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay ff: shard output ff.0.jsonl missing or changed
+PROBLEM: replay ff: shard output ff.1.jsonl missing or changed
+PROBLEM: replay ff shard 0/2: recert True
+PROBLEM: replay ff shard 0/2: binding sources not all pinned
+PROBLEM: replay ff shard 0/2: child environment
+PROBLEM: replay ff shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay ff shard 1/2: recert True
+PROBLEM: replay ff shard 1/2: binding sources not all pinned
+PROBLEM: replay ff shard 1/2: child environment
+PROBLEM: replay ff shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay sf_col: shard output sf_col.0.jsonl missing or changed
+PROBLEM: replay sf_col: shard output sf_col.1.jsonl missing or changed
+PROBLEM: replay sf_col shard 0/2: recert True
+PROBLEM: replay sf_col shard 0/2: binding sources not all pinned
+PROBLEM: replay sf_col shard 0/2: child environment
+PROBLEM: replay sf_col shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay sf_col shard 1/2: recert True
+PROBLEM: replay sf_col shard 1/2: binding sources not all pinned
+PROBLEM: replay sf_col shard 1/2: child environment
+PROBLEM: replay sf_col shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay sf_spk: shard output sf_spk.0.jsonl missing or changed
+PROBLEM: replay sf_spk: shard output sf_spk.1.jsonl missing or changed
+PROBLEM: replay sf_spk shard 0/2: recert True
+PROBLEM: replay sf_spk shard 0/2: binding sources not all pinned
+PROBLEM: replay sf_spk shard 0/2: child environment
+PROBLEM: replay sf_spk shard 0/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: replay sf_spk shard 1/2: recert True
+PROBLEM: replay sf_spk shard 1/2: binding sources not all pinned
+PROBLEM: replay sf_spk shard 1/2: child environment
+PROBLEM: replay sf_spk shard 1/2: pycache prefix '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/replays/run_20261002T130555_a1b1ffb8/pycache'
+PROBLEM: end.status 'PASS' != 'STRUCTURE-ONLY (NOT A PROOF)'
+XRECEIPT FAIL (155 problems)

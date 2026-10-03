@@ -1,0 +1,203 @@
+
+[29442] signal 15: Terminated: 15
+in expression starting at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/pilot.jl:38
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+ldiv at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/LinearAlgebra.jl:694
+\ at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/LinearAlgebra.jl:690 [inlined]
+\ at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/generic.jl:1236
+#fsolve_V#22 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:142
+fsolve_V at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:87 [inlined]
+#fsolve#21 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+fsolve at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+#fsolve_d#25 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:252
+fsolve_d at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:246 [inlined]
+process at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:127
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:258
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:292
+unknown function (ip: 0x15da5c293) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+taylor_tm! at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/assemble.jl:107
+family_tm! at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/assemble.jl:149
+_assemble_nodes! at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/assemble.jl:561
+assemble_box! at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/assemble.jl:449
+process at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:128
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:258
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:292
+unknown function (ip: 0x15da5c293) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+ldiv at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/LinearAlgebra.jl:694
+\ at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/LinearAlgebra.jl:690 [inlined]
+\ at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/generic.jl:1236
+#fsolve_V#22 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:142
+fsolve_V at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:87 [inlined]
+#fsolve#21 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+fsolve at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+#fsolve_d#25 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:253
+fsolve_d at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:246 [inlined]
+process at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:127
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:258
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:292
+unknown function (ip: 0x15da5c293) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+gc_try_claim_and_push at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+gc_mark_and_steal at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+gc_mark_loop_parallel at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+_jl_gc_collect at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+ijl_gc_collect at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+jl_gc_small_alloc_noinline at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+jl_gc_alloc_ at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+jl_alloc_genericmemory_unchecked at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+GenericMemory at ./boot.jl:588 [inlined]
+new_as_memoryref at ./boot.jl:604 [inlined]
+Array at ./boot.jl:651 [inlined]
+Array at ./boot.jl:661 [inlined]
+similar at ./abstractarray.jl:867 [inlined]
+similar at ./abstractarray.jl:866 [inlined]
+similar at ./broadcast.jl:228 [inlined]
+similar at ./broadcast.jl:227 [inlined]
+copy at ./broadcast.jl:919 [inlined]
+materialize at ./broadcast.jl:894 [inlined]
+#fsolve_V#22 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:117
+fsolve_V at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:87 [inlined]
+#fsolve#21 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+fsolve at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+#fsolve_d#25 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:248
+fsolve_d at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:246 [inlined]
+process at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:127
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:258
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:292
+unknown function (ip: 0x15da5c293) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+ldiv at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/LinearAlgebra.jl:694
+\ at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/LinearAlgebra.jl:690 [inlined]
+\ at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/generic.jl:1236
+#fsolve_V#22 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:142
+fsolve_V at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:87 [inlined]
+#fsolve#21 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+fsolve at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+#fsolve_d#25 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:253
+fsolve_d at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:246 [inlined]
+process at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:127
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:258
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:292
+unknown function (ip: 0x15da5c293) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+julia_resizeNOT._54848.1 at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/sys.dylib (unknown line)
+syevr! at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/lapack.jl:5427
+#eigen!#252 at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:24 [inlined]
+eigen! at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:18 [inlined]
+#_eigen#254 at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:61 [inlined]
+_eigen at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:59 [inlined]
+#eigen#253 at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:55 [inlined]
+eigen at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:54 [inlined]
+robust_geneig at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:192
+#fsolve_V#22 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:119
+fsolve_V at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:87 [inlined]
+#fsolve#21 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+fsolve at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+#fsolve_d#25 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:253
+fsolve_d at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:246 [inlined]
+process at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:127
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:258
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:292
+unknown function (ip: 0x15da5c293) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+julia_resizeNOT._54848.1 at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/sys.dylib (unknown line)
+syevr! at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/lapack.jl:5427
+#eigen!#252 at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:24 [inlined]
+eigen! at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:18 [inlined]
+#_eigen#254 at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:61 [inlined]
+_eigen at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:59 [inlined]
+#eigen#253 at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:55 [inlined]
+eigen at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/symmetriceigen.jl:54 [inlined]
+robust_geneig at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:189
+#fsolve_V#22 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:119
+fsolve_V at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:87 [inlined]
+#fsolve#21 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+fsolve at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+#fsolve_d#25 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:252
+fsolve_d at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:246 [inlined]
+process at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:127
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:258
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:292
+unknown function (ip: 0x15da5c293) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+ldiv at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/LinearAlgebra.jl:694
+\ at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/LinearAlgebra.jl:690 [inlined]
+\ at /private/tmp/julia-20260817-5403-kdwllb/julia-1.12.7/usr/share/julia/stdlib/v1.12/LinearAlgebra/src/generic.jl:1236
+#fsolve_V#22 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:142
+fsolve_V at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:87 [inlined]
+#fsolve#21 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+fsolve at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:86 [inlined]
+#fsolve_d#25 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:252
+fsolve_d at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/fsolve.jl:246 [inlined]
+process at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:127
+worker_loop at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:258
+#141 at /Users/admin/claude-sandbox/quad-ppw-2026-09-30/global2/cover.jl:292
+unknown function (ip: 0x15da5c293) at (unknown file)
+start_task at /opt/homebrew/Cellar/julia/1.12.7/lib/julia/libjulia-internal.1.12.7.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0) at (unknown file)
+Allocations: 1569536773 (Pool: 1569536411; Big: 362); GC: 8638
+coarse cells: 867 (volume 1.6594), excluded at coarse level: Dict("E3" => 125, "E2" => 137, "E1" => 1, "E4" => 937), 2.6s
+DONE processed 3, pending 0, leaves Dict("E2" => 1, "E4" => 1, "split" => 1), elapsed 5s
+cell 1/32 R23.b0.c1.b0.c0.b0.c1.a1.b0.c0.a1: Dict("E2" => 1, "E4" => 1, "split" => 1)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  4.9s 
+DONE processed 2507, pending 1386, leaves Dict("pilot_pass" => 15, "E3" => 51, "E2" => 429, "E4" => 66, "split" => 1946), elapsed 23s
+cell 2/32 R22.b0.c0.b0.c0.b0.c0.a0.d0.b0.c0.a1.d0: Dict("pilot_pass" => 15, "E3" => 51, "E2" => 429, "E4" => 66, "split" => 1946)  n-split Dict(10 => 0, 12 => 0, 8 => 15)  23.1s CAP HIT
+DONE processed 3, pending 0, leaves Dict("E2" => 1, "E4" => 1, "split" => 1), elapsed 0s
+cell 3/32 R24.b0.c0.b1.c1.b0.c1.a1.d1.b1.c1.a0.d1: Dict("E2" => 1, "E4" => 1, "split" => 1)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  0.0s 
+DONE processed 5, pending 0, leaves Dict("E2" => 3, "split" => 2), elapsed 0s
+cell 4/32 R24.b0.c0.b1.c1.b0.c0.a0.d1.b0.c0.a0.d1: Dict("E2" => 3, "split" => 2)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  0.0s 
+DONE processed 1067, pending 0, leaves Dict("pilot_pass" => 282, "E2" => 249, "E4" => 3, "split" => 533), elapsed 16s
+cell 5/32 R22.b0.c0.b0.c0.b1.c0.a0.d1.b0.c0.a0.d0: Dict("pilot_pass" => 282, "E2" => 249, "E4" => 3, "split" => 533)  n-split Dict(10 => 0, 12 => 0, 8 => 282)  16.2s 
+DONE processed 2507, pending 1774, leaves Dict("pilot_pass" => 25, "E2" => 342, "split" => 2140), elapsed 30s
+cell 6/32 R12.b0.c0.b0.c0.b0.c1.d0.c1.b0.d0: Dict("pilot_pass" => 25, "E2" => 342, "split" => 2140)  n-split Dict(10 => 0, 12 => 0, 8 => 25)  30.4s CAP HIT
+DONE processed 2507, pending 1726, leaves Dict("pilot_pass" => 145, "E2" => 243, "E4" => 3, "split" => 2116), elapsed 34s
+cell 7/32 R6.c0.c0.c0.d1.c1.d0: Dict("pilot_pass" => 145, "E2" => 243, "E4" => 3, "split" => 2116)  n-split Dict(10 => 0, 12 => 0, 8 => 145)  33.7s CAP HIT
+DONE processed 3, pending 0, leaves Dict("E2" => 1, "E4" => 1, "split" => 1), elapsed 0s
+cell 8/32 R4.c0.c0.c0.d0.c1.d0: Dict("E2" => 1, "E4" => 1, "split" => 1)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  0.0s 
+DONE processed 5, pending 0, leaves Dict("E2" => 1, "E4" => 2, "split" => 2), elapsed 0s
+cell 9/32 R24.b0.c1.b0.c0.b0.c0.a0.d0.b1.c0.a1.d1: Dict("E2" => 1, "E4" => 2, "split" => 2)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  0.0s 
+DONE processed 2507, pending 982, leaves Dict("pilot_pass" => 198, "E3" => 154, "E2" => 364, "E4" => 47, "split" => 1744), elapsed 25s
+cell 10/32 R24.b0.c0.b0.c1.b0.c0.a1.d1.c0.b1.a0.d0: Dict("pilot_pass" => 198, "E3" => 154, "E2" => 364, "E4" => 47, "split" => 1744)  n-split Dict(10 => 0, 12 => 0, 8 => 198)  24.9s CAP HIT
+DONE processed 5, pending 0, leaves Dict("E2" => 1, "E4" => 2, "split" => 2), elapsed 0s
+cell 11/32 R12.b0.c0.b0.c0.b1.c1.d1.b1.c1.d0: Dict("E2" => 1, "E4" => 2, "split" => 2)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  0.0s 
+DONE processed 3, pending 0, leaves Dict("E4" => 2, "split" => 1), elapsed 0s
+cell 12/32 R24.b0.c0.b1.c1.b0.c0.a0.d1.b1.c0.a0.d1: Dict("E4" => 2, "split" => 1)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  0.0s 
+DONE processed 29, pending 0, leaves Dict("E2" => 7, "E4" => 8, "split" => 14), elapsed 0s
+cell 13/32 R24.b0.c0.b0.c1.b0.c1.a0.d0.b1.c0.a1.d1: Dict("E2" => 7, "E4" => 8, "split" => 14)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  0.0s 
+DONE processed 9, pending 0, leaves Dict("E2" => 1, "E4" => 4, "split" => 4), elapsed 0s
+cell 14/32 R24.b0.c0.b0.c0.b1.c0.a0.d0.b1.c1.a0.d0: Dict("E2" => 1, "E4" => 4, "split" => 4)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  0.0s 
+DONE processed 125, pending 0, leaves Dict("pilot_pass" => 19, "E2" => 35, "E4" => 9, "split" => 62), elapsed 1s
+cell 15/32 R18.c0.c0.c1.a1.d0.c1.d1.a1: Dict("pilot_pass" => 19, "E2" => 35, "E4" => 9, "split" => 62)  n-split Dict(10 => 0, 12 => 0, 8 => 19)  0.7s 
+DONE processed 2507, pending 1568, leaves Dict("E3" => 22, "E2" => 353, "E4" => 95, "split" => 2037), elapsed 14s
+cell 16/32 R22.b0.c0.b0.c0.b0.c0.a1.d1.b0.c1.d1.a1: Dict("E3" => 22, "E2" => 353, "E4" => 95, "split" => 2037)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  14.4s CAP HIT
+DONE processed 1457, pending 0, leaves Dict("pilot_pass" => 729, "split" => 728), elapsed 22s
+cell 17/32 R18.c0.c0.c0.a0.d0.c1.a1.d0: Dict("pilot_pass" => 729, "split" => 728)  n-split Dict(10 => 0, 12 => 0, 8 => 729)  22.2s 
+DONE processed 2507, pending 1724, leaves Dict("E2" => 381, "E4" => 11, "split" => 2115), elapsed 30s
+cell 18/32 R16.c0.c0.c0.a0.d0.c1.a0.d1: Dict("E2" => 381, "E4" => 11, "split" => 2115)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  29.9s CAP HIT
+DONE processed 2507, pending 1378, leaves Dict("pilot_pass" => 63, "E2" => 480, "E4" => 22, "split" => 1942), elapsed 23s
+cell 19/32 R16.c0.c0.c1.a1.d1.c0.d0.a0: Dict("pilot_pass" => 63, "E2" => 480, "E4" => 22, "split" => 1942)  n-split Dict(10 => 0, 12 => 0, 8 => 63)  22.8s CAP HIT
+DONE processed 2507, pending 1644, leaves Dict("E2" => 429, "E4" => 3, "split" => 2075), elapsed 28s
+cell 20/32 R12.b0.c0.b0.c0.b1.c0.d0.b1.c1.d1: Dict("E2" => 429, "E4" => 3, "split" => 2075)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  28.5s CAP HIT
+DONE processed 2507, pending 2168, leaves Dict("pilot_pass" => 70, "E2" => 97, "E4" => 3, "split" => 2337), elapsed 35s
+cell 21/32 R12.b0.c0.b0.c0.b0.c0.d1.b0.c1.d0: Dict("pilot_pass" => 70, "E2" => 97, "E4" => 3, "split" => 2337)  n-split Dict(10 => 0, 12 => 0, 8 => 70)  34.9s CAP HIT
+DONE processed 2507, pending 2190, leaves Dict("E2" => 159, "split" => 2348), elapsed 30s
+cell 22/32 R24.b0.c0.b0.c0.b0.c1.a0.d0.c0.b1.a1.d1: Dict("E2" => 159, "split" => 2348)  n-split Dict(10 => 0, 12 => 0, 8 => 0)  30.1s CAP HIT
+DONE processed 2507, pending 1596, leaves Dict("pilot_pass" => 456, "split" => 2051), elapsed 39s
+cell 23/32 R12.b0.c0.b0.c0.b0.c0.d0.b0.c0.d1: Dict("pilot_pass" => 456, "split" => 2051)  n-split Dict(10 => 0, 12 => 0, 8 => 456)  39.1s CAP HIT
+DONE processed 2507, pending 1690, leaves Dict("pilot_pass" => 143, "E2" => 262, "E4" => 4, "split" => 2098), elapsed 33s
+cell 24/32 R20.b0.b0.b0.a1.b1.a0: Dict("pilot_pass" => 143, "E2" => 262, "E4" => 4, "split" => 2098)  n-split Dict(10 => 0, 12 => 0, 8 => 143)  33.1s CAP HIT

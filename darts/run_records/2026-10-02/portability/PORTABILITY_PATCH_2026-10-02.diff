@@ -1,0 +1,258 @@
+--- a/darts/replay3.py
++++ b/darts/replay3.py
+@@ -25,7 +25,7 @@
+ exit 0 iff all ok."""
+ import sys, os, json, time, hashlib, argparse, numpy as np, warnings
+ warnings.filterwarnings('ignore')
+-HERE = '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts'
++HERE = os.path.dirname(os.path.realpath(__file__))
+ sys.path.insert(0, HERE)
+ from replay2 import tiles, rec_hash
+ from binding import binding
+--- a/darts/replay_ok.py
++++ b/darts/replay_ok.py
+@@ -13,7 +13,7 @@
+ to its own outputs; reuse of an older replay (this script's command line) is for development only and never yields a proof.
+ Usage: replay_ok.py TAG LOG SCRIPT MANIFEST FAMILY [--dir DIR]   (exit 0 iff a complete valid replay of LOG exists in DIR)"""
+ import sys, os, glob, json, hashlib
+-HERE = '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts'
++HERE = os.path.dirname(os.path.realpath(__file__))
+ sys.path.insert(0, HERE)
+ RECEIPT_KEYS = {'root', 'path', 'line', 'status', 'method', 'ok', 'info', 'record_sha256', 'binding_sha256', 'family'}
+ 
+--- a/darts/replay2.py
++++ b/darts/replay2.py
+@@ -22,7 +22,7 @@
+ import sys, os, json, time, hashlib, argparse, math, numpy as np, warnings
+ from fractions import Fraction as Fr
+ warnings.filterwarnings('ignore')
+-HERE = '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts'
++HERE = os.path.dirname(os.path.realpath(__file__))
+ sys.path.insert(0, HERE)
+ 
+ MANIFEST_KEYS = {'COLLAR': {'family', 'roots'}, 'SPIKE_X1': {'family', 'roots'}, 'MAIN_CBOX': {'family', 'roots'}, 'BOX': {'family', 'roots'},
+--- a/darts/merge_pool.py
++++ b/darts/merge_pool.py
+@@ -4,7 +4,7 @@
+ worker logs when it was split into work items).  Completeness, duplicates (root, path), schemas and tiling are checked by replay3.py on the merge.
+ Usage: merge_pool.py FAMILY [--dir DIR]   (DIR: certs3 (default) or the re-certification directory certs4)"""
+ import sys, os, glob, json
+-HERE = '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts'
++HERE = os.path.dirname(os.path.realpath(__file__))
+ fam = sys.argv[1].lower()
+ DIR = sys.argv[sys.argv.index('--dir') + 1] if '--dir' in sys.argv else 'certs3'
+ DIR = DIR if os.path.isabs(DIR) else os.path.join(HERE, DIR)
+--- a/darts/check_charts.py
++++ b/darts/check_charts.py
+@@ -8,7 +8,7 @@
+ Usage: check_charts.py [KMAX]   (exit 0 iff all checks pass)"""
+ import sys, os, glob, time
+ from fractions import Fraction
+-sys.path.insert(0, '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts')
++sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+ import numpy as np, pickle, collections
+ import charts
+ from chart import cache_file, CACHE
+--- a/darts/manifests_legacy.py
++++ b/darts/manifests_legacy.py
+@@ -2,8 +2,8 @@
+ (run_crit2.py COLLAR/SPIKE with XS = 1, run_main_cbox.py with AYMAX = 1.5479, run_box.py shallow box with 4 roots per axis),
+ for the fail-closed replay2.py.  Usage: manifests_legacy.py OUTDIR"""
+ # RIGOR-MODULE: heuristic: definitions of the legacy root lists (any floats); accounting.py checks the manifests against them and the coverage exactly
+-import sys, json, itertools, numpy as np
+-sys.path.insert(0, '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts')
++import sys, os, json, itertools, numpy as np
++sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+ from regions import T1, T2
+ CX = (0.40, 0.60); CY = (-0.966, -0.766); nC = 2
+ cxs = np.linspace(CX[0], CX[1], nC + 1); cys = np.linspace(CY[0], CY[1], nC + 1)
+--- a/darts/run_fam.py
++++ b/darts/run_fam.py
+@@ -4,8 +4,8 @@
+ Usage:  run_fam.py FAMILY manifest OUT.json
+         run_fam.py FAMILY LOG SHARD NSHARDS
+         run_fam.py FAMILY LOG pilot N SEED"""
+-import sys, json, time, math, itertools, numpy as np
+-sys.path.insert(0, '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts')
++import sys, os, json, time, math, itertools, numpy as np
++sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+ import fam5
+ 
+ # grid: per coordinate (lo, hi, step) with lo, hi, step dyadic; a coordinate with step None is inactive (value lo, radius 0)
+@@ -81,7 +81,7 @@
+     log = sys.argv[2]
+     # production roots come from the FROZEN manifest (so that a later code change cannot change the root list of a run)
+     fam = fam5.FAMILIES[name]()
+-    man = json.load(open(f'/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/manifests/{name.lower()}.json'))
++    man = json.load(open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'manifests', f'{name.lower()}.json')))
+     roots = [(rid, p0, r) for rid, p0, r in man['roots']]
+     if sys.argv[3] == 'pilot':
+         n, seed = int(sys.argv[4]), int(sys.argv[5])
+--- a/darts/accounting.py
++++ b/darts/accounting.py
+@@ -14,13 +14,13 @@
+     for the col and spk families together (t in [0, 3/10]); every processed root's snapped box contains its cell.
+     Hence the union of the represented boxes of each family (pair) contains the product of its parameter ranges.
+  4. The far threshold RF used by the far families is <= e^3, the largest radius of the polar grids (rigorous)."""
+-import sys, json, math
++import sys, os, json, math
+ from fractions import Fraction as Fr
+-sys.path.insert(0, '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts')
++sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+ from flint import arb
+ from nanguard import exact_box, InexactBox, dec
+ from grid import dyadic_root
+-D = '/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/'
++D = os.path.dirname(os.path.realpath(__file__)) + '/'
+ bad = []
+ def fail(m): bad.append(m); print('FAIL:', m)
+ def ends(c, h): return Fr(c) - Fr(h), Fr(c) + Fr(h)
+--- a/darts/replay_all.sh
++++ b/darts/replay_all.sh
+@@ -1,14 +1,20 @@
+ #!/bin/bash
+-# Launcher of the aggregate fail-closed proof replay replay_all.py (see its docstring).  The package directory and the interpreter
+-# are ABSOLUTE constants (never derived from $0, so a symlink or a copy of this script cannot select another driver); the driver
++# Launcher of the aggregate fail-closed proof replay replay_all.py (see its docstring).  The package directory is the directory of
++# the physical launcher file, symlinks resolved (portability patch of 2026-10-02; before it, an absolute constant of the producer's
++# machine), so a symlink to this launcher still selects the canonical driver; the
++# interpreter is PY (an absolute path to an executable; default: the producer's interpreter).  The driver
+ # runs isolated (-I), without the site module (-S, no *.pth startup hooks), without bytecode (-B and a new empty pycache prefix),
+ # under a sanitised environment (env -i: only PATH=/usr/bin:/bin, HOME and the BLAS thread variables).  Environment of the caller:
+ #   SHARDS  canonical integer 1..64 (default 6 = the queue's CPU reservation)        QUICK  unset/empty (proof) or exactly 1 (structure only, never PASS)
+ #   PIN     the reviewed pin list (default <package>/review/PINNED.sha256)   CERTS_DIR  re-certified family logs (default certs4)
++#   PY      absolute path of the Python interpreter (default /Users/admin/.venvs/analysis-py313/bin/python)
+ # Any other value is rejected (exit 2).  Exit 0 iff the run is a proof PASS.  Extra arguments are passed to the driver (machinery
+ # tests: --mode test --only TAGS --gates none --run-id ID; a test run can never PASS).
+-D=/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts
+-PY=/Users/admin/.venvs/analysis-py313/bin/python
++SELF=$(/usr/bin/readlink -f "$0") || exit 2                       # the physical launcher file (a symlink to it resolves here)
++D=$(/usr/bin/dirname "$SELF") || exit 2
++PY="${PY:-/Users/admin/.venvs/analysis-py313/bin/python}"
++case "$PY" in /*) ;; *) echo "PY must be an absolute path, got '$PY'"; exit 2 ;; esac
++[ -x "$PY" ] || { echo "PY is not an executable file: $PY"; exit 2; }
+ SH="${SHARDS:-6}"
+ if ! [[ "$SH" =~ ^[1-9][0-9]?$ ]] || [ "$SH" -gt 64 ]; then echo "SHARDS must be a canonical integer in 1..64, got '$SH'"; exit 2; fi
+ case "${QUICK-}" in
+--- a/darts/test_replay_infra.py
++++ b/darts/test_replay_infra.py
+@@ -30,7 +30,7 @@
+ Usage: test_replay_infra.py   (exit 0 iff every probe behaves as required; about 10 minutes)"""
+ import os, sys, json, shutil, subprocess, hashlib, threading, time, secrets, ctypes, importlib
+ HERE = os.path.dirname(os.path.realpath(__file__)); sys.path.insert(0, HERE)
+-PY = '/Users/admin/.venvs/analysis-py313/bin/python'
++PY = os.environ.get('PY') or sys.executable
+ ENV = dict(os.environ, OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1', VECLIB_MAXIMUM_THREADS='1')
+ RESULTS = []
+ def probe(name, cond, detail=''):
+--- a/verify/xreceipt.py
++++ b/verify/xreceipt.py
+@@ -12,11 +12,15 @@
+ Modes: --mode proof (status PASS, every summary recert = True) or --mode quick (structure-only run: status
+ 'STRUCTURE-ONLY (NOT A PROOF)', recert = False).  Runtime anchors (--driver-inv / --shard-inv, from an EARLIER run such as the quick
+ run) make the runtime identity an externally anchored precondition.
+-Usage: xreceipt.py RECEIPT --pin-sha256 HEX [--mode proof|quick] [--driver-inv HEX] [--shard-inv HEX]   exit 0 iff XRECEIPT PASS
++Usage: xreceipt.py RECEIPT --pin-sha256 HEX [--mode proof|quick] [--driver-inv HEX] [--shard-inv HEX] [--darts DIR] [--home DIR]
++  --darts: the package directory the receipt was produced in (default: ../darts beside this file, physical path);
++  --home: the HOME of the run (default: $HOME);
++  --recorded-darts: the package directory recorded in the receipt, if the files are now read from another copy (--darts):
++  recorded absolute paths are compared with this root, files are read from --darts.          exit 0 iff XRECEIPT PASS
+ """
+ import sys, os, json, hashlib, re, argparse
+ 
+-DARTS = "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts"
++DARTS = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "darts"))
+ GATES = [["lemma_sector.py"], ["lemma_longarm.py"], ["check_charts.py", "8"], ["rigor_lint.py"], ["test_containment.py"],
+          ["hull_to_box.py", "56", "64", "0.0339", "0.12", "0.5", "0.875"], ["check_cbox_cover.py"], ["accounting.py"]]
+ LEGACY = [("certs/crit_collar.jsonl", "COLLAR", "manifests/crit_collar.json", "crit_collar"),
+@@ -78,7 +82,11 @@
+     ap = argparse.ArgumentParser()
+     ap.add_argument("receipt"); ap.add_argument("--pin-sha256", required=True); ap.add_argument("--mode", default="proof", choices=("proof", "quick"))
+     ap.add_argument("--driver-inv"); ap.add_argument("--shard-inv")
++    ap.add_argument("--darts", default=DARTS); ap.add_argument("--home", default=os.environ.get("HOME", ""))
++    ap.add_argument("--recorded-darts", default=None)
+     a = ap.parse_args()
++    globals()["DARTS"] = os.path.realpath(a.darts)
++    REC = a.recorded_darts or DARTS          # recorded root (string comparisons); DARTS: where files are read
+     v = V()
+     raw = open(a.receipt, "rb").read()
+     recs = parse_chain(raw, v)
+@@ -89,8 +97,8 @@
+     D = [r["data"] for r in recs]
+     st, cp, gates, merges, reps, end = D[0], D[1], D[2:10], D[10:18], D[18:32], D[32]
+     # ---------------------------------------------------------------- pin (on disk, reviewed digest) and pinned files
+-    pin_path = os.path.join(DARTS, "review/PINNED.sha256")
+-    pin_raw = open(pin_path, "rb").read()
++    pin_path = os.path.join(REC, "review/PINNED.sha256")
++    pin_raw = open(os.path.join(DARTS, "review/PINNED.sha256"), "rb").read()
+     v.req(sha_bytes(pin_raw) == a.pin_sha256, "review/PINNED.sha256 on disk is not the reviewed pin")
+     pins = {}
+     for line in pin_raw.decode().split("\n"):
+@@ -107,7 +115,7 @@
+     v.req(st.get("pin_sha256") == a.pin_sha256, "start.pin_sha256 is not the reviewed pin")
+     v.req(st.get("pin_file") == pin_path, f"start.pin_file {st.get('pin_file')!r}")
+     v.req(is_int(st.get("pin_count")) and st.get("pin_count") == len(pins), f"start.pin_count {st.get('pin_count')!r} != {len(pins)}")
+-    v.req(st.get("argv") == [os.path.join(DARTS, "replay_all.py"), "--pin", pin_path, "--shards", str(N), "--mode", a.mode, "--certs", CERTS],
++    v.req(st.get("argv") == [os.path.join(REC, "replay_all.py"), "--pin", pin_path, "--shards", str(N), "--mode", a.mode, "--certs", CERTS],
+           f"start.argv is not the plain {a.mode} invocation: {st.get('argv')}")
+     v.req(st.get("driver_sha256") == pins.get("replay_all.py") and is_hex(pins.get("replay_all.py")), "start.driver_sha256 is not the pinned replay_all.py")
+     v.req(st.get("wrapper_sha256") == pins.get("replay_all.sh") and is_hex(pins.get("replay_all.sh")), "start.wrapper_sha256 is not the pinned replay_all.sh")
+@@ -115,10 +123,10 @@
+     v.req(st.get("failures_so_far") == [], f"start.failures_so_far {st.get('failures_so_far')!r}")
+     run_id = st.get("run_id")
+     v.req(isinstance(run_id, str) and re.fullmatch(r"[0-9]{8}T[0-9]{6}_[0-9a-f]{8}", run_id) is not None, f"start.run_id {run_id!r}")
+-    run_dir = os.path.join(DARTS, "replays", f"run_{run_id}")
+-    v.req(st.get("pin_copy") == os.path.relpath(os.path.join(run_dir, "PIN.sha256"), DARTS), f"start.pin_copy {st.get('pin_copy')!r}")
+-    want_env = {"PATH": "/usr/bin:/bin", "HOME": "/Users/admin", "TMPDIR": os.path.join(run_dir, "tmp"), "OMP_NUM_THREADS": "1",
+-                "OPENBLAS_NUM_THREADS": "1", "VECLIB_MAXIMUM_THREADS": "1", "DARTS_PIN": os.path.join(run_dir, "PIN.sha256")}
++    run_dir = os.path.join(DARTS, "replays", f"run_{run_id}"); run_dir_rec = os.path.join(REC, "replays", f"run_{run_id}")
++    v.req(st.get("pin_copy") == os.path.relpath(os.path.join(run_dir_rec, "PIN.sha256"), REC), f"start.pin_copy {st.get('pin_copy')!r}")
++    want_env = {"PATH": "/usr/bin:/bin", "HOME": a.home, "TMPDIR": os.path.join(run_dir_rec, "tmp"), "OMP_NUM_THREADS": "1",
++                "OPENBLAS_NUM_THREADS": "1", "VECLIB_MAXIMUM_THREADS": "1", "DARTS_PIN": os.path.join(run_dir_rec, "PIN.sha256")}
+     v.req(st.get("child_env") == want_env, f"start.child_env {st.get('child_env')!r}")
+     ident = st.get("runtime_identity")
+     v.req(isinstance(ident, dict) and is_hex(ident.get("inventory_sha256")) and is_int(ident.get("inventory_count")), "start.runtime_identity malformed")
+@@ -190,7 +198,7 @@
+             v.req({"refcache/" + f: h for f, h in (sm.get("binding_refcache") or {}).items()} == {f: h for f, h in pins.items() if f.startswith("refcache/")}, f"{sp}: chart caches != pin")
+             env = sm.get("environment") if isinstance(sm.get("environment"), dict) else {}
+             v.req(env.get("env") == {k: x for k, x in want_env.items() if k.startswith(("OMP_", "OPENBLAS_", "VECLIB_", "DARTS_"))}, f"{sp}: child environment")
+-            v.req(env.get("pycache_prefix") == os.path.join(run_dir, "pycache"), f"{sp}: pycache prefix {env.get('pycache_prefix')!r}")
++            v.req(env.get("pycache_prefix") == os.path.join(run_dir_rec, "pycache"), f"{sp}: pycache prefix {env.get('pycache_prefix')!r}")
+             v.req(not (env.get("fp") or {}).get("behaviour_failures"), f"{sp}: FP behaviour failures")
+             v.req(is_hex(env.get("inventory_sha256")) and is_int(env.get("inventory_count")), f"{sp}: runtime inventory malformed")
+             shard_invs.add(env.get("inventory_sha256"))
+--- a/verify/test_xreceipt.py
++++ b/verify/test_xreceipt.py
+@@ -4,7 +4,7 @@
+ import sys, os, json, copy, hashlib, subprocess, argparse, tempfile
+ 
+ HERE = os.path.dirname(os.path.realpath(__file__))
+-PY = "/Users/admin/.venvs/analysis-py313/bin/python"
++PY = os.environ.get("PY") or sys.executable
+ 
+ 
+ def canon(o): return json.dumps(o, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+--- a/verify/xdart.py
++++ b/verify/xdart.py
+@@ -127,8 +127,12 @@
+         d = np.abs(self.p0 - x) <= self.r + tol
+         return bool(np.any(np.all(d, axis=1)))
+ 
++import os
++DARTS = os.environ.get("XDART_DARTS") or os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "darts"))
++DARTS = DARTS.rstrip("/") + "/"
++
+ if __name__ == "__main__" and "--test-index" in __import__("sys").argv:
+-    ix = LeafIndex("/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/certs2/kf_spike.jsonl")
++    ix = LeafIndex(DARTS + "certs2/kf_spike.jsonl")
+     print("kf_spike leaves by status:", ix.statuses, "cert boxes:", len(ix.p0))
+     rng = np.random.default_rng(0); ok_in = 0
+     for k in rng.choice(len(ix.p0), 200, replace=False):
+@@ -140,7 +144,6 @@
+ 
+ # ---------------------------------------------------------------------------------------------- coverage of one dart
+ import os
+-DARTS = "/Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/"
+ FAMDIR = os.environ.get("XDART_CERTS", "certs3")      # family logs: certs3 (pre-repair) or certs4 (re-certified)
+ assert FAMDIR in ("certs3", "certs4"), FAMDIR
+ LOGS = {"crit_collar": "certs/crit_collar.jsonl", "crit_spike_X1": "certs/crit_spike_X1.jsonl", "main_cbox": "certs/main_cbox.jsonl",

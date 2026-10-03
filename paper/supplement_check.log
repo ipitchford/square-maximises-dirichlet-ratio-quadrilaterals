@@ -1,0 +1,56 @@
+supplement_check.py -- mechanical fidelity check
+source     : /Users/admin/claude-sandbox/quad-ppw-2026-09-30/darts/LEMMAS.md  sha256=de10db1e2aea95731da71e8375124e3fc7ad6af59f559c8b0c5384004a7f05b7
+supplement : /Users/admin/claude-sandbox/quad-ppw-2026-09-30/paper/SUPPLEMENT_S.md  sha256=df94868d7609259a5f7685191dfad78d71e667fee5f37eb11e76bbf199f84881
+
+(0) front matter and opening paragraph
+    YAML fields: {'title': 'Supplement S. Non-convex quadrilaterals (darts): lemmas and proofs', 'author': 'Anonymous', 'date': '2026-10-02'}
+    opening paragraph matches the specified text: True
+    => PASS
+
+(a) numeric literals
+    source: 1593 literals (154 distinct); supplement body: 1593 literals (154 distinct)
+    multiset identical: True; ordered sequence identical: True
+    => PASS
+
+(b) section headers and statement labels
+    headers: source 17, supplement 17; identical (level + token skeleton): True
+       # Darts: analytic lemmas and the rigour of the box certificate (2026-10-01)
+       ## 0. Setting, charts, symmetries
+       ## 1. Tools (all standard; proofs given or referenced)
+       ## 2. Prop 5.1 (shallow notch) — from paper §5, restated
+       ## 3. Lemma 3.1 (collapse collar: the reflex vertex close to a neighbouring vertex)
+       ## 4. Lemma 4.1 (BD-chord bound) — valid for every dart
+       ## 5. Lemma 5.1 (thin wedge at B) — a complete analytic treatment of the corner θ_B → 0
+       ## 5a. Lemma 5.3 (thin wedge at B, sector version) — extends Lemma 5.1 to θ_B ≤ 0.1772 rad (10.15°)
+       ## 5b. Lemma 5.2 (flat hull triangle) — the corner θ_B → π
+       ## 6. Lemma 6.1 (tails of long arms)
+       ## 7. The faces of the shape simplex: what is regular for the box certificate
+       ## 8. The box certificate (cert.py) — statement and rigour
+       ## 9. Reduction lemmas for the non-compact faces (spikes and long arms)
+       ## 10. The general certificate (gcert.py) — used for all runs
+       ## 11. One-dimensional (Born–Oppenheimer) bounds for families of darts (`bo1d.py`, `bo2.py`, `p2fix.py`, `cover5.py`)
+       ## 12. A lemma for darts that are thin along BD
+       ## 13. The global decomposition (every dart is covered)
+    labels: source 72, supplement 72; ordered lists identical: True
+    label sequence: Prop 5.1; Lemma 3.1; Lemma 4.1; Lemma 5.1; Lemma 5.3; Lemma 5.3; Lemma 5.1; Lemma 5.1; Lemma 5.1; Lemma 5.2; Lemma 6.1; Lemma 11.3; Lemma 4.1; Prop 5.1; Lemma 3.1; Lemmas 9.1; Lemma 9.4; Theorem S; Lemma 11.3; Lemma 9.3; Lemma 6.1; Lemma 11.3; Lemma 9.5; Lemma 9.5; Lemmas 5.1; Lemma 5.2; Lemma 9.1; Lemma 6.1; Lemma 9.2; Remark; Lemma 9.3; Lemma 9.6; Lemma 6.1; Lemma 11.3; Lemma 9.4; Lemma 6.1; Lemma 9.6; Lemma 6.1; Lemma 9.5; Lemma 4.1; Lemma 9.5; Lemma 9.3; Lemmas 9.1; Lemma 11.1; Lemma 11.2; Lemma 11.3; Lemma 11.1; Lemma 11.2; Lemma 9.4; Remarks; Lemma 11.4; Lemma 11.2; Lemma 11.3; Lemma 12.1; Lemma 12.1; Lemma 11.3; Lemma 13.1; Prop 5.1; Theorem 13.2; Lemma 5.3; Lemma 5.2; Prop 5.1; Lemma 12.1; Lemmas 9.1; Lemma 12.1; Lemma 9.4; Lemma 13.1; Lemma 11.4; Lemma 9.6; Theorem H; Theorem M; Lemma 11.3
+    => PASS
+
+(c) backticked code names
+    source: 51 spans (48 distinct); supplement body: 51 spans (48 distinct)
+    multisets identical: True
+    => PASS
+
+(d) token skeleton (letters, numbers, named symbols, punctuation), section by section
+    notation canonicalisations applied to the supplement before tokenising:
+      - 2x2 smallmatrix [a b; c d] -> source list notation [[a, b],[c, d]]  [3 occurrence(s)]
+      - range 'k = 0, \dots, 30' -> source 'k = 0..30' (source '..' is read as an ellipsis)  [1 occurrence(s)]
+      - \sqrt{compound argument} -> \sqrt(argument), as in the source's √(...)  [5 occurrence(s)]
+    tokens: source 39730, supplement 39730; differing blocks: 0
+    => PASS
+
+(e) pdflatex safety (no Unicode inside math; only — – § é … outside math/code)
+    math spans: 1552; non-ASCII inside math: []; disallowed non-ASCII in text: []
+    => PASS
+
+SUMMARY: (0) PASS, (a) PASS, (b) PASS, (c) PASS, (d) PASS, (e) PASS
+OVERALL: PASS

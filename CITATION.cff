@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "Unrefereed candidate. If you use this work, please cite it as below."
+title: "The square maximises the ratio of the first two Dirichlet eigenvalues among quadrilaterals"
+authors:
+  - name: "Anonymous"
+version: "0.1.0-candidate"
+date-released: "2026-10-03"
+doi: "10.5281/zenodo.23109314"
+license:
+  - CC0-1.0
+  - MIT
+repository-code: "https://github.com/ipitchford/square-maximises-dirichlet-ratio-quadrilaterals"
+url: "https://evidencepress.org/releases/square-maximises-dirichlet-ratio-quadrilaterals/"
+type: software
+preferred-citation:
+  type: report
+  title: "The square maximises the ratio of the first two Dirichlet eigenvalues among quadrilaterals"
+  authors:
+    - name: "Anonymous"
+  publisher:
+    name: "Evidence Press"
+  year: 2026
+  doi: "10.5281/zenodo.23109314"
+  notes: "Unrefereed candidate, version 0.1.0-candidate. Computer-assisted proof."
+keywords:
+  - Dirichlet Laplacian
+  - eigenvalue ratio
+  - Payne–Pólya–Weinberger inequality
+  - Ashbaugh–Benguria inequality
+  - quadrilaterals
+  - shape optimisation
+  - spectral geometry
+  - computer-assisted proof
+  - validated numerics
+  - ball arithmetic
+  - Lehmann–Goerisch method

@@ -1,0 +1,6 @@
+param a: dLL=0 dM=0 dK=0  ->  (L2) residual identity value = 0
+param b: dLL=0 dM=0 dK=0  ->  (L2) residual identity value = 0
+param c: dLL=0 dM=0 dK=0  ->  (L2) residual identity value = 0
+param d: dLL=0 dM=0 dK=0  ->  (L2) residual identity value = 0
+LL(0) check: L0 for LL VERIFIED (exact)
+LEMMA L2: VERIFIED (exact)

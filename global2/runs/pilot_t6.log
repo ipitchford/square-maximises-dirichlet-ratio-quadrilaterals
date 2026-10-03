@@ -1,0 +1,98 @@
+coarse cells: 1737 (volume 0.2184), excluded at coarse level: Dict("E2" => 320, "E4" => 422, "SHELL" => 1, "E3T" => 723), 20.6s
+cell 1/48 T21.b0.b0.b0.a0.d0.b1.a0.d0.b0.c1.a0.d1: Dict("pilot_pass" => 5, "split" => 4) 11.9s
+cell 2/48 T10.b0.c0.b0.c0.b0.c0.d1.b1.c0.d1.c0.b0.a0.d0: Dict("pilot_pass" => 1, "E2" => 6, "E4" => 2, "split" => 8) 0.4s
+cell 3/48 T24.b0.c0.b0.c0.b0.c0.a0.d0.b1.c0.a0.d0.c1.b0.a1.d0: Dict("pilot_pass" => 46, "E2" => 2, "split" => 47) 2.6s
+cell 4/48 T12.b0.c0.b0.c0.b1.c0.d0.b0.c1.d1.b1.c0.a0.d0: Dict("E3T" => 1, "COMPOUND" => 6, "split" => 6) 0.6s
+cell 5/48 T20.b0.b0.b0.a1.b0.d1.a0.b1.c0.d0.a0: Dict("pilot_pass" => 807, "COMPOUND" => 72, "E3T" => 35, "E2" => 501, "split" => 1414) 58.5s
+cell 6/48 T12.b0.c0.b0.c0.b0.c0.d0.b0.c0.d0.b1.c1.a0.d0: Dict("pilot_pass" => 2, "split" => 1) 0.2s
+cell 7/48 T14.a0.d1.a1.b1.c0.d0.a0: Dict("pilot_pass" => 1) 0.0s
+cell 8/48 T8.b0.b0.b0.b1.d1.b0.a0.c1.d0: Dict("pilot_pass" => 5, "split" => 4) 0.5s
+cell 9/48 T8.b0.b0.b0.b1.d0.b0.a1.c1.d1: Dict("pilot_pass" => 3, "split" => 2) 0.3s
+cell 10/48 T23.b0.c0.b0.c0.b0.c0.a0.b1.c1.d1.a0.b0.c0.d0.a0: Dict("pilot_pass" => 2, "COMPOUND" => 1, "E2" => 3, "split" => 5) 0.2s
+cell 11/48 T17.c0.c0.c0.a0.c0.d0.a1.c1.b1.d0.a0: Dict("pilot_pass" => 3, "split" => 2) 0.3s
+cell 12/48 T24.b0.c0.b0.c0.b0.c0.a0.d0.b1.c0.a0.d0.c0.b0.a0.d1: Dict("pilot_pass" => 20, "split" => 19) 1.1s
+cell 13/48 T9.b0.b0.b0.d0.b1.d0.b1.a0.c0.d1: Dict("pilot_pass" => 1) 0.0s
+cell 14/48 T23.b0.c0.b0.c0.b0.c0.a0.b0.c1.d0.a0.b0.c1.d1.a1: Dict("pilot_pass" => 4, "E2" => 1, "split" => 4) 0.4s
+cell 15/48 T12.b0.c0.b0.c0.b0.c0.d0.b1.c1.d1.b1.c1.a0.d0: Dict("E3T" => 4, "COMPOUND" => 5, "pilot_pass" => 35, "E2" => 4, "split" => 47) 2.8s
+cell 16/48 T20.b0.b0.b0.a0.b1.d1.a1.b1.c0.d1.a0: Dict("COMPOUND" => 1) 0.0s
+cell 17/48 T19.b0.b0.b0.a0.d1.b0.a0.d0.b0.c0.d1.a0: Dict("pilot_pass" => 1) 0.1s
+cell 18/48 T11.b0.c0.b0.c0.b0.c0.b0.c0.d0.b0.c1.a0.d0: Dict("pilot_pass" => 2, "split" => 1) 0.2s
+cell 19/48 T17.c0.c0.c1.a0.c0.d1.a0.c1.b0.d0.a0: Dict("E3T" => 5, "pilot_pass" => 6, "split" => 10) 0.8s
+cell 20/48 T11.b0.c0.b0.c0.b0.c0.b1.c0.d1.c1.b0.a0.d1: Dict("pilot_pass" => 4, "split" => 3) 0.4s
+cell 21/48 T8.b0.b0.b0.b0.d0.b1.a1.c1.d1: Dict("pilot_pass" => 2, "split" => 1) 0.2s
+cell 22/48 T23.b0.c0.b0.c0.b0.c0.a0.b0.c0.d0.a0.b0.c1.d0.a0: Dict("pilot_pass" => 1) 0.0s
+cell 23/48 T16.c0.c0.c0.a0.d1.c1.a0.d1.c0.b0.a0.d0: Dict("pilot_pass" => 1) 0.0s
+cell 24/48 T20.b0.b0.b0.a0.b0.d1.a0.b1.c0.d0.a0: Dict("pilot_pass" => 2, "split" => 1) 0.2s
+cell 25/48 T18.c0.c0.c1.a0.d0.c0.a0.d0.c1.b0.a0.d1: Dict("pilot_pass" => 1, "COMPOUND" => 3, "split" => 3) 0.2s
+cell 26/48 T23.b0.c0.b0.c0.b0.c0.a0.b0.c1.d0.a1.b0.c1.d0.a0: Dict("E3T" => 1, "COMPOUND" => 2, "pilot_pass" => 3, "E2" => 6, "split" => 11) 0.3s
+cell 27/48 T5.c0.c0.c0.c1.d1.c0.a1.b1.d0: Dict("pilot_pass" => 1) 0.2s
+cell 28/48 T8.b0.b0.b0.b1.d1.b0.a1.c0.d0: Dict("pilot_pass" => 8, "split" => 7) 0.7s
+cell 29/48 T5.c0.c0.c1.c0.d0.c1.a1.b0.d0: Dict("pilot_pass" => 8, "COMPOUND" => 1, "E2" => 13, "split" => 21) 0.5s
+cell 30/48 T11.b0.c0.b0.c0.b0.c0.b1.c1.d1.b1.c0.a0.d1: Dict("pilot_pass" => 3, "COMPOUND" => 1, "E2" => 6, "split" => 9) 0.3s
+cell 31/48 T16.c0.c0.c0.a0.d1.c1.a0.d1.c0.b0.a1.d0: Dict("pilot_pass" => 3, "split" => 2) 0.4s
+cell 32/48 T23.b0.c0.b0.c0.b0.c0.a1.b0.c0.d1.a0.b1.c0.d0.a0: Dict("E3T" => 1, "COMPOUND" => 7, "pilot_pass" => 6, "E2" => 3, "split" => 16) 1.0s
+cell 33/48 T23.b0.c0.b0.c0.b0.c0.a0.b0.c1.d0.a1.b0.c1.d0.a1: Dict("COMPOUND" => 1) 0.0s
+cell 34/48 T5.c0.c1.c0.c0.d1.c0.a1.b1.d1: Dict("COMPOUND" => 1) 0.0s
+cell 35/48 T21.b0.b0.b0.a0.d0.b0.a0.d1.b1.c0.d0.a1: Dict("COMPOUND" => 1) 0.0s
+cell 36/48 T11.b0.c0.b0.c0.b0.c0.b0.c0.d1.b0.c1.a1.d1: Dict("pilot_pass" => 2, "split" => 1) 0.2s
+cell 37/48 T12.b0.c0.b0.c0.b0.c0.d0.b1.c1.d0.b1.c0.a1.d1: Dict("pilot_pass" => 41, "E2" => 3, "split" => 43) 2.4s
+cell 38/48 T20.b0.b0.b0.a1.b0.d0.a0.b0.c1.d0.a0: Dict("E3T" => 6, "COMPOUND" => 2, "pilot_pass" => 4, "split" => 11) 1.0s
+cell 39/48 T12.b0.c0.b0.c0.b0.c0.d0.b1.c0.d0.c1.b0.a0.d0: Dict("pilot_pass" => 4, "split" => 3) 0.5s
+cell 40/48 T11.b0.c0.b0.c0.b0.c0.b1.c0.d1.c1.b1.a1.d1: Dict("pilot_pass" => 9, "COMPOUND" => 1, "E2" => 4, "split" => 13) 0.9s
+cell 41/48 T8.b0.b0.b0.b1.d1.b0.a0.c0.d0: Dict("pilot_pass" => 6, "split" => 5) 0.6s
+cell 42/48 T12.b0.c0.b0.c0.b1.c0.d0.b0.c0.d0.b1.c1.a0.d1: Dict("pilot_pass" => 192, "COMPOUND" => 18, "E2" => 123, "split" => 332) 14.8s
+cell 43/48 T17.c0.c0.c0.a0.c0.d0.a0.c1.b0.d0.a1: Dict("pilot_pass" => 1) 0.0s
+cell 44/48 T11.b0.c0.b0.c0.b0.c1.c0.b0.d1.c1.b1.a1.d1: Dict("pilot_pass" => 2, "E2" => 5, "split" => 6) 0.2s
+cell 45/48 T17.c0.c0.c0.a0.c1.d0.a0.c1.b1.d0.a0: Dict("pilot_pass" => 1) 0.0s
+cell 46/48 T23.b0.c0.b0.c0.b0.c0.a0.b0.c1.d0.a0.b1.c0.d0.a0: Dict("pilot_pass" => 3, "E2" => 5, "split" => 7) 0.3s
+cell 47/48 T22.b0.c0.b0.c0.b0.c0.a0.d1.b0.c0.a1.d1.b0.c0.a1.d1: Dict("pilot_pass" => 9, "COMPOUND" => 2, "E2" => 17, "split" => 27) 0.9s
+cell 48/48 T8.b0.b0.b0.b1.d0.b0.a0.c0.d1: Dict("pilot_pass" => 5, "split" => 4) 0.6s
+DONE processed 9, pending 0, leaves Dict("pilot_pass" => 5, "split" => 4), elapsed 12s
+DONE processed 17, pending 0, leaves Dict("pilot_pass" => 1, "E2" => 6, "E4" => 2, "split" => 8), elapsed 0s
+DONE processed 95, pending 0, leaves Dict("pilot_pass" => 46, "E2" => 2, "split" => 47), elapsed 3s
+DONE processed 13, pending 0, leaves Dict("E3T" => 1, "COMPOUND" => 6, "split" => 6), elapsed 1s
+DONE processed 2829, pending 0, leaves Dict("pilot_pass" => 807, "COMPOUND" => 72, "E3T" => 35, "E2" => 501, "split" => 1414), elapsed 59s
+DONE processed 3, pending 0, leaves Dict("pilot_pass" => 2, "split" => 1), elapsed 0s
+DONE processed 1, pending 0, leaves Dict("pilot_pass" => 1), elapsed 0s
+DONE processed 9, pending 0, leaves Dict("pilot_pass" => 5, "split" => 4), elapsed 1s
+DONE processed 5, pending 0, leaves Dict("pilot_pass" => 3, "split" => 2), elapsed 0s
+DONE processed 11, pending 0, leaves Dict("pilot_pass" => 2, "COMPOUND" => 1, "E2" => 3, "split" => 5), elapsed 0s
+DONE processed 5, pending 0, leaves Dict("pilot_pass" => 3, "split" => 2), elapsed 0s
+DONE processed 39, pending 0, leaves Dict("pilot_pass" => 20, "split" => 19), elapsed 1s
+DONE processed 1, pending 0, leaves Dict("pilot_pass" => 1), elapsed 0s
+DONE processed 9, pending 0, leaves Dict("pilot_pass" => 4, "E2" => 1, "split" => 4), elapsed 0s
+DONE processed 95, pending 0, leaves Dict("E3T" => 4, "COMPOUND" => 5, "pilot_pass" => 35, "E2" => 4, "split" => 47), elapsed 3s
+DONE processed 1, pending 0, leaves Dict("COMPOUND" => 1), elapsed 0s
+DONE processed 1, pending 0, leaves Dict("pilot_pass" => 1), elapsed 0s
+DONE processed 3, pending 0, leaves Dict("pilot_pass" => 2, "split" => 1), elapsed 0s
+DONE processed 21, pending 0, leaves Dict("E3T" => 5, "pilot_pass" => 6, "split" => 10), elapsed 1s
+DONE processed 7, pending 0, leaves Dict("pilot_pass" => 4, "split" => 3), elapsed 0s
+DONE processed 3, pending 0, leaves Dict("pilot_pass" => 2, "split" => 1), elapsed 0s
+DONE processed 1, pending 0, leaves Dict("pilot_pass" => 1), elapsed 0s
+DONE processed 1, pending 0, leaves Dict("pilot_pass" => 1), elapsed 0s
+DONE processed 3, pending 0, leaves Dict("pilot_pass" => 2, "split" => 1), elapsed 0s
+DONE processed 7, pending 0, leaves Dict("pilot_pass" => 1, "COMPOUND" => 3, "split" => 3), elapsed 0s
+DONE processed 23, pending 0, leaves Dict("E3T" => 1, "COMPOUND" => 2, "pilot_pass" => 3, "E2" => 6, "split" => 11), elapsed 0s
+DONE processed 1, pending 0, leaves Dict("pilot_pass" => 1), elapsed 0s
+DONE processed 15, pending 0, leaves Dict("pilot_pass" => 8, "split" => 7), elapsed 1s
+DONE processed 43, pending 0, leaves Dict("pilot_pass" => 8, "COMPOUND" => 1, "E2" => 13, "split" => 21), elapsed 1s
+DONE processed 19, pending 0, leaves Dict("pilot_pass" => 3, "COMPOUND" => 1, "E2" => 6, "split" => 9), elapsed 0s
+DONE processed 5, pending 0, leaves Dict("pilot_pass" => 3, "split" => 2), elapsed 0s
+DONE processed 33, pending 0, leaves Dict("E3T" => 1, "COMPOUND" => 7, "pilot_pass" => 6, "E2" => 3, "split" => 16), elapsed 1s
+DONE processed 1, pending 0, leaves Dict("COMPOUND" => 1), elapsed 0s
+DONE processed 1, pending 0, leaves Dict("COMPOUND" => 1), elapsed 0s
+DONE processed 1, pending 0, leaves Dict("COMPOUND" => 1), elapsed 0s
+DONE processed 3, pending 0, leaves Dict("pilot_pass" => 2, "split" => 1), elapsed 0s
+DONE processed 87, pending 0, leaves Dict("pilot_pass" => 41, "E2" => 3, "split" => 43), elapsed 2s
+DONE processed 23, pending 0, leaves Dict("E3T" => 6, "COMPOUND" => 2, "pilot_pass" => 4, "split" => 11), elapsed 1s
+DONE processed 7, pending 0, leaves Dict("pilot_pass" => 4, "split" => 3), elapsed 0s
+DONE processed 27, pending 0, leaves Dict("pilot_pass" => 9, "COMPOUND" => 1, "E2" => 4, "split" => 13), elapsed 1s
+DONE processed 11, pending 0, leaves Dict("pilot_pass" => 6, "split" => 5), elapsed 1s
+DONE processed 665, pending 0, leaves Dict("pilot_pass" => 192, "COMPOUND" => 18, "E2" => 123, "split" => 332), elapsed 15s
+DONE processed 1, pending 0, leaves Dict("pilot_pass" => 1), elapsed 0s
+DONE processed 13, pending 0, leaves Dict("pilot_pass" => 2, "E2" => 5, "split" => 6), elapsed 0s
+DONE processed 1, pending 0, leaves Dict("pilot_pass" => 1), elapsed 0s
+DONE processed 15, pending 0, leaves Dict("pilot_pass" => 3, "E2" => 5, "split" => 7), elapsed 0s
+DONE processed 55, pending 0, leaves Dict("pilot_pass" => 9, "COMPOUND" => 2, "E2" => 17, "split" => 27), elapsed 1s
+DONE processed 9, pending 0, leaves Dict("pilot_pass" => 5, "split" => 4), elapsed 1s
+done 129.28421783447266

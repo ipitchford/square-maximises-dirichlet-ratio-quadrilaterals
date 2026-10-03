@@ -1,0 +1,16 @@
+chart I tiny-t box is LEMMA_A: True
+chart I very thin box is LEMMA_B: True
+chart II box with x3 > x2 everywhere is OUTSIDE_CHART: True
+c_i formulas verified exactly at 200 random points per chart
+  [50/200] independent certificates ok 50
+  [100/200] independent certificates ok 97
+  [150/200] independent certificates ok 145
+  [200/200] independent certificates ok 193
+chart 1: records 45169, leaves 45169, exclusions 8473 checked, volume exact, cert sample 193/200, problems 7 [('ABCDAbcdacbdAcbDAC', 'certificate NOT reproduced by independent 1-D implementation'), ('AbcDAbCdABdABdcBACDB', 'certificate NOT reproduced by independent 1-D implementation'), ('AbcDABCdaBDCaBDcAbd', 'certificate NOT reproduced by independent 1-D implementation'), ('ABcdAbCDacbdabcdaB', 'certificate NOT reproduced by independent 1-D implementation'), ('ABcDabCdAcbAdCbdac', 'certificate NOT reproduced by independent 1-D implementation'), ('aBcDAbcdAABCdaCB', 'certificate NOT reproduced by independent 1-D implementation'), ('ABcDabCDaACbdacBd', 'certificate NOT reproduced by independent 1-D implementation')]
+  [50/200] independent certificates ok 47
+  [100/200] independent certificates ok 94
+  [150/200] independent certificates ok 144
+  [200/200] independent certificates ok 188
+chart 2: records 8048, leaves 8048, exclusions 476 checked, volume exact, cert sample 188/200, problems 12 [('ABcdABCDACacdCDBDa', 'certificate NOT reproduced by independent 1-D implementation'), ('ABCdAbcDCACAcbdDbc', 'certificate NOT reproduced by independent 1-D implementation'), ('ABCDABCdaccADBDCBd', 'certificate NOT reproduced by independent 1-D implementation'), ('ABcdABCDACacdCdbDb', 'certificate NOT reproduced by independent 1-D implementation'), ('ABcdABCDACACDdcb', 'certificate NOT reproduced by independent 1-D implementation'), ('ABCDABcdACACdbcdbAC', 'certificate NOT reproduced by independent 1-D implementation'), ('ABCdAbcDCAcacdbAD', 'certificate NOT reproduced by independent 1-D implementation'), ('AbCdABcdcAcAcADcBd', 'certificate NOT reproduced by independent 1-D implementation')]
+XBANDCOVER FAIL
+exit=1

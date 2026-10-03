@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.DS_Store
+replay_out/
+fresh_replay_local/
+darts/replays/.pycache.*
+darts/replays/test_runs/

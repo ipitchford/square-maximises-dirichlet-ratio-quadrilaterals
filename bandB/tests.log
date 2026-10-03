@@ -1,0 +1,9 @@
+T1 containment: 87254 exact slice comparisons, failures so far 0
+T2 exclusions: 20210 point checks, statuses Dict(:LEMMA_B => 88, :OUTSIDE_CHART => 1664, :LEMMA_A => 102, :OUT_OF_BAND => 167), failures so far 0
+T3 element integrals: 621 enclosure checks, failures so far 0
+T4 Sturm/Gram sanity done, failures so far 0
+T5 tiling checker done, failures so far 0
+T6 exact Float64/Rational comparisons done, failures so far 0
+T7 exact-dyadic enclosure: 2896 strict containment checks (12 real certificate meshes); the defective pre-review assembly fails containment in 72/72 meshes (as it must); failures so far 0
+ALL TESTS: PASS (0 failures, 21.3 s)
+exit 0

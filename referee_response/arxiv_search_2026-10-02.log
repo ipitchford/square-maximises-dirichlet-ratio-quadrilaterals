@@ -1,0 +1,20 @@
+== all:quadrilateral+AND+all:Dirichlet+AND+all:eigenvalue
+  total: 6
+  2026-09-02 2609.02784v1 | Maximizing the fundamental Laplace--Neumann eigenvalue on quadrilaterals
+  2024-06-03 2406.01778v1 | On a conjecture of a Pólya functional for triangles and rectangles
+  2024-03-27 2403.18556v1 | Numerical optimisation of Dirac eigenvalues
+  2022-07-12 2207.05814v1 | Global and Local Bounds on the Fundamental Ratio of Triangles and Quadrilaterals
+  2022-03-30 2203.16409v1 | On the Polygonal Faber-Krahn Inequality
+  2017-12-27 1712.09472v5 | Construction and application of algebraic dual polynomial representations for finite element methods on q
+== all:%22non-convex%22+AND+all:quadrilateral+AND+all:eigenvalue
+  total: 0
+== all:%22fundamental+ratio%22+AND+all:quadrilateral
+  total: 1
+  2022-07-12 2207.05814v1 | Global and Local Bounds on the Fundamental Ratio of Triangles and Quadrilaterals
+== all:Payne+AND+all:Weinberger+AND+all:polygon
+  total: 0
+== all:%22ratio+of+the+first+two%22+AND+all:Dirichlet+AND+all:quadrilateral
+  total: 1
+  2022-07-12 2207.05814v1 | Global and Local Bounds on the Fundamental Ratio of Triangles and Quadrilaterals
+== all:quadrilateral+AND+all:%22second+eigenvalue%22+AND+all:Laplacian
+  total: 0

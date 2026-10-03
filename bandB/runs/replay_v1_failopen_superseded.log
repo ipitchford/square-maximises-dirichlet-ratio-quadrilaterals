@@ -1,0 +1,18 @@
+replay started 2026-10-01T10:01:03.658  threads 6
+
+== runs/cover_chart1.jsonl: chart 1, 45169 leaf records (257 other lines)
+box-from-path mismatches: 0
+tiling: PASS ok: 45169 leaves tile the chart-1 root exactly
+statuses: Dict("CERT" => 36696, "OUT_OF_BAND" => 8094, "LEMMA_B" => 141, "OUTSIDE_CHART" => 128, "LEMMA_A" => 110)
+re-derived exclusions: 8473;  re-run certificates: 36696 (worst margin R2/(2.5E) = 0.999999);  re-verification failures: 0;  3227.1 s
+
+== runs/cover_chart2.jsonl: chart 2, 8048 leaf records (257 other lines)
+box-from-path mismatches: 0
+tiling: PASS ok: 8048 leaves tile the chart-2 root exactly
+statuses: Dict("CERT" => 7572, "OUTSIDE_CHART" => 315, "LEMMA_A" => 161)
+re-derived exclusions: 476;  re-run certificates: 7572 (worst margin R2/(2.5E) = 0.999968);  re-verification failures: 0;  41.6 s
+
+chart 1: 45169 leaves tile the root exactly=true; CERT 36696, LEMMA_A 110, LEMMA_B 141, OUT_OF_BAND 8094, OUTSIDE_CHART 128, FAIL_FLOOR 0; worst margin 0.999999
+chart 2: 8048 leaves tile the root exactly=true; CERT 7572, LEMMA_A 161, LEMMA_B 0, OUT_OF_BAND 0, OUTSIDE_CHART 315, FAIL_FLOOR 0; worst margin 0.999968
+
+REPLAY PASSED  (3274.1 s)

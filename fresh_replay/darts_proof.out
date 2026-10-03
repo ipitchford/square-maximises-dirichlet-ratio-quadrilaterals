@@ -1,0 +1,44 @@
+Started: fresh-darts-proof (pid 3308)
+gate lemma_sector.py: exit 0
+gate lemma_longarm.py: exit 0
+gate check_charts.py 8: exit 0
+gate rigor_lint.py: exit 0
+gate test_containment.py: exit 0
+gate hull_to_box.py 56 64 0.0339 0.12 0.5 0.875: exit 0
+gate check_cbox_cover.py: exit 0
+gate accounting.py: exit 0
+replay crit_collar: shards ok 2/2, validation problems 0
+replay crit_spike_X1: shards ok 2/2, validation problems 0
+replay main_cbox: shards ok 2/2, validation problems 0
+replay shallow_crit: shards ok 2/2, validation problems 0
+replay kf_collar: shards ok 2/2, validation problems 0
+replay kf_spike: shards ok 2/2, validation problems 0
+replay pp: shards ok 2/2, validation problems 0
+replay sp_col: shards ok 2/2, validation problems 0
+replay sp_spk: shards ok 2/2, validation problems 0
+replay pf: shards ok 2/2, validation problems 0
+replay fp: shards ok 2/2, validation problems 0
+replay ff: shards ok 2/2, validation problems 0
+replay sf_col: shards ok 2/2, validation problems 0
+replay sf_spk: shards ok 2/2, validation problems 0
+REPLAY_ALL STATUS: PASS  receipt replays/receipts/20261002T221832_7c5eb4b8.jsonl  run directory replays/run_20261002T221832_7c5eb4b8
+RECEIPT FINAL DIGEST (self_sha256 of the end record): bfe58c0b9ffe7759dd3236d3a2c8c96e02286838ecf82409a6e0f26fae280373
+RECEIPT FILE SHA256: 9055fcbce245ca81b93c8f0ab8d4fe01c25bd4429fa9357b810f0fd68fdddb3e
+    19426.48 real     36972.26 user       149.40 sys
+          1640185856  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+             2966930  page reclaims
+                2617  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               84943  voluntary context switches
+              978902  involuntary context switches
+        232835830468  instructions retired
+         60387486048  cycles elapsed
+          1347798432  peak memory footprint

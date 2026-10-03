@@ -1,0 +1,185 @@
+{
+ "schemaVersion": "1.0",
+ "contributionMap": [
+  {
+   "claim": "For every simple quadrilateral Q, convex or not, lambda_2(Q)/lambda_1(Q) <= 5/2 (Dirichlet), with equality only for squares.",
+   "unit": "statement",
+   "paperLocation": "abstract; Theorem 1",
+   "searches": [
+    {
+     "date": "2026-09-30",
+     "query": "quadrilateral AND eigenvalue AND Dirichlet; \"fundamental ratio\" AND quadrilateral; Ashbaugh AND Benguria AND polygon; \"ratio of the first two\" AND Dirichlet AND polygon; quadrilateral AND PPW; citations of arXiv:2207.05814, 2009.00927, 0707.3631",
+     "corpus": "arXiv listings and API, Semantic Scholar citation graph, web search (2 rounds), full text of cited sources"
+    },
+    {
+     "date": "2026-10-02",
+     "query": "quadrilateral AND Dirichlet AND eigenvalue; \"non-convex\" AND quadrilateral AND eigenvalue; \"fundamental ratio\" AND quadrilateral; Payne AND Weinberger AND polygon; \"ratio of the first two\" AND Dirichlet AND quadrilateral; quadrilateral AND \"second eigenvalue\" AND Laplacian",
+     "corpus": "arXiv API (log referee_response/arxiv_search_2026-10-02.log); external referee's bounded literature check"
+    }
+   ],
+   "closestPriorWork": "Arbon (2022), arXiv:2207.05814, Theorem 1.3: strict local maximality of the square in an explicit small neighbourhood (argument has two gaps, paper §1); Endo and Osting (2026), arXiv:2609.02784: the Neumann analogue for convex quadrilaterals",
+   "verdict": "new-in-bounded-search"
+  },
+  {
+   "claim": "Certified local step: inertia criterion for a 3x3 Rayleigh-Ritz pencil of transported square modes with a Kato-Temple bound, expanded as multivariate Taylor models with exact first-order structure",
+   "unit": "method",
+   "paperLocation": "§3",
+   "searches": [
+    {
+     "date": "2026-09-30",
+     "query": "Kato-Temple Schur complement Taylor model eigenvalue shape perturbation; second-order local maximality square Neumann",
+     "corpus": "arXiv, cited sources"
+    }
+   ],
+   "closestPriorWork": "Endo and Osting (2026), second-order test at the square for the Neumann problem; Temple (1928), Kato (1949), Haynsworth (1968)",
+   "verdict": "known-cited"
+  },
+  {
+   "claim": "Global certified box cover with Rayleigh-Ritz upper bounds and Lehmann-Goerisch lower bounds with an exactly divergence-matched (Piola-transported) flux",
+   "unit": "method",
+   "paperLocation": "§4",
+   "searches": [
+    {
+     "date": "2026-09-30",
+     "query": "Lehmann-Goerisch flux H(div) verified eigenvalue bounds polygons; box covering shape optimisation eigenvalue certified",
+     "corpus": "arXiv, textbooks (Nakao-Plum-Watanabe 2019; Liu 2024)"
+    }
+   ],
+   "closestPriorWork": "Lehmann (1949, 1950); Goerisch and Haunhorst (1985); Behnke and Goerisch (1994); Endo, Liu and Mariano (2026) for triangles; Endo and Osting (2026) for the box-cover architecture",
+   "verdict": "known-cited"
+  },
+  {
+   "claim": "Non-convex quadrilaterals: mixed-boundary bracketing of arms, one-dimensional bounds with exponential tails certified by Sturm shooting, inclusion certificates, charts uniform in the arm lengths",
+   "unit": "method",
+   "paperLocation": "§5; Supplement S",
+   "searches": [
+    {
+     "date": "2026-10-02",
+     "query": "non-convex quadrilateral eigenvalue; Dirichlet-Neumann bracketing long arms eigenvalue; Born-Oppenheimer lower bound Dirichlet Laplacian thin domains",
+     "corpus": "arXiv API, cited sources"
+    }
+   ],
+   "closestPriorWork": "general domain monotonicity and Dirichlet-Neumann bracketing; Allegretto (1974), Piepenbrink (1974); Liu (2015) guaranteed finite-element bounds",
+   "verdict": "known-cited"
+  },
+  {
+   "claim": "Two gaps in Arbon (2022)'s local argument: rule (3.16) adds single-vertex first-order variations; the second-order remainder bound is inferred from a global bound",
+   "unit": "identification",
+   "paperLocation": "§1",
+   "searches": [
+    {
+     "date": "2026-09-30",
+     "query": "citations of arXiv:2207.05814 (errata, follow-ups)",
+     "corpus": "Semantic Scholar citation graph; arXiv versions of 2207.05814 (v1 only)"
+    }
+   ],
+   "closestPriorWork": "none found; exact calculation in referee_response/arbon_perturbation.py",
+   "verdict": "new-in-bounded-search"
+  }
+ ],
+ "sourcesReadInFull": [
+  {
+   "citation": "Arbon (2022), arXiv:2207.05814",
+   "usedFor": "prior local result; the gaps identified in §1",
+   "readWhat": "full text v1: Theorem 1.3, §3 (eqs. 3.16-3.18), the remainder argument",
+   "date": "2026-09-30",
+   "evidenceLocator": "https://arxiv.org/abs/2207.05814v1; paper §1; referee_response/arbon_perturbation.py"
+  },
+  {
+   "citation": "Endo and Osting (2026), arXiv:2609.02784",
+   "usedFor": "parametrisation Q_p and Theorem 2.1 (every convex quadrilateral is similar to some Q_p); method prior art",
+   "readWhat": "full text v1: §2 (eqs. (2)-(3), Theorem 2.1 and proof), the certified cover",
+   "date": "2026-09-30",
+   "evidenceLocator": "https://arxiv.org/abs/2609.02784v1; referee_response/REFERENCES_VERIFIED.md item 4"
+  },
+  {
+   "citation": "Arbon, Mannan, Psenka and Ragavan (2022), J. Spectr. Theory 12(2) 515-533",
+   "usedFor": "xi(T) <= 7/3 for every triangle (Lemma A)",
+   "readWhat": "statement of the main theorem and its scope (all triangles), arXiv:2009.00927 v2",
+   "date": "2026-10-02",
+   "evidenceLocator": "doi:10.4171/JST/409; referee_response/REFERENCES_VERIFIED.md item 2"
+  },
+  {
+   "citation": "Siudeja (2010), Indiana Univ. Math. J. 59(3) 1097-1120",
+   "usedFor": "acute triangle case; Conjecture 1.2 (polygonal conjecture)",
+   "readWhat": "Theorem 1.1 and Conjecture 1.2 in arXiv:0707.3631 v1 and v2",
+   "date": "2026-10-02",
+   "evidenceLocator": "https://arxiv.org/abs/0707.3631v1; referee_response/REFERENCES_VERIFIED.md item 3"
+  },
+  {
+   "citation": "Endo, Liu and Mariano (2026), arXiv:2605.04331",
+   "usedFor": "method context: finite-element Lehmann-Goerisch bounds with an H(div) flux for triangles",
+   "readWhat": "Lemmas 3.3 and 3.4",
+   "date": "2026-10-02",
+   "evidenceLocator": "https://arxiv.org/abs/2605.04331v1; referee_response/REFERENCES_VERIFIED.md item 5"
+  }
+ ],
+ "limitationTriage": [
+  {
+   "limitation": "No second, independently written implementation of the dart certificates",
+   "closingQuestion": "Would a separately written dart checker on a sample close this?",
+   "triedOrSearched": "A sampled coverage check (verify/xdart.py) exists; a certificate reimplementation was scoped",
+   "estimatedCost": "about 1-2 days of agent work plus hours of compute",
+   "cheap": false,
+   "decision": "OPEN",
+   "reasonOpen": "publisher's decision (2 October 2026): do not run an independent dart check for this version",
+   "whyNotClosedNow": "explicit publisher instruction"
+  },
+  {
+   "limitation": "No independent rerun by an unaffiliated party",
+   "closingQuestion": "Can the producer establish this?",
+   "triedOrSearched": "fresh-extraction replay of the frozen archive by the producer",
+   "estimatedCost": "not available to the producer",
+   "cheap": false,
+   "decision": "OPEN",
+   "reasonOpen": "requires an unaffiliated party; no external engagement in scope",
+   "whyNotClosedNow": "outside the producer's authority"
+  },
+  {
+   "limitation": "Supremum of xi over darts (7/3 observed numerically)",
+   "closingQuestion": "Is it needed for Theorem 1?",
+   "triedOrSearched": "not needed: Theorem 5 proves xi < 5/2 directly",
+   "estimatedCost": "a separate research project",
+   "cheap": false,
+   "decision": "OPEN",
+   "reasonOpen": "not part of the claim; labelled an observation",
+   "whyNotClosedNow": "out of scope"
+  },
+  {
+   "limitation": "Quantitative stability near the square",
+   "closingQuestion": "Does Theorem 2's certificate give an explicit stability constant?",
+   "triedOrSearched": "the Taylor models give det S, tr S < 0 with exact bounds per box, which could be turned into a quadratic deficit estimate",
+   "estimatedCost": "several hours",
+   "cheap": false,
+   "decision": "OPEN",
+   "reasonOpen": "not claimed",
+   "whyNotClosedNow": "outside the requested revision"
+  },
+  {
+   "limitation": "Hardcoded producer paths in the dart verifier prevented replay from another location",
+   "closingQuestion": "Can the paths be derived from file locations without changing any predicate?",
+   "triedOrSearched": "portability patch (78 changed lines), re-pin, infrastructure tests, fresh-extraction proof replay",
+   "estimatedCost": "1 h plus the replay compute",
+   "cheap": true,
+   "decision": "CLOSED",
+   "reasonOpen": "",
+   "whyNotClosedNow": ""
+  }
+ ],
+ "extensionScout": {
+  "by": "research agent (Anthropic Claude)",
+  "date": "2026-10-02",
+  "proposals": [
+   "regular k-gons for k >= 5 with the same architecture",
+   "an independently written dart certificate checker",
+   "a quantitative deficit estimate near the square from the local certificate",
+   "formalisation of the Lehmann-Goerisch and Sturm primitives in a proof assistant"
+  ],
+  "actions": [
+   "not started: new research beyond this release",
+   "not started: publisher's decision for this version",
+   "not started: outside the requested revision",
+   "not started: outside the requested revision"
+  ]
+ }
+}

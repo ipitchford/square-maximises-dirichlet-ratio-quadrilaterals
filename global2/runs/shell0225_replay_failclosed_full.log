@@ -1,0 +1,5 @@
+log runs/shell0225_cert.jsonl sha256 6e38aa632d23e4c621958a8ac087a7ce9960604a16eb1a75f8f505bdddb057f9
+coverage: 8217 leaves, 0 uncovered, 0 bound mismatches, 0 records unreached
+exclusions re-checked: 1, failed: 0
+certificates re-verified: 8216 of 8216, failed: 0, min logged margin 2.5-kappa = 0.00000, time 2888s
+REPLAY OK (exhaustive for the region 0,0.225,0,0.225,0,0.225,-0.225,0.225)
